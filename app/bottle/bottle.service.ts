@@ -14,7 +14,7 @@ export class BottleService {
         let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS });
 
         return this.http.get(APP_SETTINGS.BOTTLES_URL+id+'/', options)
-            .map(res => <Bottle> res.json().results[0])
+            .map(res => <Bottle> res.json())
             .catch(this.handleError);
     }
 

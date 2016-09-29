@@ -14,7 +14,7 @@ export class AcidService {
         let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS });
 
         return this.http.get(APP_SETTINGS.ACIDS_URL+id+'/', options)
-            .map(res => <Acid> res.json().results[0])
+            .map(res => <Acid> res.json())
             .catch(this.handleError);
     }
 
