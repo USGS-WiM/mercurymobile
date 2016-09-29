@@ -8,6 +8,7 @@ export class SampleBottle {
     preservation_type?: number,
     preservation_volume?: number,
     preservation_acid?: number,
-    preservation_comment?: string
+    preservation_comment?: string,
+    id?: number
   ) {}
 }

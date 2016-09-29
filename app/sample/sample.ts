@@ -10,6 +10,7 @@ export class Sample {
     length?: number,
     replicate?: number,
     sample_bottles?: number[],
-    comment?: string
+    comment?: string,
+    id?: number
   ) {}
 }
