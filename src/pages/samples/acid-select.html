@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Select Acid
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <ion-icon name="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div [hidden]="!notready" align="center" id="loading-spinner"><ion-spinner></ion-spinner></div>
+  <div [hidden]="notready">
+    <ion-searchbar (input)="filterAcids($event)" placeholder="Filter by text"></ion-searchbar>
+    <ion-list>
+      <ion-item *ngFor="let acid of acids">
+        <ion-label>{{acid}}</ion-label>
+        <ion-radio [checked]="acid === selectedAcid" (click)="selectAcid(acid)"></ion-radio>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>
