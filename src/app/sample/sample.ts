@@ -7,10 +7,11 @@ export class Sample {
     date: Date,
     time: Date,
     depth: number,
-    length?: number,
-    replicate?: number,
+    replicate: number,
+    medium: number,
     sample_bottles?: number[],
     comment?: string,
+    length?: number,
     id?: number
   ) {}
 }
