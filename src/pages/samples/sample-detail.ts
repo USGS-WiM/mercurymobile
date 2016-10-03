@@ -51,7 +51,7 @@ export class SampleDetailPage {
   private _numRowsAdded: number = 0;
   private _numSampleBottles: number;
 
-  mySample: Sample = new Sample(null, null, null, null, null, null, null, null, null, null, null, null);
+  mySample: Sample = new Sample(null, null, null, null, null, null, null, null, null, null, null, null, null);
   mySampleBottles: SampleBottle[];
   myProjects: Project[];
   mySites: Site[];
@@ -101,10 +101,6 @@ export class SampleDetailPage {
     this._getPreservations();
     this._getAcids();
 
-    // If we navigated to this page, we will have an item available as a nav param
-    this.sample_ID = this.navParams.get('sample');
-    // TODO: figure out how to handle template selected logic with no (empty new) sample
-
     this.sampleHeaderControls = new FormGroup({
       projectName: this.projectName,
       projectNumber: this.projectNumber,
@@ -125,6 +121,9 @@ export class SampleDetailPage {
       sampleBottleControls: this.sampleBottleControls,
       sampleCommentControls: this.sampleCommentControls
     });
+
+    // If we navigated to this page, we will have an item available as a nav param
+    this.sample_ID = this.navParams.get('sample');
 
     if (this.sample_ID) {
       this._getSample(this.sample_ID);
@@ -160,7 +159,7 @@ export class SampleDetailPage {
         error => this._errorMessage = <any>error);
   }
 
-  private _getSampleBottles(sampleID){
+  private _getSampleBottles(sampleID: number | string){
     this._samplebottleService.getSampleBottles(new URLSearchParams('sample='+sampleID))
       .then(
         response => {
@@ -246,42 +245,56 @@ export class SampleDetailPage {
         error => this._errorMessage = <any>error);
   }
 
-  openAcidSelect(row) {
+  openAcidSelect(rowIndex: number) {
     let opts = {showBackdrop: false, enableBackdropDismiss: false};
     let modal = this.modalCtrl.create(AcidSelectPage, {}, opts);
     modal.onDidDismiss(data => {
-      (<FormGroup>this.sampleBottleControls.controls[row]).controls['preservationAcid'].setValue(data);
+      (<FormGroup>this.sampleBottleControls.controls[rowIndex]).controls['preservationAcid'].setValue(data);
     });
     modal.present();
   }
 
-  openBottleSelect(row) {
+  openBottleSelect(rowIndex: number) {
     let opts = {showBackdrop: false, enableBackdropDismiss: false};
     let modal = this.modalCtrl.create(BottleSelectPage, {}, opts);
     modal.onDidDismiss(data => {
-      (<FormGroup>this.sampleBottleControls.controls[row]).controls['bottle'].setValue(data);
+      (<FormGroup>this.sampleBottleControls.controls[rowIndex]).controls['bottle'].setValue(data);
     });
     modal.present();
   }
 
-  filterSitesByName(projectName) {
-    let projects = this.myProjects.filter(function(obj) {return obj.name == projectName});
-    this._getSites(projects[0].id);
+  projectNameChange(projectName: String) {
+    let projects = this.myProjects.filter(function(project: Project) {return project['name'] == projectName});
+    let projectID = projects[0]['id'];
+    this.projectNumber.setValue(projectID);
+    this._getSites(projectID);
   }
 
-  filterSitesByNumber(projectNumber) {
-    let projects = this.myProjects.filter(function(obj) {return obj.id == projectNumber});
-    this._getSites(projects[0].id);
+  projectNumberChange(projectNumber: number) {
+    let projects = this.myProjects.filter(function(project: Project) {return project['id'] == projectNumber});
+    let projectID = projects[0]['id'];
+    this.projectName.setValue(projectID);
+    this._getSites(projectID);
   }
 
-  addRow(samplebottle?){
+  siteNameChange(siteName: number) {
+    let sites = this.mySites.filter(function(site: Site) {return site['usgs_scode'] == siteName});
+    let siteID = sites[0]['id'];
+    this.siteNumber.setValue(siteID);
+  }
+
+  siteNumberChange(siteNumber: number) {
+    let sites = this.mySites.filter(function(site: Site) {return site['id'] == siteNumber});
+    let siteID = sites[0]['id'];
+    this.siteName.setValue(siteID);
+  }
+
+  addRow(samplebottle?: SampleBottle){
     if(samplebottle) {
       this.sampleBottleControls.push(
         new FormGroup({
           bottle: new FormControl(samplebottle['bottle'] ? samplebottle['bottle'] : null),
-          medium: new FormControl(null),
-          //medium: new FormControl(this.mySample['medium'] ? this.mySample['medium'] : null),
-          // TODO: figure out how to properly handle mediums
+          medium: new FormControl(this.mySample['medium'] ? this.mySample['medium'] : null),
           analysis: new FormControl(samplebottle['analysis_type'] ? samplebottle['analysis_type'] : null),
           filterType: new FormControl(samplebottle['filter_type'] ? samplebottle['filter_type'] : null),
           filterVolume: new FormControl(samplebottle['volume_filtered'] ? samplebottle['volume_filtered'] : null),
@@ -312,10 +325,10 @@ export class SampleDetailPage {
 
   }
 
-  removeRow(row) {
+  removeRow(sampleBottleControlsRow: FormGroup) {
     let sampleBottleControlRows = this.sampleBottleControls.controls;
     for(let i = 0, j = sampleBottleControlRows.length; i < j; i++) {
-      if(sampleBottleControlRows[i] == row) {
+      if(sampleBottleControlRows[i] == sampleBottleControlsRow) {
         sampleBottleControlRows.splice(i, 1);
         break;
       }
@@ -323,6 +336,7 @@ export class SampleDetailPage {
   }
 
   onSubmit(formValue){
+    // TODO: build proper onSubmit function, including validations (especially grabbing medium from samplebottles)
     alert("Submitted!");
     console.log(formValue);
   }

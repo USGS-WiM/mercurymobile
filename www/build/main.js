@@ -76386,10 +76386,11 @@ var SAMPLES = [
         date: '2016-09-01',
         time: '12:34:00',
         depth: 1,
-        length: null,
         replicate: 1,
+        medium: 37,
         sample_bottles: [1, 2, 3],
-        comment: 'First Test' },
+        comment: 'First Test',
+        length: null },
     { id: 2,
         projectName: 'SEWRPC',
         projectNumber: 919,
@@ -76398,10 +76399,11 @@ var SAMPLES = [
         date: '2016-09-02',
         time: '10:45:00',
         depth: 2,
-        length: null,
         replicate: 1,
+        medium: 37,
         sample_bottles: [4, 5],
-        comment: 'Second Test' }
+        comment: 'Second Test',
+        length: null },
 ];
 
 var __decorate$105 = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
@@ -76431,7 +76433,7 @@ var SampleService = (function () {
 }());
 
 var Sample = (function () {
-    function Sample(projectName, projectNumber, siteName, siteNumber, date, time, depth, length, replicate, sample_bottles, comment, id) {
+    function Sample(projectName, projectNumber, siteName, siteNumber, date, time, depth, replicate, medium, sample_bottles, comment, length, id) {
     }
     return Sample;
 }());
@@ -92321,7 +92323,7 @@ var SampleDetailPage = (function () {
         this.notready = true;
         this._defaultRowCount = 8;
         this._numRowsAdded = 0;
-        this.mySample = new Sample(null, null, null, null, null, null, null, null, null, null, null, null);
+        this.mySample = new Sample(null, null, null, null, null, null, null, null, null, null, null, null, null);
         this.sampleBottleControls = new FormArray([]);
         this.projectName = new FormControl(null);
         this.projectNumber = new FormControl(null);
@@ -92340,9 +92342,6 @@ var SampleDetailPage = (function () {
         this._getFilters();
         this._getPreservations();
         this._getAcids();
-        // If we navigated to this page, we will have an item available as a nav param
-        this.sample_ID = this.navParams.get('sample');
-        // TODO: figure out how to handle template selected logic with no (empty new) sample
         this.sampleHeaderControls = new FormGroup({
             projectName: this.projectName,
             projectNumber: this.projectNumber,
@@ -92361,6 +92360,8 @@ var SampleDetailPage = (function () {
             sampleBottleControls: this.sampleBottleControls,
             sampleCommentControls: this.sampleCommentControls
         });
+        // If we navigated to this page, we will have an item available as a nav param
+        this.sample_ID = this.navParams.get('sample');
         if (this.sample_ID) {
             this._getSample(this.sample_ID);
         }
@@ -92460,39 +92461,51 @@ var SampleDetailPage = (function () {
             _this.myAcids = response;
         }, function (error) { return _this._errorMessage = error; });
     };
-    SampleDetailPage.prototype.openAcidSelect = function (row) {
+    SampleDetailPage.prototype.openAcidSelect = function (rowIndex) {
         var _this = this;
         var opts = { showBackdrop: false, enableBackdropDismiss: false };
         var modal = this.modalCtrl.create(AcidSelectPage, {}, opts);
         modal.onDidDismiss(function (data) {
-            _this.sampleBottleControls.controls[row].controls['preservationAcid'].setValue(data);
+            _this.sampleBottleControls.controls[rowIndex].controls['preservationAcid'].setValue(data);
         });
         modal.present();
     };
-    SampleDetailPage.prototype.openBottleSelect = function (row) {
+    SampleDetailPage.prototype.openBottleSelect = function (rowIndex) {
         var _this = this;
         var opts = { showBackdrop: false, enableBackdropDismiss: false };
         var modal = this.modalCtrl.create(BottleSelectPage, {}, opts);
         modal.onDidDismiss(function (data) {
-            _this.sampleBottleControls.controls[row].controls['bottle'].setValue(data);
+            _this.sampleBottleControls.controls[rowIndex].controls['bottle'].setValue(data);
         });
         modal.present();
     };
-    SampleDetailPage.prototype.filterSitesByName = function (projectName) {
-        var projects = this.myProjects.filter(function (obj) { return obj.name == projectName; });
-        this._getSites(projects[0].id);
+    SampleDetailPage.prototype.projectNameChange = function (projectName) {
+        var projects = this.myProjects.filter(function (project) { return project['name'] == projectName; });
+        var projectID = projects[0]['id'];
+        this.projectNumber.setValue(projectID);
+        this._getSites(projectID);
     };
-    SampleDetailPage.prototype.filterSitesByNumber = function (projectNumber) {
-        var projects = this.myProjects.filter(function (obj) { return obj.id == projectNumber; });
-        this._getSites(projects[0].id);
+    SampleDetailPage.prototype.projectNumberChange = function (projectNumber) {
+        var projects = this.myProjects.filter(function (project) { return project['id'] == projectNumber; });
+        var projectID = projects[0]['id'];
+        this.projectName.setValue(projectID);
+        this._getSites(projectID);
+    };
+    SampleDetailPage.prototype.siteNameChange = function (siteName) {
+        var sites = this.mySites.filter(function (site) { return site['usgs_scode'] == siteName; });
+        var siteID = sites[0]['id'];
+        this.siteNumber.setValue(siteID);
+    };
+    SampleDetailPage.prototype.siteNumberChange = function (siteNumber) {
+        var sites = this.mySites.filter(function (site) { return site['id'] == siteNumber; });
+        var siteID = sites[0]['id'];
+        this.siteName.setValue(siteID);
     };
     SampleDetailPage.prototype.addRow = function (samplebottle) {
         if (samplebottle) {
             this.sampleBottleControls.push(new FormGroup({
                 bottle: new FormControl(samplebottle['bottle'] ? samplebottle['bottle'] : null),
-                medium: new FormControl(null),
-                //medium: new FormControl(this.mySample['medium'] ? this.mySample['medium'] : null),
-                // TODO: figure out how to properly handle mediums
+                medium: new FormControl(this.mySample['medium'] ? this.mySample['medium'] : null),
                 analysis: new FormControl(samplebottle['analysis_type'] ? samplebottle['analysis_type'] : null),
                 filterType: new FormControl(samplebottle['filter_type'] ? samplebottle['filter_type'] : null),
                 filterVolume: new FormControl(samplebottle['volume_filtered'] ? samplebottle['volume_filtered'] : null),
@@ -92518,22 +92531,23 @@ var SampleDetailPage = (function () {
             }));
         }
     };
-    SampleDetailPage.prototype.removeRow = function (row) {
+    SampleDetailPage.prototype.removeRow = function (sampleBottleControlsRow) {
         var sampleBottleControlRows = this.sampleBottleControls.controls;
         for (var i = 0, j = sampleBottleControlRows.length; i < j; i++) {
-            if (sampleBottleControlRows[i] == row) {
+            if (sampleBottleControlRows[i] == sampleBottleControlsRow) {
                 sampleBottleControlRows.splice(i, 1);
                 break;
             }
         }
     };
     SampleDetailPage.prototype.onSubmit = function (formValue) {
+        // TODO: build proper onSubmit function, including validations (especially grabbing medium from samplebottles)
         alert("Submitted!");
         console.log(formValue);
     };
     SampleDetailPage = __decorate$106([
         Component({
-             template: '<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Sample {{sample_ID}}</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>\n  <div [hidden]="notready">\n    <form [formGroup]="sampleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleForm.value)">\n      <ion-grid id="header" formGroupName="sampleHeaderControls">\n        <ion-row>\n          <ion-col width-50>\n            <ion-label>Site Name</ion-label>\n            <ion-item><ion-select formControlName="siteName">\n              <ion-option *ngFor="let site of mySites" [value]="site.id" [selected]="site.id == mySample.siteNumber">{{site.name}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n          <ion-col width-50>\n            <ion-label>Site Number</ion-label>\n            <ion-item><ion-select formControlName="siteNumber">\n              <ion-option *ngFor="let site of mySites" [value]="site.id" [selected]="site.id == mySample.siteNumber">{{site.usgs_scode}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col width-50>\n            <ion-label>Project Name</ion-label>\n            <ion-item><ion-select formControlName="projectName" (ionChange)="filterSitesByName(projName.text)" #projName>\n              <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="project.id == mySample.projectNumber">{{project.name}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n          <ion-col width-50>\n            <ion-label>Project Number</ion-label>\n            <ion-item><ion-select formControlName="projectNumber" (ionChange)="filterSitesByNumber(projNumber.text)" #projNumber>\n              <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="project.id == mySample.projectNumber">{{project.id}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col width-25>\n            <ion-label>Date</ion-label>\n            <ion-item><ion-input type="date" formControlName="sampleDate"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-25>\n            <ion-label>Time</ion-label>\n            <ion-item><ion-input type="time" formControlName="sampleTime"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-25>\n            <ion-label>Depth</ion-label>\n            <ion-item><ion-input type="number" formControlName="sampleDepth"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-25>\n            <ion-label>Rep</ion-label>\n            <ion-item><ion-input type="number" formControlName="sampleRep"></ion-input></ion-item>\n          </ion-col>\n        </ion-row>\n      </ion-grid>\n      <ion-grid id="body" formGroupName="sampleBottleControls">\n        <ion-row>\n          <ion-col width-10>Container</ion-col>\n          <ion-col width-10>Medium</ion-col>\n          <ion-col width-10>Analysis</ion-col>\n          <ion-col width-10>Filter</ion-col>\n          <ion-col width-10>Filter Volume</ion-col>\n          <ion-col width-10>Preservation</ion-col>\n          <ion-col width-10>Acid</ion-col>\n          <ion-col width-10>Acid Volume</ion-col>\n          <ion-col width-10></ion-col>\n          <ion-col width-10><div style="padding: 10px;"><button ion-button type="button" style="float: right;" (click)="addRow()"><ion-icon name="add-circle"></ion-icon></button></div></ion-col>\n        </ion-row>\n        <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow" style="border-style: solid;">{{ndx + 1}}\n          <ion-col width-10>\n            <ion-item><ion-input type="string" formControlName="bottle" (click)="openBottleSelect(ndx)"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-10>\n            <ion-item><ion-select formControlName="medium">\n              <ion-option *ngFor="let medium of myMediums" [value]="medium.id" [selected]="false">{{medium.nwis_code}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n          <ion-col width-10>\n            <ion-item><ion-select formControlName="analysis">\n              <ion-option *ngFor="let analysis of myAnalyses" [value]="analysis.id" [selected]="false">{{analysis.analysis}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n          <ion-col width-10>\n            <ion-item><ion-select formControlName="filterType">\n              <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="false">{{filter.filter}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n          <ion-col width-10>\n            <ion-item><ion-input type="number" formControlName="filterVolume"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-10>\n            <ion-item><ion-select formControlName="preservationType">\n              <ion-option *ngFor="let preservation of myPreservations" [value]="preservation.id" [selected]="false">{{preservation.preservation}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n          <ion-col width-10>\n              <ion-item><ion-input type="string" formControlName="preservationAcid" (click)="openAcidSelect(ndx)"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-10>\n            <ion-item><ion-input type="number" formControlName="preservationVolume"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-10></ion-col>\n          <ion-col width-10><div style="padding: 10px;"><button ion-button type="button" style="float: right;" (click)="removeRow(sampleBottleControlsRow)"><ion-icon name="remove-circle"></ion-icon></button></div></ion-col>\n        </ion-row>\n      </ion-grid>\n      <ion-grid id="comments" formGroupName="sampleCommentControls">\n        <ion-row>\n          <ion-col width-100>\n            <ion-label>Comments</ion-label>\n            <ion-item><ion-input type="text" formControlName="sampleComment"></ion-input></ion-item>\n          </ion-col>\n        </ion-row>\n      </ion-grid>\n      <div><button ion-button type="submit">Submit</button></div>\n    </form>\n  </div>\n</ion-content>\n',
+             template: '<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Sample {{sample_ID}}</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>\n  <div [hidden]="notready">\n    <form [formGroup]="sampleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleForm.value)">\n      <ion-grid id="header" formGroupName="sampleHeaderControls">\n        <ion-row>\n          <ion-col width-50>\n            <ion-label>Site Name</ion-label>\n            <ion-item><ion-select formControlName="siteName" (ionChange)="siteNameChange(sName.text)" #sName>\n              <ion-option *ngFor="let site of mySites" [value]="site.id" [selected]="site.id == mySample.siteNumber">{{site.name}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n          <ion-col width-50>\n            <ion-label>Site Number</ion-label>\n            <ion-item><ion-select formControlName="siteNumber" (ionChange)="siteNumberChange(sName.text)" #sNumber>\n              <ion-option *ngFor="let site of mySites" [value]="site.id" [selected]="site.id == mySample.siteNumber">{{site.usgs_scode}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col width-50>\n            <ion-label>Project Name</ion-label>\n            <ion-item><ion-select formControlName="projectName" (ionChange)="projectNameChange(pName.text)" #pName>\n              <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="project.id == mySample.projectNumber">{{project.name}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n          <ion-col width-50>\n            <ion-label>Project Number</ion-label>\n            <ion-item><ion-select formControlName="projectNumber" (ionChange)="projectNumberChange(pNumber.text)" #pNumber>\n              <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="project.id == mySample.projectNumber">{{project.id}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col width-25>\n            <ion-label>Date</ion-label>\n            <ion-item><ion-input type="date" formControlName="sampleDate"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-25>\n            <ion-label>Time</ion-label>\n            <ion-item><ion-input type="time" formControlName="sampleTime"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-25>\n            <ion-label>Depth</ion-label>\n            <ion-item><ion-input type="number" formControlName="sampleDepth"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-25>\n            <ion-label>Rep</ion-label>\n            <ion-item><ion-input type="number" formControlName="sampleRep"></ion-input></ion-item>\n          </ion-col>\n        </ion-row>\n      </ion-grid>\n      <ion-grid id="body" formGroupName="sampleBottleControls">\n        <ion-row>\n          <ion-col width-10>Container</ion-col>\n          <ion-col width-10>Medium</ion-col>\n          <ion-col width-10>Analysis</ion-col>\n          <ion-col width-10>Filter</ion-col>\n          <ion-col width-10>Filter Volume</ion-col>\n          <ion-col width-10>Preservation</ion-col>\n          <ion-col width-10>Acid</ion-col>\n          <ion-col width-10>Acid Volume</ion-col>\n          <ion-col width-10></ion-col>\n          <ion-col width-10><div style="padding: 10px;"><button ion-button type="button" style="float: right;" (click)="addRow()"><ion-icon name="add-circle"></ion-icon></button></div></ion-col>\n        </ion-row>\n        <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow" style="border-style: solid;">{{ndx + 1}}\n          <ion-col width-10>\n            <ion-item><ion-input type="string" formControlName="bottle" (click)="openBottleSelect(ndx)"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-10>\n            <ion-item><ion-select formControlName="medium">\n              <ion-option *ngFor="let medium of myMediums" [value]="medium.id" [selected]="medium.id == mySample.medium">{{medium.nwis_code}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n          <ion-col width-10>\n            <ion-item><ion-select formControlName="analysis">\n              <ion-option *ngFor="let analysis of myAnalyses" [value]="analysis.id" [selected]="false">{{analysis.analysis}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n          <ion-col width-10>\n            <ion-item><ion-select formControlName="filterType">\n              <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="false">{{filter.filter}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n          <ion-col width-10>\n            <ion-item><ion-input type="number" formControlName="filterVolume"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-10>\n            <ion-item><ion-select formControlName="preservationType">\n              <ion-option *ngFor="let preservation of myPreservations" [value]="preservation.id" [selected]="false">{{preservation.preservation}}</ion-option>\n            </ion-select></ion-item>\n          </ion-col>\n          <ion-col width-10>\n              <ion-item><ion-input type="string" formControlName="preservationAcid" (click)="openAcidSelect(ndx)"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-10>\n            <ion-item><ion-input type="number" formControlName="preservationVolume"></ion-input></ion-item>\n          </ion-col>\n          <ion-col width-10></ion-col>\n          <ion-col width-10><div style="padding: 10px;"><button ion-button type="button" style="float: right;" (click)="removeRow(sampleBottleControlsRow)"><ion-icon name="remove-circle"></ion-icon></button></div></ion-col>\n        </ion-row>\n      </ion-grid>\n      <ion-grid id="comments" formGroupName="sampleCommentControls">\n        <ion-row>\n          <ion-col width-100>\n            <ion-label>Comments</ion-label>\n            <ion-item><ion-input type="text" formControlName="sampleComment"></ion-input></ion-item>\n          </ion-col>\n        </ion-row>\n      </ion-grid>\n      <div><button ion-button type="submit">Submit</button></div>\n    </form>\n  </div>\n</ion-content>\n',
             providers: [
                 SampleService,
                 SampleBottleService,
