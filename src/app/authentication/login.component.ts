@@ -1,18 +1,18 @@
 import {Component} from '@angular/core';
-import {REACTIVE_FORM_DIRECTIVES, FormBuilder, Validators, FormGroup} from '@angular/forms';
-import {Router} from '@angular/router';
+import {FormBuilder, Validators, FormGroup} from '@angular/forms';
+import {NavController, NavParams} from 'ionic-angular';
 import {AuthenticationService} from './authentication.service';
 
 @Component({
     selector: 'login',
-    directives: [ REACTIVE_FORM_DIRECTIVES ],
     templateUrl: 'login.component.html'
 })
 
 export class LoginComponent {
     form: FormGroup;
     error: boolean = false;
-    constructor(fb: FormBuilder, public auth: AuthenticationService, public router: Router) {
+    constructor(fb: FormBuilder, public auth: AuthenticationService,
+                public navCtrl: NavController, public navParams: NavParams,) {
         this.form = fb.group({
             username:  ['', Validators.required],
             password:  ['', Validators.required]
@@ -23,7 +23,7 @@ export class LoginComponent {
         if (sessionStorage.getItem('username')) {this.auth.logout();}
         this.auth.login(value.username, value.password)
             .subscribe(
-                (user: any) => this.router.navigateByUrl('home'),
+                (user: any) => this.navCtrl.push('home'),
                 () => { this.error = true; }
             );
     }
