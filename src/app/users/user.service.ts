@@ -1,5 +1,5 @@
 import {Injectable}     from '@angular/core';
-import {Http, Response, Headers, RequestOptions, URLSearchParams} from '@angular/http';
+import {Http, Response, RequestOptions, URLSearchParams} from '@angular/http';
 import {User}           from './user';
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
@@ -12,15 +12,15 @@ export class UserService {
 
     getUser (id: number | string) {
         let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS });
-        
+
         return this.http.get(APP_SETTINGS.USERS_URL+id+'/', options)
             .map(res => <User> res.json())
             .catch(this.handleError);
     }
-  
+
     getUsers (searchArgs?: URLSearchParams) {
         let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS, search: searchArgs });
-        
+
         return this.http.get(APP_SETTINGS.USERS_URL, options)
             .map(res => <User[]> res.json())
             .catch(this.handleError);

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {URLSearchParams}   from '@angular/http';
+//import {URLSearchParams}   from '@angular/http';
 import {NavController, NavParams} from 'ionic-angular';
 import {Sample} from '../../app/sample/sample';
 import {SampleService} from '../../app/sample/sample.service';
@@ -25,13 +25,16 @@ export class SampleListPage {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedSample = navParams.get('sample');
 
+    //this._sampleService.destroyDB();
+    this._sampleService.initDB();
     this._getSamples();
 
   }
 
   private _getSamples(){
     this.notready = true;
-    this._sampleService.getSamples()
+    //this._sampleService.getSamples()
+    this._sampleService.getAll()
       .then(
         res => {
           this.samples = res;

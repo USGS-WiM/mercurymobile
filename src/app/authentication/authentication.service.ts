@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/observable/of';
-import {Http, Response, Headers, RequestOptions, URLSearchParams} from '@angular/http';
+import {Http, Headers, RequestOptions} from '@angular/http';
 import {APP_SETTINGS}   from '../app.settings';
 import {User} from '../users/user'
 

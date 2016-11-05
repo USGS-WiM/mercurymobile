@@ -4,10 +4,12 @@ import {StatusBar} from 'ionic-native';
 import {HomePage} from '../pages/home/home';
 import {SampleListPage} from '../pages/samples/sample-list';
 import {SiteListPage} from '../pages/sites/site-list';
+import {SampleService} from './sample/sample.service';
 
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
+  providers: [SampleService]
 })
 export class AppComponent {
   @ViewChild(Nav) nav: Nav;
@@ -23,6 +25,7 @@ export class AppComponent {
     sessionStorage.setItem('username', 'admin');
     sessionStorage.setItem('password', 'm3rcury@dm1n');
     this.initializeApp();
+
 
     // set our app's pages
     this.pages = [

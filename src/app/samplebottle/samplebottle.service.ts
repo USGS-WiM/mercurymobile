@@ -1,10 +1,11 @@
 import {Injectable}     from '@angular/core';
-import {Http, Response, Headers, RequestOptions, URLSearchParams} from '@angular/http';
+import {URLSearchParams} from '@angular/http';
+//import {Http, Response, Headers, RequestOptions, URLSearchParams} from '@angular/http';
 import {SampleBottle}           from './samplebottle';
-import {Observable} from 'rxjs/Rx';
+//import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import {APP_SETTINGS}   from '../app.settings';
+//import {APP_SETTINGS}   from '../app.settings';
 import {SAMPLEBOTTLES} from './mock-samplebottles'
 
 @Injectable()
