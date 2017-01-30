@@ -278,7 +278,7 @@ export class SampleDetailPage {
   }
 
   siteNameChange(siteName: number) {
-    let sites = this.mySites.filter(function(site: Site) {return site['usgs_scode'] == siteName});
+    let sites = this.mySites.filter(function(site: Site) {return site['name'] == siteName});
     let siteID = sites[0]['id'];
     this.siteNumber.setValue(siteID);
   }

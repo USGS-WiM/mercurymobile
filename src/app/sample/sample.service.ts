@@ -21,15 +21,15 @@ export class SampleService {
 
   initDB() {
     this._db.allDocs()
-      .then(function (result) {
+      .then(result => {
         if(result.total_rows === 0) {
+          console.log(SAMPLES.length);
           for (let sample of SAMPLES) {
             this._db.post(sample);
           }
         }
-        console.log(result);
       })
-      .catch(function (error) {
+      .catch( error => {
         console.log(error)
       });
   }
