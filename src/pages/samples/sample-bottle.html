@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Sample Bottle {{sample_bottle_name}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>
+  <div [hidden]="notready">
+    <form [formGroup]="sampleBottleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleBottleForm.value)">
+      <ion-grid id="body" formGroupName="sampleBottleControlsGroup">
+        <ion-row>
+          <ion-col width-10>Analysis</ion-col>
+          <ion-col width-90>
+            <ion-item>
+              <ion-select class="select-wide" formControlName="analysis">
+                <ion-option *ngFor="let analysis of myAnalyses" [value]="analysis.id" [selected]="analysis.id == mySampleBottle.analysis_type">{{analysis.analysis}}</ion-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-10>Filter</ion-col>
+          <ion-col width-90>
+            <ion-item>
+              <ion-select class="select-wide" formControlName="filterType">
+                <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="filter.id == mySampleBottle.filter_type">{{filter.filter}}</ion-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-10>Filter Volume</ion-col>
+          <ion-col width-90>
+            <ion-item>
+              <ion-input type="number" formControlName="filterVolume"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-10>Preservation</ion-col>
+          <ion-col width-90>
+            <ion-item>
+              <ion-select class="select-wide" formControlName="preservationType">
+                <ion-option *ngFor="let preservation of myPreservations" [value]="preservation.id"  [selected]="preservation.id == mySampleBottle.preservation_type">{{preservation.preservation}}</ion-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-10>Acid Volume</ion-col>
+          <ion-col width-90>
+            <ion-item>
+              <ion-input type="number" formControlName="preservationVolume"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <div><button ion-button type="submit">Submit</button></div>
+    </form>
+  </div>
+</ion-content>

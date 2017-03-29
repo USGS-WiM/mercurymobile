@@ -8,22 +8,17 @@ import {Sample} from '../../app/sample/sample';
 import {SampleBottle} from '../../app/samplebottle/samplebottle';
 import {Bottle} from "../../app/bottle/bottle";
 import {Medium} from "../../app/medium/medium";
-import {Analysis} from "../../app/analysis/analysis";
-import {Filter} from "../../app/filter/filter";
-import {Preservation} from "../../app/preservation/preservation";
 import {Acid} from "../../app/acid/acid";
 import {ProjectService} from '../../app/project/project.service';
 import {SiteService} from '../../app/site/site.service';
 import {BottleService} from "../../app/bottle/bottle.service";
 import {MediumService} from "../../app/medium/medium.service";
-import {AnalysisService} from "../../app/analysis/analysis.service";
-import {FilterService} from "../../app/filter/filter.service";
-import {PreservationService} from "../../app/preservation/preservation.service";
-import {AcidService} from "../../app/acid/acid.service";
 import {SampleService} from "../../app/sample/sample.service";
 import {SampleBottleService} from "../../app/samplebottle/samplebottle.service";
-import {AcidSelectPage} from './acid-select';
+import {AcidService} from "../../app/acid/acid.service";
 import {BottleSelectPage} from './bottle-select';
+import {AcidSelectPage} from './acid-select';
+import {SampleBottlePage} from './sample-bottle';
 
 @Component({
   templateUrl: 'sample-detail.html',
@@ -34,11 +29,9 @@ import {BottleSelectPage} from './bottle-select';
     SiteService,
     BottleService,
     MediumService,
-    AnalysisService,
-    FilterService,
-    PreservationService,
     AcidService
-  ]
+  ],
+  styles: ['.select-wide {max-width: 100%;}']
 })
 export class SampleDetailPage {
   cooperator_ID: number = 20000166;
@@ -57,9 +50,6 @@ export class SampleDetailPage {
   mySites: Site[];
   myBottles: Bottle[];
   myMediums: Medium[];
-  myAnalyses: Analysis[];
-  myFilters: Filter[];
-  myPreservations: Preservation[];
   myAcids: Acid[];
 
   sampleForm: FormGroup;
@@ -74,6 +64,8 @@ export class SampleDetailPage {
   sampleTime: FormControl = new FormControl(null);
   sampleDepth: FormControl = new FormControl(null);
   sampleRep: FormControl = new FormControl(null);
+  sampleMedium: FormControl = new FormControl(null);
+  sampleAcid: FormControl = new FormControl(null);
   sampleComment: FormControl = new FormControl(null);
 
   constructor(public navCtrl: NavController,
@@ -86,9 +78,6 @@ export class SampleDetailPage {
               private _siteService: SiteService,
               private _bottleService: BottleService,
               private _mediumService: MediumService,
-              private _analysisService: AnalysisService,
-              private _filterService: FilterService,
-              private _preservationService: PreservationService,
               private _acidService: AcidService
   ) {
 
@@ -96,9 +85,6 @@ export class SampleDetailPage {
     //this._getSites(this.project_ID);
     //this._getBottles();
     this._getMediums();
-    this._getAnalyses();
-    this._getFilters();
-    this._getPreservations();
     this._getAcids();
 
     this.sampleHeaderControls = new FormGroup({
@@ -109,7 +95,9 @@ export class SampleDetailPage {
       sampleDate: this.sampleDate,
       sampleTime: this.sampleTime,
       sampleDepth: this.sampleDepth,
-      sampleRep: this.sampleRep
+      sampleRep: this.sampleRep,
+      sampleMedium: this.sampleMedium,
+      sampleAcid: this.sampleAcid
     });
 
     this.sampleCommentControls = new FormGroup({
@@ -147,6 +135,7 @@ export class SampleDetailPage {
           this.sampleTime.setValue(response['time']);
           this.sampleDepth.setValue(response['depth']);
           this.sampleRep.setValue(response['replicate']);
+          this.sampleMedium.setValue(response['medium']);
           this.sampleComment.setValue(response['comment']);
           if (response['sample_bottles'].length > 0) {
             this._numSampleBottles = response['sample_bottles'].length;
@@ -165,6 +154,15 @@ export class SampleDetailPage {
         response => {
           this.mySampleBottles = response;
           for (let i = 0, j = this.mySampleBottles.length; i < j; i++){
+            // if (!this.sampleAcid.value) {
+            //   let acid = this.mySampleBottles[i]['preservation_acid'];
+            //   if (acid) {
+            //     let acids = response.filter(function (a) {return a['id'] == acid;});
+            //     let acidcode = acids[0]['code'];
+            //     this.sampleAcid.setValue(acidcode);
+            //     break;
+            //   }
+            // }
             this.addRow(this.mySampleBottles[i]);
           }
         },
@@ -209,49 +207,28 @@ export class SampleDetailPage {
         error => this._errorMessage = <any>error);
   }
 
-  private _getAnalyses() {
-    this._analysisService.getAnalyses()
-      .subscribe(
-        response => {
-          this.myAnalyses = response;
-        },
-        error => this._errorMessage = <any>error);
-  }
-
-  private _getFilters() {
-    this._filterService.getFilters()
-      .subscribe(
-        response => {
-          this.myFilters = response;
-        },
-        error => this._errorMessage = <any>error);
-  }
-
-  private _getPreservations() {
-    this._preservationService.getPreservations()
-      .subscribe(
-        response => {
-          this.myPreservations = response;
-        },
-        error => this._errorMessage = <any>error);
-  }
-
   private _getAcids() {
     this._acidService.getAcids(/*new URLSearchParams('page_size=all')*/)
       .subscribe(
         response => {
           this.myAcids = response;
+          if (!this.sampleAcid.value) {
+            if (this.mySampleBottles.length > 0) {
+              for (let i = 0, j = this.mySampleBottles.length; i < j; i++) {
+                let acid = this.mySampleBottles[i]['preservation_acid'];
+                if (acid) {
+                  let acids = response.filter(function (a) {
+                    return a['id'] == acid;
+                  });
+                  let acidcode = acids[0]['code'];
+                  this.sampleAcid.setValue(acidcode);
+                  break;
+                }
+              }
+            }
+          }
         },
         error => this._errorMessage = <any>error);
-  }
-
-  openAcidSelect(rowIndex: number) {
-    let opts = {showBackdrop: false, enableBackdropDismiss: false};
-    let modal = this.modalCtrl.create(AcidSelectPage, {}, opts);
-    modal.onDidDismiss(data => {
-      (<FormGroup>this.sampleBottleControls.controls[rowIndex]).controls['preservationAcid'].setValue(data);
-    });
-    modal.present();
   }
 
   openBottleSelect(rowIndex: number) {
@@ -261,6 +238,28 @@ export class SampleDetailPage {
       (<FormGroup>this.sampleBottleControls.controls[rowIndex]).controls['bottle'].setValue(data);
     });
     modal.present();
+  }
+
+  openAcidSelect() {
+    let opts = {showBackdrop: false, enableBackdropDismiss: false};
+    let modal = this.modalCtrl.create(AcidSelectPage, {}, opts);
+    modal.onDidDismiss(data => {
+      (<FormGroup>this.sampleHeaderControls).controls['sampleAcid'].setValue(data);
+    });
+    modal.present();
+  }
+
+  editSampleBottle(rowIndex: number){
+    let sbName = (<FormGroup>this.sampleBottleControls.controls[rowIndex]).controls['bottle'].value;
+    let samplebottles = this.mySampleBottles.filter(function (sb) {return sb['bottle_string'] == sbName;});
+    let sbID = samplebottles[0]['bottle'];
+    this.openPage(sbID);
+  }
+
+  openPage(sample_bottle_id) {
+    this.navCtrl.push(SampleBottlePage, {
+      samplebottle: sample_bottle_id
+    });
   }
 
   projectNameChange(projectName: String) {
@@ -278,7 +277,7 @@ export class SampleDetailPage {
   }
 
   siteNameChange(siteName: number) {
-    let sites = this.mySites.filter(function(site: Site) {return site['usgs_scode'] == siteName});
+    let sites = this.mySites.filter(function(site: Site) {return site['name'] == siteName});
     let siteID = sites[0]['id'];
     this.siteNumber.setValue(siteID);
   }
@@ -293,14 +292,7 @@ export class SampleDetailPage {
     if(samplebottle) {
       this.sampleBottleControls.push(
         new FormGroup({
-          bottle: new FormControl(samplebottle['bottle'] ? samplebottle['bottle'] : null),
-          medium: new FormControl(this.mySample['medium'] ? this.mySample['medium'] : null),
-          analysis: new FormControl(samplebottle['analysis_type'] ? samplebottle['analysis_type'] : null),
-          filterType: new FormControl(samplebottle['filter_type'] ? samplebottle['filter_type'] : null),
-          filterVolume: new FormControl(samplebottle['volume_filtered'] ? samplebottle['volume_filtered'] : null),
-          preservationType: new FormControl(samplebottle['preservation_type'] ? samplebottle['preservation_type'] : null),
-          preservationAcid: new FormControl(samplebottle['preservation_acid'] ? samplebottle['preservation_acid'] : null),
-          preservationVolume: new FormControl(samplebottle['preservation_volume'] ? samplebottle['preservation_volume'] : null)
+          bottle: new FormControl(samplebottle['bottle_string'] ? samplebottle['bottle_string'] : null)
         })
       );
       this._numRowsAdded++;
@@ -311,14 +303,7 @@ export class SampleDetailPage {
     else {
       this.sampleBottleControls.push(
         new FormGroup({
-          bottle: new FormControl(null),
-          medium: new FormControl(null),
-          analysis: new FormControl(null),
-          filterType: new FormControl(null),
-          filterVolume: new FormControl(null),
-          preservationType: new FormControl(null),
-          preservationAcid: new FormControl(null),
-          preservationVolume: new FormControl(null)
+          bottle: new FormControl(null)
         })
       );
     }

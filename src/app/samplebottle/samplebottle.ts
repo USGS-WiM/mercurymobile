@@ -2,6 +2,7 @@ export class SampleBottle {
   constructor (
     sample: number,
     bottle: number,
+    bottle_string: string,
     analysis_type: number,
     filter_type: number,
     volume_filtered: number,
