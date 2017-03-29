@@ -31,7 +31,7 @@ export class AcidSelectPage {
     this._acidService.getAcids(new URLSearchParams('unused=true&page_size=100'))
       .subscribe(
         response => {
-          this.myAcids = response;
+          this.myAcids = response.results;
           this._buildAcidOptions();
           this.notready = false;
         },

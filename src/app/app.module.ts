@@ -18,6 +18,7 @@ import {UserService} from './users/user.service';
 import {HomePage} from '../pages/home/home';
 import {SampleListPage} from '../pages/samples/sample-list';
 import {SampleDetailPage} from '../pages/samples/sample-detail';
+import {SampleBottlePage} from '../pages/samples/sample-bottle';
 import {AcidSelectPage} from '../pages/samples/acid-select';
 import {BottleSelectPage} from '../pages/samples/bottle-select';
 import {SiteListPage} from '../pages/sites/site-list';
@@ -26,7 +27,7 @@ import {SiteDetailPage} from '../pages/sites/site-detail';
 @NgModule({
   declarations: [
     AppComponent, HomePage, SampleListPage, SampleDetailPage, AcidSelectPage, BottleSelectPage,
-    SiteListPage, SiteDetailPage
+    SiteListPage, SiteDetailPage, SampleBottlePage
   ],
   imports: [
     IonicModule.forRoot(AppComponent), ReactiveFormsModule, HttpModule
@@ -34,7 +35,7 @@ import {SiteDetailPage} from '../pages/sites/site-detail';
   bootstrap: [IonicApp],
   entryComponents: [
     AppComponent, HomePage, SampleListPage, SampleDetailPage, AcidSelectPage, BottleSelectPage,
-    SiteListPage, SiteDetailPage
+    SiteListPage, SiteDetailPage, SampleBottlePage
   ],
   providers: [
     AcidService, AnalysisService, AuthenticationService, BottleService, FilterService, MediumService,

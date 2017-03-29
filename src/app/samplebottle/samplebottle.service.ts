@@ -11,8 +11,8 @@ import {SAMPLEBOTTLES} from './mock-samplebottles'
 @Injectable()
 export class SampleBottleService {
   getSampleBottle(id: number | string): Promise<SampleBottle> {
-    let newid: number = +id - 1;
-    return Promise.resolve(SAMPLEBOTTLES[newid]);
+    let samplebottle = SAMPLEBOTTLES.filter(function (sb) {return sb['bottle'] == id;})[0];
+    return Promise.resolve(samplebottle);
   }
 
   getSampleBottles(searchArgs?: URLSearchParams): Promise<SampleBottle[]> {
