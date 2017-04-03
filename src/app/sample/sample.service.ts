@@ -5,8 +5,11 @@ import {Sample}           from './sample';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 //import {APP_SETTINGS}   from '../app.settings';
-import {SAMPLES} from './mock-samples'
+import {APP_UTILITIES}   from '../app.utilities';
+import {SAMPLES} from './mock-samples';
 import PouchDB from 'pouchdb';
+import replicationStream from 'pouchdb-replication-stream';
+import MemoryStream from 'memorystream';
 
 @Injectable()
 export class SampleService {
@@ -16,6 +19,8 @@ export class SampleService {
   //PouchDB.debug.enable('*');
 
   constructor() {
+     PouchDB.plugin(replicationStream.plugin);
+     PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
      this._db = new PouchDB('samples');
   }
 
@@ -23,7 +28,6 @@ export class SampleService {
     this._db.allDocs()
       .then(result => {
         if(result.total_rows === 0) {
-          console.log(SAMPLES.length);
           for (let sample of SAMPLES) {
             this._db.post(sample);
           }
@@ -36,6 +40,22 @@ export class SampleService {
 
   destroyDB() {
     new PouchDB('samples').destroy();
+  }
+
+  dumpDB(filename: string) {
+    let dumpedString = '';
+    let stream = new MemoryStream();
+    stream.on('data', function(chunk) {
+      dumpedString += chunk.toString();
+    });
+
+    this._db.dump(stream)
+      .then(function() {
+        console.log('dumpDB SUCCESS! ' + dumpedString);
+        APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
+      }).catch(function(err) {
+        console.log('dumpDB ERROR! ', err);
+    });
   }
 
   add(sample) {
@@ -107,7 +127,7 @@ export class SampleService {
       return low;
   }
 
-    getSample(id: number | string): Promise<Sample> {
+  getSample(id: number | string): Promise<Sample> {
     let newid: number = +id - 1;
     return Promise.resolve(SAMPLES[newid]);
   }

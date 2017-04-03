@@ -5,10 +5,79 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
+import {SITES} from './sites';
+import PouchDB from 'pouchdb';
+import find from 'pouchdb-find';
+import load from 'pouchdb-load';
+import replicationStream from 'pouchdb-replication-stream';
 
 @Injectable()
 export class SiteService {
-    constructor (private http: Http) {}
+    private _db;
+    private _sites;
+
+    constructor (private http: Http) {
+      PouchDB.plugin(find);
+      PouchDB.plugin(load);
+      PouchDB.plugin(replicationStream.plugin);
+      PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
+      this._db = new PouchDB('sites');
+      //this.destroyDB();
+      this.initDB();
+    }
+
+    initDB() {
+      this._db.allDocs()
+        .then(result => {
+          if(result.total_rows === 0) {
+            //this._db.bulkDocs(SITES);
+            for (let site of SITES) {
+              //this._db.post(site);
+              this._db.put({
+                _id: site['name'],
+                id: site['id'],
+                name: site['name'],
+                usgs_scode: site['usgs_scode'],
+                projects: site['projects']
+              });
+            }
+          }
+        })
+        .catch( error => {
+          console.log(error)
+        });
+    }
+
+    destroyDB() {
+      new PouchDB('sites').destroy();
+    }
+
+    findSite(val: string) {
+      this._db.find({
+        selector: {_id: val},
+        fields: ['id', 'site']
+        //sort: ['code']
+      }).then(function (result) {
+        return result['docs'];
+      }).catch(function (err) {
+        console.log('site find error');
+      });
+    }
+
+    getAllSites () {
+        if (!this._sites) {
+          return this._db.allDocs({ include_docs: true})
+              .then(docs => {
+                  this._sites = docs.rows.map(row => {
+                      return row.doc;
+                  });
+                  return this._sites;
+              });
+      } else {
+          // Return cached data as a promise
+          return Promise.resolve(this._sites);
+      }
+    }
 
     getSite (id: number | string) {
         let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS });

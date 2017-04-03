@@ -5,10 +5,77 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
+import {FILTERS} from './filters';
+import PouchDB from 'pouchdb';
+import find from 'pouchdb-find';
+import load from 'pouchdb-load';
+import replicationStream from 'pouchdb-replication-stream';
 
 @Injectable()
 export class FilterService {
-    constructor (private http: Http) {}
+    private _db;
+    private _filters;
+
+    constructor (private http: Http) {
+      PouchDB.plugin(find);
+      PouchDB.plugin(load);
+      PouchDB.plugin(replicationStream.plugin);
+      PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
+      this._db = new PouchDB('filters');
+      //this.destroyDB();
+      this.initDB();
+    }
+
+    initDB() {
+      this._db.allDocs()
+        .then(result => {
+          if(result.total_rows === 0) {
+            //this._db.bulkDocs(FILTERS);
+            for (let filter of FILTERS) {
+              //this._db.post(analysis);
+              this._db.put({
+                _id: filter['filter'],
+                id: filter['id'],
+                filter: filter['filter']
+              });
+            }
+          }
+        })
+        .catch( error => {
+          console.log(error)
+        });
+    }
+
+    destroyDB() {
+      new PouchDB('filters').destroy();
+    }
+
+    findFilter(val: string) {
+      this._db.find({
+        selector: {_id: val},
+        fields: ['id', 'filter']
+        //sort: ['code']
+      }).then(function (result) {
+        return result['docs'];
+      }).catch(function (err) {
+        console.log('filter find error');
+      });
+    }
+
+    getAllFilters () {
+        if (!this._filters) {
+          return this._db.allDocs({ include_docs: true})
+              .then(docs => {
+                  this._filters = docs.rows.map(row => {
+                      return row.doc;
+                  });
+                  return this._filters;
+              });
+      } else {
+          // Return cached data as a promise
+          return Promise.resolve(this._filters);
+      }
+    }
 
     getFilter (id: number | string) {
         let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS });

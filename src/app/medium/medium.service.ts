@@ -5,10 +5,79 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
+import {MEDIUMS} from './mediums';
+import PouchDB from 'pouchdb';
+import find from 'pouchdb-find';
+import load from 'pouchdb-load';
+import replicationStream from 'pouchdb-replication-stream';
 
 @Injectable()
 export class MediumService {
-    constructor (private http: Http) {}
+    private _db;
+    private _mediums;
+
+
+    constructor (private http: Http) {
+      PouchDB.plugin(find);
+      PouchDB.plugin(load);
+      PouchDB.plugin(replicationStream.plugin);
+      PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
+      this._db = new PouchDB('medium');
+      //this.destroyDB();
+      this.initDB();
+    }
+
+    initDB() {
+      this._db.allDocs()
+        .then(result => {
+          if(result.total_rows === 0) {
+            //this._db.bulkDocs(MEDIUMS);
+            for (let medium of MEDIUMS) {
+              //this._db.post(medium);
+              this._db.put({
+                _id: medium['nwis_code'],
+                id: medium['id'],
+                nwis_code: medium['nwis_code'],
+                medium: medium['medium']
+              });
+            }
+          }
+        })
+        .catch( error => {
+          console.log(error)
+        });
+    }
+
+    destroyDB() {
+      new PouchDB('mediums').destroy();
+    }
+
+    findMedium(val: string) {
+      this._db.find({
+        selector: {_id: val},
+        fields: ['id', 'medium']
+        //sort: ['code']
+      }).then(function (result) {
+        return result['docs'];
+      }).catch(function (err) {
+        console.log('medium find error');
+      });
+    }
+
+    getAllMediums () {
+        if (!this._mediums) {
+          return this._db.allDocs({ include_docs: true})
+              .then(docs => {
+                  this._mediums = docs.rows.map(row => {
+                      return row.doc;
+                  });
+                  return this._mediums;
+              });
+      } else {
+          // Return cached data as a promise
+          return Promise.resolve(this._mediums);
+      }
+    }
 
     getMedium (id: number | string) {
         let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS });

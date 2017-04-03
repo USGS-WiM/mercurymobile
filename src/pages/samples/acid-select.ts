@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {URLSearchParams}   from '@angular/http';
+//import {URLSearchParams}   from '@angular/http';
 import {NavParams, ViewController, Platform} from 'ionic-angular';
 import {Acid} from '../../app/acid/acid';
 import {AcidService} from '../../app/acid/acid.service';
@@ -24,18 +24,31 @@ export class AcidSelectPage {
       public viewCtrl: ViewController,
       private _acidService: AcidService
   ) {
-    this._getAcids();
+    this._getAllAcids();
   }
 
-  private _getAcids() {
-    this._acidService.getAcids(new URLSearchParams('unused=true&page_size=100'))
-      .subscribe(
-        response => {
-          this.myAcids = response.results;
+  // private _getAcids() {
+  //   this._acidService.getAcids(new URLSearchParams('unused=true&page_size=100'))
+  //     .subscribe(
+  //       response => {
+  //         this.myAcids = response.results;
+  //         this._buildAcidOptions();
+  //         this.notready = false;
+  //       },
+  //       error => this._errorMessage = <any>error);
+  // }
+
+  private _getAllAcids() {
+    this.myAcids = this._acidService.getAllAcids().then(
+        res => {
+          this.myAcids = res;
           this._buildAcidOptions();
-          this.notready = false;
         },
-        error => this._errorMessage = <any>error);
+        error => {
+          this._errorMessage = <any>error;
+          this.notready = false;
+        });
+
   }
 
   private _buildAcidOptions() {
@@ -43,6 +56,7 @@ export class AcidSelectPage {
     for (let i = 0, j = this.myAcids.length; i < j; i++) {
       this.acids.push(this.myAcids[i]['code']);
     }
+    this.notready = false;
   }
 
   filterAcids(event: any) {

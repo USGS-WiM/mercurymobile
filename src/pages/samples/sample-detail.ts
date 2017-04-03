@@ -19,6 +19,7 @@ import {AcidService} from "../../app/acid/acid.service";
 import {BottleSelectPage} from './bottle-select';
 import {AcidSelectPage} from './acid-select';
 import {SampleBottlePage} from './sample-bottle';
+import {APP_UTILITIES}   from '../../app/app.utilities';
 
 @Component({
   templateUrl: 'sample-detail.html',
@@ -208,8 +209,8 @@ export class SampleDetailPage {
   }
 
   private _getAcids() {
-    this._acidService.getAcids(/*new URLSearchParams('page_size=all')*/)
-      .subscribe(
+    this._acidService.getAllAcids(/*new URLSearchParams('page_size=all')*/)
+      .then(
         response => {
           this.myAcids = response;
           if (!this.sampleAcid.value) {
@@ -227,8 +228,8 @@ export class SampleDetailPage {
               }
             }
           }
-        },
-        error => this._errorMessage = <any>error);
+        })
+        .catch(function(error) {this._errorMessage = <any>error});
   }
 
   openBottleSelect(rowIndex: number) {
@@ -324,6 +325,11 @@ export class SampleDetailPage {
     // TODO: build proper onSubmit function, including validations (especially grabbing medium from samplebottles)
     alert("Submitted!");
     console.log(formValue);
+  }
+
+  dumpDB(){
+    let filename = this.mySample['projectName'].replace(/\s/g,'') + "_" + this.mySample['siteName'].replace(/\s/g,'') + "_" + APP_UTILITIES.TODAY + ".txt";
+    this._sampleService.dumpDB(filename);
   }
 
 }

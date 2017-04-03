@@ -5,10 +5,78 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
+import {ANALYSES} from './analyses';
+import PouchDB from 'pouchdb';
+import find from 'pouchdb-find';
+import load from 'pouchdb-load';
+import replicationStream from 'pouchdb-replication-stream';
 
 @Injectable()
 export class AnalysisService {
-    constructor (private http: Http) {}
+    private _db;
+    private _analyses;
+
+    constructor (private http: Http) {
+      PouchDB.plugin(find);
+      PouchDB.plugin(load);
+      PouchDB.plugin(replicationStream.plugin);
+      PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
+      this._db = new PouchDB('analyses');
+      //this.destroyDB();
+      this.initDB();
+    }
+
+    initDB() {
+      this._db.allDocs()
+        .then(result => {
+          if(result.total_rows === 0) {
+            //this._db.bulkDocs(ANALYSES);
+            for (let analysis of ANALYSES) {
+              //this._db.post(analysis);
+              this._db.put({
+                _id: analysis['analysis'],
+                id: analysis['id'],
+                analysis: analysis['analysis'],
+                constituents: analysis['constituents']
+              });
+            }
+          }
+        })
+        .catch( error => {
+          console.log(error)
+        });
+    }
+
+    destroyDB() {
+      new PouchDB('analyses').destroy();
+    }
+
+    findAnalysis(val: string) {
+      this._db.find({
+        selector: {_id: val},
+        fields: ['id', 'analysis']
+        //sort: ['code']
+      }).then(function (result) {
+        return result['docs'];
+      }).catch(function (err) {
+        console.log('analysis find error');
+      });
+    }
+
+    getAllAnalyses () {
+        if (!this._analyses) {
+          return this._db.allDocs({ include_docs: true})
+              .then(docs => {
+                  this._analyses = docs.rows.map(row => {
+                      return row.doc;
+                  });
+                  return this._analyses;
+              });
+      } else {
+          // Return cached data as a promise
+          return Promise.resolve(this._analyses);
+      }
+    }
 
     getAnalysis (id: number | string) {
         let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS });
