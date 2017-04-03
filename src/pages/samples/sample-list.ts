@@ -3,6 +3,7 @@ import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Sample} from '../../app/sample/sample';
 import {SampleService} from '../../app/sample/sample.service';
+import {AcidService} from '../../app/acid/acid.service';
 import {SampleDetailPage} from './sample-detail';
 
 
@@ -21,13 +22,14 @@ export class SampleListPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              private _sampleService: SampleService) {
+              private _sampleService: SampleService, private _acidServer: AcidService) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedSample = navParams.get('sample');
 
     //this._sampleService.destroyDB();
     this._sampleService.initDB();
     this._getSamples();
+    this._acidServer.initDB();
 
   }
 

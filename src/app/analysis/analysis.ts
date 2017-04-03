@@ -3,7 +3,6 @@ export class Analysis {
     id: number,
     analysis: string,
     description: string,
-    mediums: number[],
-    methods: number[]
+    consituents: number[]
   ) {}
 }
