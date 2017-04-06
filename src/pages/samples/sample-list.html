@@ -9,6 +9,10 @@
 
 <ion-content>
   <button ion-button type="button" (click)="addSample()">Add Sample</button>
+  <button ion-button type="button" (click)="dumpSamples()">Export Sample</button>
+  <input id="fileSelect" type="file" multiple (change)="loadSamples($event)" />
+
+  <pre id="display"></pre>
   <ion-list>
     <button ion-item *ngFor="let sample of samples" (click)="editSample(sample.id)">
       <ion-icon name="beaker" item-left></ion-icon>

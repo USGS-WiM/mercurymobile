@@ -1,27 +1,26 @@
 import {Injectable}     from '@angular/core';
 //import {Http, Response, Headers, RequestOptions, URLSearchParams} from '@angular/http';
 import {Sample}           from './sample';
-//import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-//import {APP_SETTINGS}   from '../app.settings';
-import {APP_UTILITIES}   from '../app.utilities';
+import {APP_UTILITIES}   from '../../app/app.utilities';
 import {SAMPLES} from './mock-samples';
 import PouchDB from 'pouchdb';
+import PouchDBLoad from 'pouchdb-load';
 import replicationStream from 'pouchdb-replication-stream';
 import MemoryStream from 'memorystream';
 
 @Injectable()
-export class SampleService {
+export class SampleService{
 
-  private _db;
+  public _db;
   private _samples;
-  //PouchDB.debug.enable('*');
 
   constructor() {
-     PouchDB.plugin(replicationStream.plugin);
-     PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
-     this._db = new PouchDB('samples');
+    PouchDB.plugin(replicationStream.plugin);
+    PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
+    PouchDB.plugin({loadIt: PouchDBLoad.load});
+    this._db = new PouchDB('samples');
   }
 
   initDB() {
@@ -42,6 +41,16 @@ export class SampleService {
     new PouchDB('samples').destroy();
   }
 
+  loadDB(data) {
+    this._db.loadIt(data)
+      .then(res => {
+        console.log("load success");
+      })
+      .catch( error => {
+        console.log(error);
+      });
+  }
+
   dumpDB(filename: string) {
     let dumpedString = '';
     let stream = new MemoryStream();
@@ -51,7 +60,7 @@ export class SampleService {
 
     this._db.dump(stream)
       .then(function() {
-        console.log('dumpDB SUCCESS! ' + dumpedString);
+        //console.log('dumpDB SUCCESS! ' + dumpedString);
         APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
       }).catch(function(err) {
         console.log('dumpDB ERROR! ', err);

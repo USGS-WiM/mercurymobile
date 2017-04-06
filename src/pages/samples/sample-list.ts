@@ -5,7 +5,7 @@ import {Sample} from '../../app/sample/sample';
 import {SampleService} from '../../app/sample/sample.service';
 import {AcidService} from '../../app/acid/acid.service';
 import {SampleDetailPage} from './sample-detail';
-
+import {APP_UTILITIES}   from '../../app/app.utilities';
 
 @Component({
   templateUrl: 'sample-list.html',
@@ -27,7 +27,7 @@ export class SampleListPage {
     this.selectedSample = navParams.get('sample');
 
     //this._sampleService.destroyDB();
-    this._sampleService.initDB();
+    //this._sampleService.initDB();
     this._getSamples();
     this._acidServer.initDB();
 
@@ -46,6 +46,29 @@ export class SampleListPage {
           this._errorMessage = <any>error;
           this.notready = false;
         });
+  }
+
+  fileDragHover(fileInput) {
+      fileInput.stopPropagation();
+      fileInput.preventDefault();
+  }
+
+  loadSamples(fileInput: any){
+      let self = this;
+      this.fileDragHover(fileInput);
+      let selectedFiles = <Array<File>> fileInput.target.files || fileInput.dataTransfer.files;
+      let reader = new FileReader();
+			reader.onload = function(e) {
+					self._sampleService.loadDB(reader.result);
+			};
+			reader.readAsBinaryString(selectedFiles[0]);
+  }
+
+  dumpSamples() {
+    for (let sample of this.samples) {
+      let filename = sample['projectName'].replace(/\s/g,'') + "_" + sample['siteName'].replace(/\s/g,'') + "_" + APP_UTILITIES.TODAY + ".txt";
+      this._sampleService.dumpDB(filename);
+    }
   }
 
   addSample(){
