@@ -46,12 +46,12 @@ export class SampleDetailPage {
   private _numSampleBottles: number;
 
   mySample: Sample = new Sample(null, null, null, null, null, null, null, null, null, null, null, null, null);
-  mySampleBottles: SampleBottle[];
-  myProjects: Project[];
-  mySites: Site[];
-  myBottles: Bottle[];
-  myMediums: Medium[];
-  myAcids: Acid[];
+  mySampleBottles: SampleBottle[] = [];
+  myProjects: Project[] = [];
+  mySites: Site[] = [];
+  myBottles: Bottle[] = [];
+  myMediums: Medium[] = [];
+  myAcids: Acid[] = [];
 
   sampleForm: FormGroup;
   sampleHeaderControls: FormGroup;
@@ -171,21 +171,22 @@ export class SampleDetailPage {
   }
 
   private _getProjects() {
-    this._projectService.getProjects()
-      .subscribe(
-        response => {
-          this.myProjects = response;
-        },
-        error => this._errorMessage = <any>error);
+    this._projectService.getAll()
+      .then(response =>
+      {
+        for(let i =0; i < response.rows.length; i++) {
+          this.myProjects.push(response.rows[i].doc);
+        }
+      }, error => {
+        this._errorMessage = <any>error;
+      });
   }
 
-  private _getSites(projectID: number | string) {
-    this._siteService.getSites(new URLSearchParams('project='+projectID))
-      .subscribe(
-        response => {
-          this.mySites = response.results;
-        },
-        error => this._errorMessage = <any>error);
+  private _getSites(projectID: number) {
+    this._siteService.findSitesByProject(projectID.toString())//new URLSearchParams('project='+projectID))
+      .then(response => this.mySites = response.results)
+      //.catch(error => this._errorMessage = <any>error);
+    .catch(error => console.log(error));
   }
 
   // private _getBottles() {
@@ -200,12 +201,10 @@ export class SampleDetailPage {
   // }
 
   private _getMediums() {
-    this._mediumService.getMediums()
-      .subscribe(
-        response => {
-          this.myMediums = response;
-        },
-        error => this._errorMessage = <any>error);
+    this._mediumService.getAllMediums()
+      .then(response => this.myMediums = response)
+      //.catch(error => this._errorMessage = <any>error);
+    .catch(error => console.log(error));
   }
 
   private _getAcids() {
@@ -229,7 +228,8 @@ export class SampleDetailPage {
             }
           }
         })
-        .catch(function(error) {this._errorMessage = <any>error});
+        //.catch(function(error) {this._errorMessage = <any>error});
+    .catch(error => console.log(error));
   }
 
   openBottleSelect(rowIndex: number) {

@@ -63,20 +63,23 @@ export class ProjectService {
       });
     }
 
-    getAllProjects () {
-        if (!this._projects) {
-          return this._db.allDocs({ include_docs: true})
+    public getAll() {
+        return this._db.allDocs({include_docs: true});
+    }
+
+    getAllProjects() {
+      if (!this._projects) {
+          this._db.allDocs({ include_docs: true})
               .then(docs => {
                   this._projects = docs.rows.map(row => {
                       return row.doc;
                   });
-                  return this._projects;
+                  Promise.resolve(this._projects);
               });
       } else {
-          // Return cached data as a promise
           return Promise.resolve(this._projects);
       }
-    }
+  }
 
     getProject (id: number | string) {
         let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS });
