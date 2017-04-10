@@ -64,19 +64,20 @@ export class SiteService {
       });
     }
 
-    getAllSites () {
-        if (!this._sites) {
-          return this._db.allDocs({ include_docs: true})
-              .then(docs => {
-                  this._sites = docs.rows.map(row => {
-                      return row.doc;
-                  });
-                  return this._sites;
-              });
-      } else {
-          // Return cached data as a promise
-          return Promise.resolve(this._sites);
-      }
+    findSitesByProject(val: string) {
+        return this._db.find({
+          selector: {project: {$in: val}},
+          fields: ['id', 'site']
+          //sort: ['code']
+        }).then(function (result) {
+          return result['docs'];
+        }).catch(function (err) {
+          console.log(err);
+        });
+    }
+
+    public getAllSites() {
+        return this._db.allDocs({include_docs: true});
     }
 
     getSite (id: number | string) {

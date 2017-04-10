@@ -79,52 +79,9 @@ export class SampleService{
       return this._db.remove(sample);
   }
 
-  getAll() {
-
-      if (!this._samples) {
-          return this._db.allDocs({ include_docs: true})
-              .then(docs => {
-
-                  // Each row has a .doc object and we just want to send an
-                  // array of birthday objects back to the calling controller,
-                  // so let's map the array to contain just the .doc objects.
-
-                  this._samples = docs.rows.map(row => {
-                      // Dates are not automatically converted from a string.
-                      //row.doc.Date = new Date(row.doc.Date);
-                      return row.doc;
-                  });
-
-                  // Listen for changes on the database.
-                  this._db.changes({ live: true, since: 'now', include_docs: true})
-                      .on('change', this.onDatabaseChange);
-
-                  return this._samples;
-              });
-      } else {
-          // Return cached data as a promise
-          return Promise.resolve(this._samples);
-      }
+  public getAll() {
+      return this._db.allDocs({include_docs: true});
   }
-
-  private onDatabaseChange = (change) => {
-      let index = this.findIndex(this._samples, change.id);
-      let sample = this._samples[index];
-
-      if (change.deleted) {
-          if (sample) {
-              this._samples.splice(index, 1); // delete
-          }
-      }
-      else {
-          //change.doc.Date = new Date(change.doc.Date);
-          if (sample && sample._id === change.id) {
-              this._samples[index] = change.doc; // update
-          } else {
-              this._samples.splice(index, 0, change.doc); // insert
-          }
-      }
-  };
 
   // Binary search, the array is by default sorted by _id.
   private findIndex(array, id) {

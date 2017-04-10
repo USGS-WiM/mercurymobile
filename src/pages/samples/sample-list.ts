@@ -37,15 +37,16 @@ export class SampleListPage {
     this.notready = true;
     //this._sampleService.getSamples()
     this._sampleService.getAll()
-      .then(
-        res => {
-          this.samples = res;
+      .then(response =>
+      {
+        for(let i =0; i < response.rows.length; i++) {
+          this.samples.push(response.rows[i].doc);
           this.notready = false;
-        },
-        error => {
-          this._errorMessage = <any>error;
-          this.notready = false;
-        });
+        }
+      }, error => {
+        this._errorMessage = <any>error;
+        this.notready = false;
+      });
   }
 
   fileDragHover(fileInput) {
