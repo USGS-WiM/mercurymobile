@@ -62,19 +62,8 @@ export class PreservationService {
       });
     }
 
-    getAllPreservations () {
-        if (!this._preservations) {
-          return this._db.allDocs({ include_docs: true})
-              .then(docs => {
-                  this._preservations = docs.rows.map(row => {
-                      return row.doc;
-                  });
-                  return this._preservations;
-              });
-      } else {
-          // Return cached data as a promise
-          return Promise.resolve(this._preservations);
-      }
+    public getAll() {
+        return this._db.allDocs({include_docs: true});
     }
 
     getPreservation (id: number | string) {

@@ -62,19 +62,8 @@ export class BottleService {
       });
     }
 
-    getAllBottles () {
-        if (!this._bottles) {
-          return this._db.allDocs({ include_docs: true})
-              .then(docs => {
-                  this._bottles = docs.rows.map(row => {
-                      return row.doc;
-                  });
-                  return this._bottles;
-              });
-      } else {
-          // Return cached data as a promise
-          return Promise.resolve(this._bottles);
-      }
+    public getAll() {
+        return this._db.allDocs({include_docs: true});
     }
 
     getBottle (id: number | string) {

@@ -63,19 +63,8 @@ export class AnalysisService {
       });
     }
 
-    getAllAnalyses () {
-        if (!this._analyses) {
-          return this._db.allDocs({ include_docs: true})
-              .then(docs => {
-                  this._analyses = docs.rows.map(row => {
-                      return row.doc;
-                  });
-                  return this._analyses;
-              });
-      } else {
-          // Return cached data as a promise
-          return Promise.resolve(this._analyses);
-      }
+    public getAll() {
+        return this._db.allDocs({include_docs: true});
     }
 
     getAnalysis (id: number | string) {

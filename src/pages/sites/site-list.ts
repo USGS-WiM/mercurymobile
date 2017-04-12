@@ -32,18 +32,28 @@ export class SiteListPage {
 
   private _getSites(newUrlSearchParams?){
     this.notready = true;
-    this._siteService.getSites(new URLSearchParams(newUrlSearchParams))
-      .subscribe(
-        res => {
-          this.sites = res.results;
-          this.siteCount = res.count;
-          this.resultPages = Math.ceil(this.siteCount / 100);
-          this.notready = false;
-        },
-        error => {
-          this._errorMessage = <any>error;
-          this.notready = false;
-        });
+    this._siteService.getAll()//new URLSearchParams(newUrlSearchParams))
+    .then(response =>
+      {
+        for(let i =0; i < response.rows.length; i++) {
+          this.sites.push(response.rows[i].doc);
+        }
+        this.notready = false;
+      }, error => {
+        this._errorMessage = <any>error;
+        this.notready = false;
+      });
+      // .subscribe(
+      //   res => {
+      //     this.sites = res.results;
+      //     this.siteCount = res.count;
+      //     this.resultPages = Math.ceil(this.siteCount / 100);
+      //     this.notready = false;
+      //   },
+      //   error => {
+      //     this._errorMessage = <any>error;
+      //     this.notready = false;
+      //   });
   }
 
   nextPage(){
