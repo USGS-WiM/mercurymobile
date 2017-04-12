@@ -183,10 +183,19 @@ export class SampleDetailPage {
   }
 
   private _getSites(projectID: number) {
-    this._siteService.findSitesByProject(projectID.toString())//new URLSearchParams('project='+projectID))
-      .then(response => this.mySites = response.results)
-      //.catch(error => this._errorMessage = <any>error);
-    .catch(error => console.log(error));
+    this._siteService.findSitesByProject(projectID)
+      .then(response =>
+      {
+        for(let i =0; i < response.length; i++) {
+          let sitedata = response[i];
+          let newsite = new Site("temp");
+          newsite['name'] = sitedata.name;
+          newsite['id'] = sitedata.id;
+          this.mySites.push(newsite);
+        }
+      }, error => {
+        this._errorMessage = <any>error;
+      });
   }
 
   // private _getBottles() {
@@ -201,17 +210,24 @@ export class SampleDetailPage {
   // }
 
   private _getMediums() {
-    this._mediumService.getAllMediums()
-      .then(response => this.myMediums = response)
-      //.catch(error => this._errorMessage = <any>error);
-    .catch(error => console.log(error));
+    this._mediumService.getAll()
+      .then(response =>
+      {
+        for(let i =0; i < response.rows.length; i++) {
+          this.myMediums.push(response.rows[i].doc);
+        }
+      }, error => {
+        this._errorMessage = <any>error;
+      });
   }
 
   private _getAcids() {
-    this._acidService.getAllAcids(/*new URLSearchParams('page_size=all')*/)
+    this._acidService.getAll()
       .then(
         response => {
-          this.myAcids = response;
+          for(let i =0; i < response.rows.length; i++) {
+            this.myAcids.push(response.rows[i].doc);
+          }
           if (!this.sampleAcid.value) {
             if (this.mySampleBottles.length > 0) {
               for (let i = 0, j = this.mySampleBottles.length; i < j; i++) {
@@ -227,9 +243,9 @@ export class SampleDetailPage {
               }
             }
           }
-        })
-        //.catch(function(error) {this._errorMessage = <any>error});
-    .catch(error => console.log(error));
+        }, error => {
+        this._errorMessage = <any>error;
+      });
   }
 
   openBottleSelect(rowIndex: number) {

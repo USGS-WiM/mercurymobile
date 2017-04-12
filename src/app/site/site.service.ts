@@ -46,6 +46,13 @@ export class SiteService {
         .catch( error => {
           console.log(error)
         });
+      this._db.createIndex({
+        index: {
+          fields: ['projects'],
+          name: 'projects',
+          ddoc: 'projects'
+        }
+      });
     }
 
     destroyDB() {
@@ -64,10 +71,11 @@ export class SiteService {
       });
     }
 
-    findSitesByProject(val: string) {
+    findSitesByProject(val: number) {
+      console.log(val);
         return this._db.find({
-          selector: {project: {$in: val}},
-          fields: ['id', 'site']
+          selector: {projects: {$elemMatch: {$eq: val}}},
+          fields: ['id', 'name']
           //sort: ['code']
         }).then(function (result) {
           return result['docs'];
@@ -76,7 +84,7 @@ export class SiteService {
         });
     }
 
-    public getAllSites() {
+    public getAll() {
         return this._db.allDocs({include_docs: true});
     }
 

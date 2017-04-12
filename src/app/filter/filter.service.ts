@@ -62,19 +62,8 @@ export class FilterService {
       });
     }
 
-    getAllFilters () {
-        if (!this._filters) {
-          return this._db.allDocs({ include_docs: true})
-              .then(docs => {
-                  this._filters = docs.rows.map(row => {
-                      return row.doc;
-                  });
-                  return this._filters;
-              });
-      } else {
-          // Return cached data as a promise
-          return Promise.resolve(this._filters);
-      }
+    public getAll() {
+        return this._db.allDocs({include_docs: true});
     }
 
     getFilter (id: number | string) {

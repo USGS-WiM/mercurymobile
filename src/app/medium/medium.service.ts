@@ -64,19 +64,8 @@ export class MediumService {
       });
     }
 
-    getAllMediums () {
-        if (!this._mediums) {
-          return this._db.allDocs({ include_docs: true})
-              .then(docs => {
-                  this._mediums = docs.rows.map(row => {
-                      return row.doc;
-                  });
-                  return this._mediums;
-              });
-      } else {
-          // Return cached data as a promise
-          return Promise.resolve(this._mediums);
-      }
+    public getAll() {
+        return this._db.allDocs({include_docs: true});
     }
 
     getMedium (id: number | string) {

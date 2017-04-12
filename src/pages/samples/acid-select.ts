@@ -15,7 +15,7 @@ export class AcidSelectPage {
   notready: Boolean = true;
   private _errorMessage: string;
   selectedacid: string = '';
-  myAcids: Acid[];
+  myAcids: Acid[] = [];
   acids = [];
 
   constructor(
@@ -39,16 +39,17 @@ export class AcidSelectPage {
   // }
 
   private _getAllAcids() {
-    this.myAcids = this._acidService.getAllAcids().then(
-        res => {
-          this.myAcids = res;
+    this._acidService.getAll()
+      .then(response =>
+        {
+          for(let i =0; i < response.rows.length; i++) {
+            this.myAcids.push(response.rows[i].doc);
+          }
           this._buildAcidOptions();
-        },
-        error => {
+        }, error => {
           this._errorMessage = <any>error;
           this.notready = false;
         });
-
   }
 
   private _buildAcidOptions() {
