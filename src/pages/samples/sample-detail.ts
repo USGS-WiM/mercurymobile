@@ -23,15 +23,6 @@ import {APP_UTILITIES}   from '../../app/app.utilities';
 
 @Component({
   templateUrl: 'sample-detail.html',
-  providers: [
-    SampleService,
-    SampleBottleService,
-    ProjectService,
-    SiteService,
-    BottleService,
-    MediumService,
-    AcidService
-  ],
   styles: ['.select-wide {max-width: 100%;}']
 })
 export class SampleDetailPage {
@@ -190,6 +181,7 @@ export class SampleDetailPage {
           let sitedata = response[i];
           let newsite = new Site("temp");
           newsite['name'] = sitedata.name;
+          newsite['usgs_scode'] = sitedata.usgs_scode;
           newsite['id'] = sitedata.id;
           this.mySites.push(newsite);
         }
