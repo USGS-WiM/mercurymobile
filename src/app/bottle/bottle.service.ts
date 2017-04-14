@@ -15,6 +15,7 @@ import replicationStream from 'pouchdb-replication-stream';
 export class BottleService {
     private _db;
     private _bottles;
+    bottle_names = [];
 
     constructor (private http: Http) {
       PouchDB.plugin(find);
@@ -64,6 +65,23 @@ export class BottleService {
 
     public getAll() {
         return this._db.allDocs({include_docs: true});
+    }
+
+    public getAllNames() {
+        return this.bottle_names;
+    }
+
+    public setAllNames() {
+        this._db.allDocs({include_docs: true})
+          .then(response => {
+            let list = [];
+            for (let i = 0; i < response.rows.length; i++) {
+              list.push(response.rows[i].doc['name']);
+            }
+            this.bottle_names = list;
+          }, error => {
+            console.log(error);
+          });
     }
 
     getBottle (id: number | string) {

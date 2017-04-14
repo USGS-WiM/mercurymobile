@@ -5,6 +5,7 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
+import {APP_UTILITIES}   from '../app.utilities';
 import {SITES} from './sites';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
@@ -46,15 +47,15 @@ export class SiteService {
         .catch( error => {
           console.log(error)
         });
-      this._db.createIndex({
-        index: {
-          fields: ['projects'],
-          name: 'projects',
-          ddoc: 'projects'
-        }
-      });
-    }
 
+    }
+      // this._db.createIndex({
+      //   index: {
+      //     fields: ['projects'],
+      //     name: 'projects',
+      //     ddoc: 'projects'
+      //   }
+      // });
     destroyDB() {
       new PouchDB('sites').destroy();
     }
@@ -72,14 +73,17 @@ export class SiteService {
     }
 
     findSitesByProject(val: number) {
+      console.log("findSitesByProject: "+APP_UTILITIES.TIME);
       console.log(val);
         return this._db.find({
           selector: {projects: {$elemMatch: {$eq: val}}},
-          fields: ['id', 'name']
+          fields: ['id', 'name', 'usgs_scode']
           //sort: ['code']
         }).then(function (result) {
+          console.log("findThen: "+APP_UTILITIES.TIME);
           return result['docs'];
         }).catch(function (err) {
+          console.log("findCatch: "+APP_UTILITIES.TIME);
           console.log(err);
         });
     }
