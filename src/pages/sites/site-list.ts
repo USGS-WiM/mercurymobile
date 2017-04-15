@@ -7,8 +7,7 @@ import {SiteDetailPage} from './site-detail';
 
 
 @Component({
-  templateUrl: 'site-list.html',
-  providers: [SiteService]
+  templateUrl: 'site-list.html'
 })
 export class SiteListPage {
   selectedSite: Site;

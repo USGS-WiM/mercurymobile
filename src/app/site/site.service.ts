@@ -15,7 +15,6 @@ import replicationStream from 'pouchdb-replication-stream';
 @Injectable()
 export class SiteService {
     private _db;
-    private _sites;
 
     constructor (private http: Http) {
       PouchDB.plugin(find);
@@ -30,10 +29,18 @@ export class SiteService {
     initDB() {
       this._db.allDocs()
         .then(result => {
+          console.log("site rows " + result.total_rows);
           if(result.total_rows === 0) {
-            //this._db.bulkDocs(SITES);
+            console.log("load SITES");
+            console.log(APP_UTILITIES.TIME);
             for (let site of SITES) {
-              //this._db.post(site);
+              // let projects = site['projects'];
+              // let projects_list = "";
+              // if (projects) {
+              //   for (let project of projects) {
+              //     projects_list = projects_list + "_" + project;
+              //   }
+              // }
               this._db.put({
                 _id: site['name'],
                 id: site['id'],
@@ -42,6 +49,8 @@ export class SiteService {
                 projects: site['projects']
               });
             }
+            console.log("end load SITES");
+            console.log(APP_UTILITIES.TIME);
           }
         })
         .catch( error => {
@@ -49,13 +58,7 @@ export class SiteService {
         });
 
     }
-      // this._db.createIndex({
-      //   index: {
-      //     fields: ['projects'],
-      //     name: 'projects',
-      //     ddoc: 'projects'
-      //   }
-      // });
+
     destroyDB() {
       new PouchDB('sites').destroy();
     }
@@ -73,19 +76,24 @@ export class SiteService {
     }
 
     findSitesByProject(val: number) {
-      console.log("findSitesByProject: "+APP_UTILITIES.TIME);
       console.log(val);
+      console.log("find sites " + APP_UTILITIES.TIME);
         return this._db.find({
-          selector: {projects: {$elemMatch: {$eq: val}}},
+          selector: {projects: {$elemMatch: {$eq: 919}}},
+          //selector: {_id: {$elemMatch: {$regex: "^" + val}}},
           fields: ['id', 'name', 'usgs_scode']
           //sort: ['code']
         }).then(function (result) {
-          console.log("findThen: "+APP_UTILITIES.TIME);
+          console.log("find sites results " + APP_UTILITIES.TIME);
+          console.log(result);
           return result['docs'];
         }).catch(function (err) {
-          console.log("findCatch: "+APP_UTILITIES.TIME);
           console.log(err);
         });
+    }
+
+    public getSitesByProject(val: string) {
+      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 100});
     }
 
     public getAll() {

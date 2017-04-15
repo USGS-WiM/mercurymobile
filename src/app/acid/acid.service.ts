@@ -10,12 +10,11 @@ import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
 import load from 'pouchdb-load';
 import replicationStream from 'pouchdb-replication-stream';
-//import MemoryStream from 'memorystream';
+
 
 @Injectable()
 export class AcidService {
     private _db;
-    private _acids;
 
     constructor (private http: Http) {
       PouchDB.plugin(find);
@@ -31,9 +30,7 @@ export class AcidService {
       this._db.allDocs()
         .then(result => {
           if(result.total_rows === 0) {
-            //this._db.bulkDocs(ACIDS);
             for (let acid of ACIDS) {
-              //this._db.post(acid);
               this._db.put({
                 _id: acid['code'],
                 id: acid['id'],
@@ -63,8 +60,12 @@ export class AcidService {
       });
     }
 
+    public getAcidsByName(val: string) {
+      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 100});
+    }
+
     public getAll() {
-        return this._db.allDocs({include_docs: true});
+        return this._db.allDocs({include_docs: true, limit: 100});
     }
 
     getAcid (id: number | string) {

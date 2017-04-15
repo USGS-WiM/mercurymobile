@@ -11,11 +11,10 @@ import find from 'pouchdb-find';
 import load from 'pouchdb-load';
 import replicationStream from 'pouchdb-replication-stream';
 
+
 @Injectable()
 export class BottleService {
     private _db;
-    private _bottles;
-    bottle_names = [];
 
     constructor (private http: Http) {
       PouchDB.plugin(find);
@@ -31,9 +30,7 @@ export class BottleService {
       this._db.allDocs()
         .then(result => {
           if(result.total_rows === 0) {
-            //this._db.bulkDocs(BOTTLES);
             for (let bottle of BOTTLES) {
-              //this._db.post(acid);
               this._db.put({
                 _id: bottle['name'],
                 id: bottle['id'],
@@ -55,7 +52,7 @@ export class BottleService {
       this._db.find({
         selector: {_id: val},
         fields: ['id', 'name']
-        //sort: ['code']
+        //sort: ['name']
       }).then(function (result) {
         return result['docs'];
       }).catch(function (err) {
@@ -63,25 +60,12 @@ export class BottleService {
       });
     }
 
+    public getBottlesByName(val: string) {
+      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 100});
+    }
+
     public getAll() {
-        return this._db.allDocs({include_docs: true});
-    }
-
-    public getAllNames() {
-        return this.bottle_names;
-    }
-
-    public setAllNames() {
-        this._db.allDocs({include_docs: true})
-          .then(response => {
-            let list = [];
-            for (let i = 0; i < response.rows.length; i++) {
-              list.push(response.rows[i].doc['name']);
-            }
-            this.bottle_names = list;
-          }, error => {
-            console.log(error);
-          });
+        return this._db.allDocs({include_docs: true, limit: 100});
     }
 
     getBottle (id: number | string) {

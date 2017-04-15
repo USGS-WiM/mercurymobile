@@ -8,8 +8,7 @@ import {ProjectService} from '../../app/project/project.service';
 
 
 @Component({
-  templateUrl: 'site-detail.html',
-  providers: [SiteService, ProjectService]
+  templateUrl: 'site-detail.html'
 })
 export class SiteDetailPage {
   active: Boolean = true;

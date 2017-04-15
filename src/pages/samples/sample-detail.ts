@@ -21,6 +21,7 @@ import {AcidSelectPage} from './acid-select';
 import {SampleBottlePage} from './sample-bottle';
 import {APP_UTILITIES}   from '../../app/app.utilities';
 
+
 @Component({
   templateUrl: 'sample-detail.html',
   styles: ['.select-wide {max-width: 100%;}']
@@ -68,14 +69,11 @@ export class SampleDetailPage {
               private _samplebottleService: SampleBottleService,
               private _projectService: ProjectService,
               private _siteService: SiteService,
-              private _bottleService: BottleService,
               private _mediumService: MediumService,
               private _acidService: AcidService
   ) {
 
     this._getProjects();
-    //this._getSites(this.project_ID);
-    //this._getBottles();
     this._getMediums();
     this._getAcids();
 
@@ -165,6 +163,7 @@ export class SampleDetailPage {
     this._projectService.getAll()
       .then(response =>
       {
+        console.log(response);
         for(let i =0; i < response.rows.length; i++) {
           this.myProjects.push(response.rows[i].doc);
         }
@@ -189,17 +188,6 @@ export class SampleDetailPage {
         this._errorMessage = <any>error;
       });
   }
-
-  // private _getBottles() {
-  //   this._bottleService.getBottles(new URLSearchParams('unused=true&page_size=100'))
-  //     .subscribe(
-  //       response => {
-  //         this.myBottles = response;
-  //         alert(this.myBottles.length);
-  //         //this._buildBottleOptions();
-  //       },
-  //       error => this._errorMessage = <any>error);
-  // }
 
   private _getMediums() {
     this._mediumService.getAll()
