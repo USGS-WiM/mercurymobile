@@ -12,12 +12,6 @@ import {SampleBottleService} from "../../app/samplebottle/samplebottle.service";
 
 @Component({
   templateUrl: 'sample-bottle.html',
-  providers: [
-    SampleBottleService,
-    AnalysisService,
-    FilterService,
-    PreservationService
-  ],
   styles: ['.select-wide {max-width: 100%;}']
 })
 export class SampleBottlePage {
