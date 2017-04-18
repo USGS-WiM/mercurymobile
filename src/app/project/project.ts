@@ -5,6 +5,6 @@ export class Project {
     description?: string,
     accounting_code?: string,
     cooperator?: number,
-    sites?: number[]
+    sites?: {}[]
   ) {}
 }
