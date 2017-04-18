@@ -29,10 +29,10 @@ export class SiteService {
     initDB() {
       this._db.allDocs()
         .then(result => {
-          console.log("site rows " + result.total_rows);
+          //console.log("site rows " + result.total_rows);
           if(result.total_rows === 0) {
-            console.log("load SITES");
-            console.log(APP_UTILITIES.TIME);
+            //console.log("load SITES");
+            //console.log(APP_UTILITIES.TIME);
             for (let site of SITES) {
               // let projects = site['projects'];
               // let projects_list = "";
@@ -49,8 +49,8 @@ export class SiteService {
                 projects: site['projects']
               });
             }
-            console.log("end load SITES");
-            console.log(APP_UTILITIES.TIME);
+            //console.log("end load SITES");
+            //console.log(APP_UTILITIES.TIME);
           }
         })
         .catch( error => {
@@ -76,15 +76,15 @@ export class SiteService {
     }
 
     findSitesByProject(val: number) {
-      console.log(val);
-      console.log("find sites " + APP_UTILITIES.TIME);
+      //console.log(val);
+      //console.log("find sites " + APP_UTILITIES.TIME);
         return this._db.find({
-          selector: {projects: {$elemMatch: {$eq: 919}}},
+          selector: {projects: {$elemMatch: {$eq: val}}},
           //selector: {_id: {$elemMatch: {$regex: "^" + val}}},
           fields: ['id', 'name', 'usgs_scode']
           //sort: ['code']
         }).then(function (result) {
-          console.log("find sites results " + APP_UTILITIES.TIME);
+          //console.log("find sites results " + APP_UTILITIES.TIME);
           console.log(result);
           return result['docs'];
         }).catch(function (err) {

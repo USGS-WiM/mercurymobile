@@ -73,7 +73,7 @@
             <ion-label>Medium</ion-label>
             <ion-item>
               <ion-select class="select-wide" formControlName="sampleMedium">
-                <ion-option *ngFor="let medium of myMediums" [value]="medium.id" [selected]="medium.id == mySample.medium">{{medium.nwis_code}} - {{medium.description}}</ion-option>
+                <ion-option *ngFor="let medium of myMediums" [value]="medium.id" [selected]="medium.id == mySample.medium">{{medium.nwis_code}}  {{medium.description}}</ion-option>
               </ion-select>
             </ion-item>
           </ion-col>

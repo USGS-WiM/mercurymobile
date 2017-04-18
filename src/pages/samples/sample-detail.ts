@@ -11,7 +11,7 @@ import {Medium} from "../../app/medium/medium";
 import {Acid} from "../../app/acid/acid";
 import {ProjectService} from '../../app/project/project.service';
 import {SiteService} from '../../app/site/site.service';
-import {BottleService} from "../../app/bottle/bottle.service";
+//import {BottleService} from "../../app/bottle/bottle.service";
 import {MediumService} from "../../app/medium/medium.service";
 import {SampleService} from "../../app/sample/sample.service";
 import {SampleBottleService} from "../../app/samplebottle/samplebottle.service";
@@ -163,7 +163,7 @@ export class SampleDetailPage {
     this._projectService.getAll()
       .then(response =>
       {
-        console.log(response);
+        //console.log(response);
         for(let i =0; i < response.rows.length; i++) {
           this.myProjects.push(response.rows[i].doc);
         }
@@ -172,27 +172,29 @@ export class SampleDetailPage {
       });
   }
 
-  private _getSites(projectID: number) {
-    this._siteService.findSitesByProject(projectID)
-      .then(response =>
-      {
-        for(let i =0; i < response.length; i++) {
-          let sitedata = response[i];
-          let newsite = new Site("temp");
-          newsite['name'] = sitedata.name;
-          newsite['usgs_scode'] = sitedata.usgs_scode;
-          newsite['id'] = sitedata.id;
-          this.mySites.push(newsite);
-        }
-      }, error => {
-        this._errorMessage = <any>error;
-      });
+  private _getSites(sites: any) {
+    // this._siteService.findSitesByProject(projectID)
+    //   .then(response =>
+    //   {
+    //     for(let i =0; i < response.length; i++) {
+    //       let sitedata = response[i];
+    //       let newsite = new Site("temp");
+    //       newsite['name'] = sitedata.name;
+    //       newsite['usgs_scode'] = sitedata.usgs_scode;
+    //       newsite['id'] = sitedata.id;
+    //       this.mySites.push(newsite);
+    //     }
+    //   }, error => {
+    //     this._errorMessage = <any>error;
+    //   });
+    this.mySites = sites;
   }
 
   private _getMediums() {
     this._mediumService.getAll()
       .then(response =>
       {
+        console.log(response);
         for(let i =0; i < response.rows.length; i++) {
           this.myMediums.push(response.rows[i].doc);
         }
@@ -263,14 +265,14 @@ export class SampleDetailPage {
     let projects = this.myProjects.filter(function(project: Project) {return project['name'] == projectName});
     let projectID = projects[0]['id'];
     this.projectNumber.setValue(projectID);
-    this._getSites(projectID);
+    this._getSites(projects[0]['sites']);
   }
 
   projectNumberChange(projectNumber: number) {
     let projects = this.myProjects.filter(function(project: Project) {return project['id'] == projectNumber});
     let projectID = projects[0]['id'];
     this.projectName.setValue(projectID);
-    this._getSites(projectID);
+    this._getSites(projects[0]['sites']);
   }
 
   siteNameChange(siteName: number) {

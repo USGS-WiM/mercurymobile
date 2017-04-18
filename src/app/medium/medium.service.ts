@@ -22,7 +22,7 @@ export class MediumService {
       PouchDB.plugin(load);
       PouchDB.plugin(replicationStream.plugin);
       PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
-      this._db = new PouchDB('medium');
+      this._db = new PouchDB('mediums');
       //this.destroyDB();
       this.initDB();
     }
@@ -38,7 +38,8 @@ export class MediumService {
                 _id: medium['nwis_code'],
                 id: medium['id'],
                 nwis_code: medium['nwis_code'],
-                medium: medium['medium']
+                medium: medium['medium'],
+                description: medium['description']
               });
             }
           }
