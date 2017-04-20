@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {URLSearchParams}   from '@angular/http';
 import {ModalController, NavController, NavParams} from 'ionic-angular';
 import {Site} from '../../app/site/site';
 import {SiteService} from '../../app/site/site.service';
@@ -11,10 +10,14 @@ import {SiteDetailPage} from './site-detail';
 })
 export class SiteListPage {
   selectedSite: Site;
-  sites: Site[];
+  sites: Site[] = [];
+  private _firstSites: string[] = [];
+  private _firstSite: string;
+  private _lastSite: string;
+  private _pageSize: number = 100;
   siteCount: number = 0;
   currentPage: number = 1;
-  resultPages = Math.ceil(this.siteCount / 100);
+  resultPages = Math.ceil(this.siteCount / this._pageSize);
   notready: Boolean = true;
   private _errorMessage: string;
 
@@ -29,14 +32,23 @@ export class SiteListPage {
 
   }
 
-  private _getSites(newUrlSearchParams?){
+  private _getSites(opts?: any){
     this.notready = true;
-    this._siteService.getAll()//new URLSearchParams(newUrlSearchParams))
+    if (!opts) {
+      opts = {include_docs: true, limit: this._pageSize}
+    }
+    this._siteService.getAll(opts)
     .then(response =>
       {
-        for(let i =0; i < response.rows.length; i++) {
+        this.sites.length = 0;
+        console.log(response);
+        this.siteCount = response.total_rows;
+        this.resultPages = Math.ceil(this.siteCount / this._pageSize);
+        for(let i = 0, j = response.rows.length; i < j; i++) {
           this.sites.push(response.rows[i].doc);
         }
+        this._firstSite = response.rows[0].doc['_id'];
+        this._lastSite = response.rows[this._pageSize - 1].doc['_id'];
         this.notready = false;
       }, error => {
         this._errorMessage = <any>error;
@@ -57,8 +69,11 @@ export class SiteListPage {
 
   nextPage(){
     if (this.currentPage != this.resultPages) {
-      this._getSites('page='+(this.currentPage + 1));
+      //this._getSites('page='+(this.currentPage + 1));
       this.currentPage++;
+      this._firstSites.push(this._firstSite);
+      let opts = {include_docs: true, limit: this._pageSize, startkey: this._lastSite, skip: 1};
+      this._getSites(opts);
     }
     else {
       alert("End of results, there are no pages after Page " + this.resultPages + ".");
@@ -67,8 +82,10 @@ export class SiteListPage {
 
   prevPage(){
     if (this.currentPage != 1) {
-      this._getSites('page='+(this.currentPage - 1));
+      //this._getSites('page='+(this.currentPage - 1));
       this.currentPage--;
+      let opts = {include_docs: true, limit: this._pageSize, startkey: this._firstSites.pop()};
+      this._getSites(opts);
     }
     else {
       alert("There are no pages before Page 1.");

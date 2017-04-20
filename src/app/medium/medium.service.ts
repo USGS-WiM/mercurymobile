@@ -14,8 +14,7 @@ import replicationStream from 'pouchdb-replication-stream';
 @Injectable()
 export class MediumService {
     private _db;
-    private _mediums;
-
+    //private _mediums;
 
     constructor (private http: Http) {
       PouchDB.plugin(find);

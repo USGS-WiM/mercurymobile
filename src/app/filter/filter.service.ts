@@ -14,7 +14,7 @@ import replicationStream from 'pouchdb-replication-stream';
 @Injectable()
 export class FilterService {
     private _db;
-    private _filters;
+    //private _filters;
 
     constructor (private http: Http) {
       PouchDB.plugin(find);

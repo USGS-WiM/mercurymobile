@@ -14,7 +14,7 @@ import replicationStream from 'pouchdb-replication-stream';
 @Injectable()
 export class PreservationService {
     private _db;
-    private _preservations;
+    //private _preservations;
 
     constructor (private http: Http) {
       PouchDB.plugin(find);
