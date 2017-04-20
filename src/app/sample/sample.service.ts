@@ -14,7 +14,7 @@ import MemoryStream from 'memorystream';
 export class SampleService{
 
   public _db;
-  private _samples;
+  //private _samples;
 
   constructor() {
     PouchDB.plugin(replicationStream.plugin);
@@ -84,14 +84,14 @@ export class SampleService{
   }
 
   // Binary search, the array is by default sorted by _id.
-  private findIndex(array, id) {
-      let low = 0, high = array.length, mid;
-      while (low < high) {
-      mid = (low + high) >>> 1;
-      array[mid]._id < id ? low = mid + 1 : high = mid
-      }
-      return low;
-  }
+  // private findIndex(array, id) {
+  //     let low = 0, high = array.length, mid;
+  //     while (low < high) {
+  //     mid = (low + high) >>> 1;
+  //     array[mid]._id < id ? low = mid + 1 : high = mid
+  //     }
+  //     return low;
+  // }
 
   getSample(id: number | string): Promise<Sample> {
     let newid: number = +id - 1;

@@ -28,7 +28,7 @@ export class AcidSelectPage {
       .then(response =>
         {
           for(let i = 0; i < response.rows.length; i++) {
-            this.acids.push(response.rows[i].doc['code']);
+            this.acids.push(response.rows[i]['id']);
           }
           this.notready = false;
         }, error => {
@@ -40,13 +40,14 @@ export class AcidSelectPage {
   filterAcids(event: any) {
     this.notready = true;
     let val = event.target.value;
+    console.log(val);
     if (val && val.trim() != ''){
       this._acidService.getAcidsByName(val)
         .then(response =>
         {
           this.acids.length = 0;
           for(let i = 0; i < response.rows.length; i++) {
-            this.acids.push(response.rows[i].doc['code']);
+            this.acids.push(response.rows[i]['id']);
           }
           this.notready = false;
         }, error => {

@@ -14,7 +14,7 @@ import replicationStream from 'pouchdb-replication-stream';
 @Injectable()
 export class AnalysisService {
     private _db;
-    private _analyses;
+    //private _analyses;
 
     constructor (private http: Http) {
       PouchDB.plugin(find);
@@ -54,8 +54,8 @@ export class AnalysisService {
     findAnalysis(val: string) {
       this._db.find({
         selector: {_id: val},
-        fields: ['id', 'analysis']
-        //sort: ['code']
+        fields: ['id', 'analysis'],
+        sort: ['analysis']
       }).then(function (result) {
         return result['docs'];
       }).catch(function (err) {

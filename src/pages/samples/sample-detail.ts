@@ -6,12 +6,9 @@ import {Project} from '../../app/project/project';
 import {Site} from '../../app/site/site';
 import {Sample} from '../../app/sample/sample';
 import {SampleBottle} from '../../app/samplebottle/samplebottle';
-import {Bottle} from "../../app/bottle/bottle";
 import {Medium} from "../../app/medium/medium";
-import {Acid} from "../../app/acid/acid";
 import {ProjectService} from '../../app/project/project.service';
 import {SiteService} from '../../app/site/site.service';
-//import {BottleService} from "../../app/bottle/bottle.service";
 import {MediumService} from "../../app/medium/medium.service";
 import {SampleService} from "../../app/sample/sample.service";
 import {SampleBottleService} from "../../app/samplebottle/samplebottle.service";
@@ -27,8 +24,6 @@ import {APP_UTILITIES}   from '../../app/app.utilities';
   styles: ['.select-wide {max-width: 100%;}']
 })
 export class SampleDetailPage {
-  cooperator_ID: number = 20000166;
-  project_ID: number = 6104;
   sample_ID: number;
   active: Boolean = true;
   notready: Boolean = true;
@@ -41,9 +36,7 @@ export class SampleDetailPage {
   mySampleBottles: SampleBottle[] = [];
   myProjects: Project[] = [];
   mySites: Site[] = [];
-  myBottles: Bottle[] = [];
   myMediums: Medium[] = [];
-  myAcids: Acid[] = [];
 
   sampleForm: FormGroup;
   sampleHeaderControls: FormGroup;
@@ -75,7 +68,6 @@ export class SampleDetailPage {
 
     this._getProjects();
     this._getMediums();
-    this._getAcids();
 
     this.sampleHeaderControls = new FormGroup({
       projectName: this.projectName,
@@ -153,6 +145,11 @@ export class SampleDetailPage {
             //     break;
             //   }
             // }
+            let acid = this.mySampleBottles[i]['preservation_acid'];
+            if (acid) {
+              this._getAcid(acid);
+              break;
+            }
             this.addRow(this.mySampleBottles[i]);
           }
         },
@@ -194,7 +191,6 @@ export class SampleDetailPage {
     this._mediumService.getAll()
       .then(response =>
       {
-        console.log(response);
         for(let i =0; i < response.rows.length; i++) {
           this.myMediums.push(response.rows[i].doc);
         }
@@ -203,28 +199,14 @@ export class SampleDetailPage {
       });
   }
 
-  private _getAcids() {
-    this._acidService.getAll()
+  private _getAcid(acidID: number) {
+    this._acidService.findAcid(acidID)
       .then(
         response => {
-          for(let i =0; i < response.rows.length; i++) {
-            this.myAcids.push(response.rows[i].doc);
-          }
-          if (!this.sampleAcid.value) {
-            if (this.mySampleBottles.length > 0) {
-              for (let i = 0, j = this.mySampleBottles.length; i < j; i++) {
-                let acid = this.mySampleBottles[i]['preservation_acid'];
-                if (acid) {
-                  let acids = response.filter(function (a) {
-                    return a['id'] == acid;
-                  });
-                  let acidcode = acids[0]['code'];
-                  this.sampleAcid.setValue(acidcode);
-                  break;
-                }
-              }
-            }
-          }
+          let acids = response.filter(function (a) {
+            return a['id'] == acidID;
+          });
+          this.sampleAcid.setValue(acids[0]['code']);
         }, error => {
         this._errorMessage = <any>error;
       });
@@ -251,8 +233,7 @@ export class SampleDetailPage {
   editSampleBottle(rowIndex: number){
     let sbName = (<FormGroup>this.sampleBottleControls.controls[rowIndex]).controls['bottle'].value;
     let samplebottles = this.mySampleBottles.filter(function (sb) {return sb['bottle_string'] == sbName;});
-    let sbID = samplebottles[0]['bottle'];
-    this.openPage(sbID);
+    this.openPage(samplebottles[0]['bottle']);
   }
 
   openPage(sample_bottle_id) {
@@ -263,28 +244,24 @@ export class SampleDetailPage {
 
   projectNameChange(projectName: String) {
     let projects = this.myProjects.filter(function(project: Project) {return project['name'] == projectName});
-    let projectID = projects[0]['id'];
-    this.projectNumber.setValue(projectID);
+    this.projectNumber.setValue(projects[0]['id']);
     this._getSites(projects[0]['sites']);
   }
 
   projectNumberChange(projectNumber: number) {
     let projects = this.myProjects.filter(function(project: Project) {return project['id'] == projectNumber});
-    let projectID = projects[0]['id'];
-    this.projectName.setValue(projectID);
+    this.projectName.setValue(projects[0]['id']);
     this._getSites(projects[0]['sites']);
   }
 
   siteNameChange(siteName: number) {
     let sites = this.mySites.filter(function(site: Site) {return site['name'] == siteName});
-    let siteID = sites[0]['id'];
-    this.siteNumber.setValue(siteID);
+    this.siteNumber.setValue(sites[0]['id']);
   }
 
   siteNumberChange(siteNumber: number) {
     let sites = this.mySites.filter(function(site: Site) {return site['id'] == siteNumber});
-    let siteID = sites[0]['id'];
-    this.siteName.setValue(siteID);
+    this.siteName.setValue(sites[0]['id']);
   }
 
   addRow(samplebottle?: SampleBottle){

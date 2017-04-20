@@ -5,7 +5,6 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
-import {APP_UTILITIES}   from '../app.utilities';
 import {SITES} from './sites';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
@@ -29,18 +28,8 @@ export class SiteService {
     initDB() {
       this._db.allDocs()
         .then(result => {
-          //console.log("site rows " + result.total_rows);
           if(result.total_rows === 0) {
-            //console.log("load SITES");
-            //console.log(APP_UTILITIES.TIME);
             for (let site of SITES) {
-              // let projects = site['projects'];
-              // let projects_list = "";
-              // if (projects) {
-              //   for (let project of projects) {
-              //     projects_list = projects_list + "_" + project;
-              //   }
-              // }
               this._db.put({
                 _id: site['name'],
                 id: site['id'],
@@ -49,8 +38,6 @@ export class SiteService {
                 projects: site['projects']
               });
             }
-            //console.log("end load SITES");
-            //console.log(APP_UTILITIES.TIME);
           }
         })
         .catch( error => {
@@ -76,15 +63,12 @@ export class SiteService {
     }
 
     findSitesByProject(val: number) {
-      //console.log(val);
-      //console.log("find sites " + APP_UTILITIES.TIME);
         return this._db.find({
           selector: {projects: {$elemMatch: {$eq: val}}},
           //selector: {_id: {$elemMatch: {$regex: "^" + val}}},
-          fields: ['id', 'name', 'usgs_scode']
-          //sort: ['code']
+          fields: ['id', 'name', 'usgs_scode'],
+          sort: ['code']
         }).then(function (result) {
-          //console.log("find sites results " + APP_UTILITIES.TIME);
           console.log(result);
           return result['docs'];
         }).catch(function (err) {
@@ -96,8 +80,8 @@ export class SiteService {
       return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 100});
     }
 
-    public getAll() {
-        return this._db.allDocs({include_docs: true});
+    public getAll(opts: any) {
+        return this._db.allDocs(opts);
     }
 
     getSite (id: number | string) {

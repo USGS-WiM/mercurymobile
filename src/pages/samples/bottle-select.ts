@@ -28,7 +28,7 @@ export class BottleSelectPage {
       .then(response =>
         {
           for(let i = 0; i < response.rows.length; i++) {
-            this.bottles.push(response.rows[i].doc['name']);
+            this.bottles.push(response.rows[i]['id']);
           }
           this.notready = false;
         }, error => {
@@ -46,7 +46,7 @@ export class BottleSelectPage {
         {
           this.bottles.length = 0;
           for(let i = 0; i < response.rows.length; i++) {
-            this.bottles.push(response.rows[i].doc['name']);
+            this.bottles.push(response.rows[i]['id']);
           }
           this.notready = false;
         }, error => {

@@ -48,11 +48,11 @@ export class AcidService {
       new PouchDB('acids').destroy();
     }
 
-    findAcid(val: string) {
-      this._db.find({
-        selector: {_id: val},
-        fields: ['id', 'code']
-        //sort: ['code']
+    findAcid(val: number) {
+      return this._db.find({
+        selector: {id: val},
+        fields: ['id', 'code'],
+        sort: ['_id']
       }).then(function (result) {
         return result['docs'];
       }).catch(function (err) {
@@ -61,11 +61,11 @@ export class AcidService {
     }
 
     public getAcidsByName(val: string) {
-      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 100});
+      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: false, limit: 100});
     }
 
     public getAll() {
-        return this._db.allDocs({include_docs: true, limit: 100});
+        return this._db.allDocs({include_docs: false, limit: 100});
     }
 
     getAcid (id: number | string) {
