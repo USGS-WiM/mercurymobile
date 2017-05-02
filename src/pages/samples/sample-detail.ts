@@ -13,6 +13,7 @@ import {MediumService} from "../../app/medium/medium.service";
 import {SampleService} from "../../app/sample/sample.service";
 import {SampleBottleService} from "../../app/samplebottle/samplebottle.service";
 import {AcidService} from "../../app/acid/acid.service";
+import {BottleService} from "../../app/bottle/bottle.service";
 import {BottleSelectPage} from './bottle-select';
 import {AcidSelectPage} from './acid-select';
 import {SampleBottlePage} from './sample-bottle';
@@ -63,7 +64,8 @@ export class SampleDetailPage {
               private _projectService: ProjectService,
               private _siteService: SiteService,
               private _mediumService: MediumService,
-              private _acidService: AcidService
+              private _acidService: AcidService,
+              private _bottleService: BottleService
   ) {
 
     this._getProjects();
@@ -245,23 +247,27 @@ export class SampleDetailPage {
   projectNameChange(projectName: String) {
     let projects = this.myProjects.filter(function(project: Project) {return project['name'] == projectName});
     this.projectNumber.setValue(projects[0]['id']);
+    this.mySample['projectNumber'] = projects[0]['id'];
     this._getSites(projects[0]['sites']);
   }
 
   projectNumberChange(projectNumber: number) {
     let projects = this.myProjects.filter(function(project: Project) {return project['id'] == projectNumber});
     this.projectName.setValue(projects[0]['id']);
+    this.mySample['projectNumber'] = projects[0]['id'];
     this._getSites(projects[0]['sites']);
   }
 
   siteNameChange(siteName: number) {
     let sites = this.mySites.filter(function(site: Site) {return site['name'] == siteName});
     this.siteNumber.setValue(sites[0]['id']);
+    this.mySample['siteNumber'] = sites[0]['id'];
   }
 
   siteNumberChange(siteNumber: number) {
     let sites = this.mySites.filter(function(site: Site) {return site['id'] == siteNumber});
     this.siteName.setValue(sites[0]['id']);
+    this.mySample['siteNumber'] = sites[0]['id'];
   }
 
   addRow(samplebottle?: SampleBottle){

@@ -23,11 +23,13 @@ import {AcidSelectPage} from '../pages/samples/acid-select';
 import {BottleSelectPage} from '../pages/samples/bottle-select';
 import {SiteListPage} from '../pages/sites/site-list';
 import {SiteDetailPage} from '../pages/sites/site-detail';
+import {ConfigPage} from '../pages/config/config';
+
 
 @NgModule({
   declarations: [
     AppComponent, HomePage, SampleListPage, SampleDetailPage, AcidSelectPage, BottleSelectPage,
-    SiteListPage, SiteDetailPage, SampleBottlePage
+    SiteListPage, SiteDetailPage, SampleBottlePage, ConfigPage
   ],
   imports: [
     IonicModule.forRoot(AppComponent), ReactiveFormsModule, HttpModule
@@ -35,7 +37,7 @@ import {SiteDetailPage} from '../pages/sites/site-detail';
   bootstrap: [IonicApp],
   entryComponents: [
     AppComponent, HomePage, SampleListPage, SampleDetailPage, AcidSelectPage, BottleSelectPage,
-    SiteListPage, SiteDetailPage, SampleBottlePage
+    SiteListPage, SiteDetailPage, SampleBottlePage, ConfigPage
   ],
   providers: [
     AcidService, AnalysisService, AuthenticationService, BottleService, FilterService, MediumService,

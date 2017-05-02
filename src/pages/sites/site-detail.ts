@@ -42,7 +42,7 @@ export class SiteDetailPage {
       private _siteService: SiteService,
       private _projectService: ProjectService
   ) {
-    this._getProjects();
+    //this._getProjects();
 
     // If we navigated to this page, we will have an item available as a nav param
     this.site_ID = this.navParams.get('id');
@@ -74,9 +74,12 @@ export class SiteDetailPage {
   }
 
   private _getSite(site_id){
-    this._siteService.getSite(site_id)
-      .subscribe(
+    //this._siteService.getSite(site_id)
+      //.subscribe(
+    this._siteService.findSite(site_id)
+      .then(
         response => {
+          console.log(response);
           this.mySite = response;
           this._myOriginalProjects = response.projects;
           this.id.setValue(response.id);

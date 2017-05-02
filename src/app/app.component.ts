@@ -4,12 +4,11 @@ import {StatusBar} from 'ionic-native';
 import {HomePage} from '../pages/home/home';
 import {SampleListPage} from '../pages/samples/sample-list';
 import {SiteListPage} from '../pages/sites/site-list';
-import {SampleService} from './sample/sample.service';
+import {ConfigPage} from '../pages/config/config'
 
 
 @Component({
-  templateUrl: 'app.html',
-  providers: [SampleService]
+  templateUrl: 'app.html'
 })
 export class AppComponent {
   @ViewChild(Nav) nav: Nav;
@@ -31,7 +30,8 @@ export class AppComponent {
     this.pages = [
       {title: 'Home', component: HomePage},
       {title: 'Samples', component: SampleListPage},
-      {title: 'Sites', component: SiteListPage}
+      {title: 'Sites', component: SiteListPage},
+      {title: 'Config', component: ConfigPage}
     ];
   }
 

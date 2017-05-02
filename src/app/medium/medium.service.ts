@@ -5,11 +5,13 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
+import {APP_UTILITIES}   from '../../app/app.utilities';
 import {MEDIUMS} from './mediums';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
 import load from 'pouchdb-load';
 import replicationStream from 'pouchdb-replication-stream';
+import MemoryStream from 'memorystream';
 
 @Injectable()
 export class MediumService {
@@ -21,9 +23,7 @@ export class MediumService {
       PouchDB.plugin(load);
       PouchDB.plugin(replicationStream.plugin);
       PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
-      this._db = new PouchDB('mediums');
-      //this.destroyDB();
-      this.initDB();
+      this._createDB();
     }
 
     initDB() {
@@ -48,8 +48,43 @@ export class MediumService {
         });
     }
 
+    private _createDB() {
+      this._db = new PouchDB('mediums');
+    }
+
     destroyDB() {
-      new PouchDB('mediums').destroy();
+      this._db.destroy()
+        .then(res => {
+          this._createDB();
+        }).catch(error => {
+          console.log(error);
+        });
+    }
+
+    loadDB(data) {
+      this._db.loadIt(data)
+        .then(res => {
+          console.log("load success");
+        })
+        .catch( error => {
+          console.log(error);
+        });
+    }
+
+    dumpDB(filename: string) {
+      let dumpedString = '';
+      let stream = new MemoryStream();
+      stream.on('data', function(chunk) {
+        dumpedString += chunk.toString();
+      });
+
+      this._db.dump(stream)
+        .then(function() {
+          //console.log('dumpDB SUCCESS! ' + dumpedString);
+          APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
+        }).catch(function(err) {
+          console.log('dumpDB ERROR! ', err);
+      });
     }
 
     findMedium(val: string) {
