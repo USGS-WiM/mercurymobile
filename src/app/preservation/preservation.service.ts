@@ -21,9 +21,7 @@ export class PreservationService {
       PouchDB.plugin(load);
       PouchDB.plugin(replicationStream.plugin);
       PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
-      this._db = new PouchDB('preservations');
-      //this.destroyDB();
-      this.initDB();
+      this._createDB();
     }
 
     initDB() {
@@ -46,8 +44,17 @@ export class PreservationService {
         });
     }
 
+    private _createDB() {
+      this._db = new PouchDB('preservations');
+    }
+
     destroyDB() {
-      new PouchDB('preservations').destroy();
+      this._db.destroy()
+        .then(res => {
+          this._createDB();
+        }).catch(error => {
+          console.log(error);
+        });
     }
 
     findPreservation(val: string) {

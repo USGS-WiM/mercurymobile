@@ -20,7 +20,7 @@ export class SampleService{
     PouchDB.plugin(replicationStream.plugin);
     PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
     PouchDB.plugin({loadIt: PouchDBLoad.load});
-    this._db = new PouchDB('samples');
+    this._createDB();
   }
 
   initDB() {
@@ -37,9 +37,18 @@ export class SampleService{
       });
   }
 
-  destroyDB() {
-    new PouchDB('samples').destroy();
-  }
+  private _createDB() {
+      this._db = new PouchDB('samples');
+    }
+
+    destroyDB() {
+      this._db.destroy()
+        .then(res => {
+          this._createDB();
+        }).catch(error => {
+          console.log(error);
+        });
+    }
 
   loadDB(data) {
     this._db.loadIt(data)

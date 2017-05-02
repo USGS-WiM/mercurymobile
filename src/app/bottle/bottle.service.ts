@@ -5,11 +5,13 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
+import {APP_UTILITIES}   from '../../app/app.utilities';
 import {BOTTLES} from './bottles';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
 import load from 'pouchdb-load';
 import replicationStream from 'pouchdb-replication-stream';
+import MemoryStream from 'memorystream';
 
 
 @Injectable()
@@ -21,31 +23,74 @@ export class BottleService {
       PouchDB.plugin(load);
       PouchDB.plugin(replicationStream.plugin);
       PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
-      this._db = new PouchDB('bottles');
-      //this.destroyDB();
-      this.initDB();
+      this._createDB();
     }
 
     initDB() {
+      console.log("start init bottles");
       this._db.allDocs()
         .then(result => {
+          //console.log(result.total_rows);
           if(result.total_rows === 0) {
+            console.log("start put bottles");
+            let count = 0;
             for (let bottle of BOTTLES) {
               this._db.put({
                 _id: bottle['name'],
                 id: bottle['id'],
                 name: bottle['name']
               });
+              count++;
+              if (count % 1000 == 0) {
+                console.log(count);
+              }
             }
+            console.log("end put bottles");
           }
         })
         .catch( error => {
           console.log(error)
         });
+      console.log("end init bottles");
+    }
+
+    private _createDB() {
+      this._db = new PouchDB('bottles');
     }
 
     destroyDB() {
-      new PouchDB('bottles').destroy();
+      this._db.destroy()
+        .then(res => {
+          this._createDB();
+        }).catch(error => {
+          console.log(error);
+        });
+    }
+
+    loadDB(data) {
+      this._db.loadIt(data)
+        .then(res => {
+          console.log("load success");
+        })
+        .catch( error => {
+          console.log(error);
+        });
+    }
+
+    dumpDB(filename: string) {
+      let dumpedString = '';
+      let stream = new MemoryStream();
+      stream.on('data', function(chunk) {
+        dumpedString += chunk.toString();
+      });
+
+      this._db.dump(stream)
+        .then(function() {
+          //console.log('dumpDB SUCCESS! ' + dumpedString);
+          APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
+        }).catch(function(err) {
+          console.log('dumpDB ERROR! ', err);
+      });
     }
 
     findBottle(val: string) {

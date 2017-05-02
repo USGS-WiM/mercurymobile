@@ -21,9 +21,7 @@ export class FilterService {
       PouchDB.plugin(load);
       PouchDB.plugin(replicationStream.plugin);
       PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
-      this._db = new PouchDB('filters');
-      //this.destroyDB();
-      this.initDB();
+      this._createDB();
     }
 
     initDB() {
@@ -46,8 +44,17 @@ export class FilterService {
         });
     }
 
+    private _createDB() {
+      this._db = new PouchDB('filters');
+    }
+
     destroyDB() {
-      new PouchDB('filters').destroy();
+      this._db.destroy()
+        .then(res => {
+          this._createDB();
+        }).catch(error => {
+          console.log(error);
+        });
     }
 
     findFilter(val: string) {
