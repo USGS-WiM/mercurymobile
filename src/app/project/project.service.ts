@@ -98,8 +98,12 @@ export class ProjectService {
       });
     }
 
-    public getAll() {
-        return this._db.allDocs({include_docs: true});
+    public getAll(opts?: any) {
+        if (this._db) {
+            if (!opts) {opts = {include_docs: true}}
+            return this._db.allDocs(opts);
+        }
+        else {return false;}
     }
 
     getAllProjects() {

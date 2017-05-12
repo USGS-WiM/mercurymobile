@@ -8,6 +8,9 @@ import {SampleService} from "../../app/sample/sample.service";
 import {SampleBottleService} from "../../app/samplebottle/samplebottle.service";
 import {AcidService} from "../../app/acid/acid.service";
 import {BottleService} from "../../app/bottle/bottle.service";
+import {AnalysisService} from "../../app/analysis/analysis.service";
+import {FilterService} from "../../app/filter/filter.service";
+import {PreservationService} from "../../app/preservation/preservation.service";
 
 
 @Component({
@@ -21,7 +24,11 @@ export class ConfigPage {
                 private _siteService: SiteService,
                 private _mediumService: MediumService,
                 private _acidService: AcidService,
-                private _bottleService: BottleService) {
+                private _bottleService: BottleService,
+                private _analysisService: AnalysisService,
+                private _filterService: FilterService,
+                private _preservationService: PreservationService) {
+
     }
 
     fileDragHover(fileInput) {
@@ -40,19 +47,19 @@ export class ConfigPage {
                     self._acidService.loadDB(reader.result);
                     break;
                 case 'analyses':
-                    //self._analysisService.loadDB(reader.result);
+                    self._analysisService.loadDB(reader.result);
                     break;
                 case 'bottles':
                     self._bottleService.loadDB(reader.result);
                     break;
                 case 'filters':
-                    //self._filterService.loadDB(reader.result);
+                    self._filterService.loadDB(reader.result);
                     break;
                 case 'mediums':
                     self._mediumService.loadDB(reader.result);
                     break;
                 case 'preservations':
-                    //self._preservationService.loadDB(reader.result);
+                    self._preservationService.loadDB(reader.result);
                     break;
                 case 'projects':
                     self._projectService.loadDB(reader.result);
@@ -61,7 +68,7 @@ export class ConfigPage {
                     self._sampleService.loadDB(reader.result);
                     break;
                 case 'samplebottles':
-                    //self._samplebottleService.loadDB(reader.result);
+                    self._samplebottleService.loadDB(reader.result);
                     break;
                 case 'sites':
                     self._siteService.loadDB(reader.result);
@@ -72,59 +79,79 @@ export class ConfigPage {
         reader.readAsBinaryString(selectedFiles[0]);
     }
 
-    dumpFiles(type: string) {
+    dumpFile(type: string) {
         let self = this;
         let filename = type + "_" + APP_UTILITIES.TODAY + ".txt";
         switch(type) {
             case 'acids':
-                if (self._acidService.getAll().total_rows > 0) {
-                  self._acidService.dumpDB(filename);
-                }
+                self._acidService.getAll({include_docs: false, limit: 1}).then(response => {
+                    if (response.total_rows > 0) {
+                      self._acidService.dumpDB(filename);
+                    }
+                });
                 break;
             case 'analyses':
-                //if (self._analysisService.getAll().total_rows > 0) {
-                  //self._analysisService.dumpDB(filename);
-                //}
+                self._analysisService.getAll({include_docs: false, limit: 1}).then(response => {
+                    if (response.total_rows > 0) {
+                      self._analysisService.dumpDB(filename);
+                    }
+                });
                 break;
             case 'bottles':
-                if (self._bottleService.getAll().total_rows > 0) {
-                  self._bottleService.dumpDB(filename);
-                }
+                self._bottleService.getAll({include_docs: false, limit: 1}).then(response => {
+                    if (response.total_rows > 0) {
+                      self._bottleService.dumpDB(filename);
+                    }
+                });
                 break;
             case 'filters':
-                //if (self._filterService.getAll().total_rows > 0) {
-                  //self._filterService.dumpDB(filename);
-                //}
+                self._filterService.getAll({include_docs: false, limit: 1}).then(response => {
+                    if (response.total_rows > 0) {
+                      self._filterService.dumpDB(filename);
+                    }
+                });
                 break;
             case 'mediums':
-                if (self._mediumService.getAll().total_rows > 0) {
-                  self._mediumService.dumpDB(filename);
-                }
+                self._mediumService.getAll({include_docs: false, limit: 1}).then(response => {
+                    if (response.total_rows > 0) {
+                      self._mediumService.dumpDB(filename);
+                    }
+                });
                 break;
             case 'preservations':
-                //if (self._preservationService.getAll().total_rows > 0) {
-                  //self._preservationService.dumpDB(filename);
-                //}
+                self._preservationService.getAll({include_docs: false, limit: 1}).then(response => {
+                    if (response.total_rows > 0) {
+                      self._preservationService.dumpDB(filename);
+                    }
+                });
                 break;
             case 'projects':
-                if (self._projectService.getAll().total_rows > 0) {
-                  self._projectService.dumpDB(filename);
-                }
+                self._projectService.getAll({include_docs: false, limit: 1}).then(response => {
+                    if (response.total_rows > 0) {
+                      self._projectService.dumpDB(filename);
+                    }
+                });
                 break;
             case 'samples':
-                if (self._sampleService.getAll().total_rows > 0) {
-                  self._sampleService.dumpDB(filename);
-                }
+                self._sampleService.getAll({include_docs: false, limit: 1}).then(response => {
+                    if (response.total_rows > 0) {
+                      self._sampleService.dumpDB(filename);
+                    }
+                });
                 break;
             case 'samplebottles':
-                //if (self._samplebottleService.getAll().total_rows > 0) {
-                  //self._samplebottleService.dumpDB(filename);
-                //}
+                self._samplebottleService.getAll({include_docs: false, limit: 1}).then(response => {
+                    if (response.total_rows > 0) {
+                      self._samplebottleService.dumpDB(filename);
+                    }
+                });
                 break;
             case 'sites':
-                if (self._siteService.getAll({include_docs: false, limit: 100}).total_rows > 0) {
-                  self._siteService.dumpDB(filename);
-                }
+                self._siteService.getAll({include_docs: false, limit: 1}).then(response => {
+                    if (response.total_rows > 0) {
+                      self._siteService.dumpDB(filename);
+                    }
+                });
                 break;
         }
     }
@@ -136,19 +163,19 @@ export class ConfigPage {
                 self._acidService.destroyDB();
                 break;
             case 'analyses':
-                //self._analysisService.destroyDB();
+                self._analysisService.destroyDB();
                 break;
             case 'bottles':
                 self._bottleService.destroyDB();
                 break;
             case 'filters':
-                //self._filterService.destroyDB();
+                self._filterService.destroyDB();
                 break;
             case 'mediums':
                 self._mediumService.destroyDB();
                 break;
             case 'preservations':
-                //self._preservationService.destroyDB();
+                self._preservationService.destroyDB();
                 break;
             case 'projects':
                 self._projectService.destroyDB();
@@ -157,7 +184,7 @@ export class ConfigPage {
                 self._sampleService.destroyDB();
                 break;
             case 'samplebottles':
-                //self._samplebottleService.destroyDB();
+                self._samplebottleService.destroyDB();
                 break;
             case 'sites':
                 self._siteService.destroyDB();

@@ -137,8 +137,12 @@ export class SiteService {
       return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 100});
     }
 
-    public getAll(opts: any) {
-        return this._db.allDocs(opts);
+    public getAll(opts?: any) {
+        if (this._db) {
+            if (!opts) {opts = {include_docs: true}}
+            return this._db.allDocs(opts);
+        }
+        else {return false;}
     }
 
     getSite (id: number | string) {

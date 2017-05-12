@@ -12,7 +12,7 @@
   <div [hidden]="notready">
     <form [formGroup]="sampleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleForm.value)">
       <ion-grid id="header" formGroupName="sampleHeaderControls">
-        <ion-row>
+        <ion-row style="border-style: solid;">
           <ion-col width-50>
             <ion-label>Project Name</ion-label>
             <ion-item>
@@ -30,7 +30,7 @@
             </ion-item>
           </ion-col>
         </ion-row>
-        <ion-row>
+        <ion-row style="border-style: solid;">
           <ion-col width-50>
             <ion-label>Site Name</ion-label>
             <ion-item>
@@ -48,7 +48,7 @@
             </ion-item>
           </ion-col>
         </ion-row>
-        <ion-row>
+        <ion-row style="border-style: solid;">
           <ion-col width-50>
             <ion-label>Date</ion-label>
             <ion-item><ion-input type="date" formControlName="sampleDate"></ion-input></ion-item>
@@ -58,7 +58,7 @@
             <ion-item><ion-input type="time" formControlName="sampleTime"></ion-input></ion-item>
           </ion-col>
         </ion-row>
-        <ion-row>
+        <ion-row style="border-style: solid;">
           <ion-col width-50>
             <ion-label>Depth</ion-label>
             <ion-item><ion-input type="number" formControlName="sampleDepth"></ion-input></ion-item>
@@ -68,7 +68,7 @@
             <ion-item><ion-input type="number" formControlName="sampleRep"></ion-input></ion-item>
           </ion-col>
         </ion-row>
-        <ion-row>
+        <ion-row style="border-style: solid;">
           <ion-col width-50>
             <ion-label>Medium</ion-label>
             <ion-item>
@@ -104,7 +104,10 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-      <div><button ion-button type="submit">Save</button><button ion-button type="button" (click)="dumpDB()">Dump DB</button></div>
+      <div>
+          <button ion-button type="submit">Save</button>
+          <button ion-button type="button" (click)="deleteSample()">Delete</button>
+      </div>
     </form>
   </div>
 </ion-content>

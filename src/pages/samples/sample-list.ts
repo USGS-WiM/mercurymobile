@@ -10,7 +10,7 @@ import {SampleDetailPage} from './sample-detail';
 })
 export class SampleListPage {
   selectedSample: Sample;
-  samples: Sample[];
+  samples: Sample[] = [];
   sampleCount: number = 0;
   currentPage: number = 1;
   resultPages = Math.ceil(this.sampleCount / 100);
@@ -36,6 +36,7 @@ export class SampleListPage {
     this._sampleService.getAll()
       .then(response =>
       {
+          console.log(response);
         for(let i =0; i < response.rows.length; i++) {
           this.samples.push(response.rows[i].doc);
           this.notready = false;

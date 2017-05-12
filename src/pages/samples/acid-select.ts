@@ -24,7 +24,7 @@ export class AcidSelectPage {
   }
 
   private _getAcids() {
-    this._acidService.getAll()
+    this._acidService.getAll({include_docs: true, limit: 100})
       .then(response =>
         {
           for(let i = 0; i < response.rows.length; i++) {

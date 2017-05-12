@@ -99,14 +99,18 @@ export class SiteDetailPage {
         error => this._errorMessage = <any>error);
   }
 
-  private _getProjects() {
-    this._projectService.getProjects()
-      .subscribe(
-        response => {
-          this.myProjects = response;
-        },
-        error => this._errorMessage = <any>error);
-  }
+  // private _getProjects() {
+  //   this._projectService.getAll()
+  //     .then(response =>
+  //     {
+  //       //console.log(response);
+  //       for(let i =0; i < response.rows.length; i++) {
+  //         this.myProjects.push(response.rows[i].doc);
+  //       }
+  //     }, error => {
+  //       this._errorMessage = <any>error;
+  //     });
+  // }
 
   dismiss() {
     this.viewCtrl.dismiss();

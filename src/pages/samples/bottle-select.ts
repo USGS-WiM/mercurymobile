@@ -24,7 +24,7 @@ export class BottleSelectPage {
   }
 
   private _getBottles() {
-    this._bottleService.getAll()
+    this._bottleService.getAll({include_docs: true, limit: 100})
       .then(response =>
         {
           for(let i = 0; i < response.rows.length; i++) {

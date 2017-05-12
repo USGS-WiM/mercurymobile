@@ -5,7 +5,7 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
-import {APP_UTILITIES}   from '../../app/app.utilities';
+import {APP_UTILITIES}   from '../app.utilities';
 import {ANALYSES} from './analyses';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
@@ -72,6 +72,7 @@ export class AnalysisService {
     }
 
     dumpDB(filename: string) {
+      console.log("in dumpDB " + filename);
       let dumpedString = '';
       let stream = new MemoryStream();
       stream.on('data', function(chunk) {
@@ -80,7 +81,7 @@ export class AnalysisService {
 
       this._db.dump(stream)
         .then(function() {
-          //console.log('dumpDB SUCCESS! ' + dumpedString);
+          console.log('dumpDB SUCCESS! ' + dumpedString);
           APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
         }).catch(function(err) {
           console.log('dumpDB ERROR! ', err);
@@ -99,8 +100,12 @@ export class AnalysisService {
       });
     }
 
-    public getAll() {
-        return this._db.allDocs({include_docs: true});
+    public getAll(opts?: any) {
+        if (this._db) {
+            if (!opts) {opts = {include_docs: true}}
+            return this._db.allDocs(opts);
+        }
+        else {return false;}
     }
 
     getAnalysis (id: number | string) {

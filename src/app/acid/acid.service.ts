@@ -99,8 +99,12 @@ export class AcidService {
       return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: false, limit: 100});
     }
 
-    public getAll() {
-        return this._db.allDocs({include_docs: false, limit: 100});
+    public getAll(opts?: any) {
+        if (this._db) {
+            if (!opts) {opts = {include_docs: true}}
+            return this._db.allDocs(opts);
+        }
+        else {return false;}
     }
 
     getAcid (id: number | string) {

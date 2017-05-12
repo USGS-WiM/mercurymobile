@@ -41,7 +41,7 @@ export class SampleService{
       this._db = new PouchDB('samples');
     }
 
-    destroyDB() {
+  destroyDB() {
       this._db.destroy()
         .then(res => {
           this._createDB();
@@ -88,8 +88,16 @@ export class SampleService{
       return this._db.remove(sample);
   }
 
-  public getAll() {
-      return this._db.allDocs({include_docs: true});
+  public getAll(opts?: any) {
+      if (this._db) {
+          if (!opts) {opts = {include_docs: true}}
+          return this._db.allDocs(opts);
+      }
+      else {return false;}
+  }
+
+  public getOne(_id: string) {
+      return this._db.get(_id);
   }
 
   // Binary search, the array is by default sorted by _id.

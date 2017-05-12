@@ -8,11 +8,13 @@
 </ion-header>
 
 <ion-content>
+  <button ion-button type="button" (click)="addSample()">Add Sample</button>
+
   <pre id="display"></pre>
   <ion-list>
     <button ion-item *ngFor="let sample of samples" (click)="editSample(sample.id)">
       <ion-icon name="beaker" item-left></ion-icon>
-      {{sample.projectName}}, {{sample.siteName}}, {{sample.date}}
+      {{sample.id}}: {{sample.projectName}}, {{sample.siteName}}, {{sample.date}}
     </button>
   </ion-list>
   <div *ngIf="selectedSample" padding>

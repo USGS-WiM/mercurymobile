@@ -45,7 +45,8 @@ export class SampleBottlePage {
       "filterVolume": new FormControl(null),
       "preservationType": new FormControl(null),
       "preservationAcid": new FormControl(null),
-      "preservationVolume": new FormControl(null)
+      "preservationVolume": new FormControl(null),
+      "preservationComment": new FormControl(null)
   };
     this.sampleBottleControlsGroup = new FormGroup(this.sampleBottleControls);
     this.sampleBottleForm = fb.group({sampleBottleControlsGroup: this.sampleBottleControlsGroup});
@@ -60,7 +61,7 @@ export class SampleBottlePage {
     this.sample_bottle_ID = this.navParams.get('samplebottle');
 
     if (this.sample_bottle_ID) {
-      this._getSampleBottle((this.sample_bottle_ID));
+      this._getSampleBottle(this.sample_bottle_ID.toString());
     }
     else {
       this.notready = false;
@@ -73,14 +74,15 @@ export class SampleBottlePage {
     this.sampleBottleControls['preservationVolume'].setValue(this.mySampleBottle['preservation_volume']);
   }
 
-  private _getSampleBottle(sampleBottleID: number | string){
-    this._samplebottleService.getSampleBottle(sampleBottleID)
+  private _getSampleBottle(sampleBottleID: string){
+    this._samplebottleService.getOne(sampleBottleID)
       .then(
         response => {
+            console.log(response);
           if (typeof response == "undefined") {alert("undefined"); this.notready = false;}
           else {
             this.mySampleBottle = response;
-            this.sample_bottle_name = this.mySampleBottle['bottle_string'];
+            this.sample_bottle_name = this.mySampleBottle['bottle_string'] || response['_id'];
             this._updateControls();
             // (<FormGroup>this.sampleBottleControls).controls['filterVolume'].setValue(this.mySampleBottle['volume_filtered']);
             // (<FormGroup>this.sampleBottleControls).controls['preservationAcid'].setValue(this.mySampleBottle['preservation_acid']);
@@ -92,32 +94,55 @@ export class SampleBottlePage {
   }
 
   private _getAnalyses() {
-    this._analysisService.getAnalyses()
-      .subscribe(
-        response => {
-          this.myAnalyses = response;
-        },
-        error => this._errorMessage = <any>error);
+    this._analysisService.getAll()
+      .then(response =>
+      {
+        for(let i =0; i < response.rows.length; i++) {
+          this.myAnalyses.push(response.rows[i].doc);
+        }
+      }, error => {
+        this._errorMessage = <any>error;
+      });
   }
 
   private _getFilters() {
-    this._filterService.getFilters()
-      .subscribe(
-        response => {
-          this.myFilters = response;
-        },
-        error => this._errorMessage = <any>error);
+    this._filterService.getAll()
+      .then(response =>
+      {
+        for(let i =0; i < response.rows.length; i++) {
+          this.myFilters.push(response.rows[i].doc);
+        }
+      }, error => {
+        this._errorMessage = <any>error;
+      });
   }
 
   private _getPreservations() {
-    this._preservationService.getPreservations()
-      .subscribe(
-        response => {
-          this.myPreservations = response;
-        },
-        error => this._errorMessage = <any>error);
+    this._preservationService.getAll()
+      .then(response =>
+      {
+        for(let i =0; i < response.rows.length; i++) {
+          this.myPreservations.push(response.rows[i].doc);
+        }
+      }, error => {
+        this._errorMessage = <any>error;
+      });
   }
 
-
+  onSubmit(formValue){
+    // TODO: build proper onSubmit function, including validations
+    alert("Submitted!");
+    console.log(formValue);
+    this.mySampleBottle['analysis_type'] = formValue.analysis;
+    this.mySampleBottle['filter_type'] = formValue.filterType;
+    this.mySampleBottle['volume_filtered'] = formValue.filterVolume;
+    this.mySampleBottle['preservation_type'] = formValue.preservationType;
+    this.mySampleBottle['preservation_volume'] = formValue.preservationVolume;
+    this.mySampleBottle['preservation_comment'] = formValue.preservationComment;
+    this._samplebottleService.update(this.mySampleBottle).then(response => {
+        console.log(response);
+        this.navCtrl.pop();
+    });
+  }
 
 }
