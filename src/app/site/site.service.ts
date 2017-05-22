@@ -34,24 +34,31 @@ export class SiteService {
           if(result.total_rows === 0) {
             console.log("start put sites");
             let count = 0;
-            for (let site of SITES) {
-              this._db.put({
-                _id: site['name'],
-                id: site['id'],
-                name: site['name'],
-                usgs_scode: site['usgs_scode'],
-                description: site['description'],
-                latitude: site['latitude'],
-                longitude: site['longitude'],
-                datum: site['datum'],
-                method: site['method'],
-                site_status: site['site_status'],
-                nwis_customer_code: site['nwis_customer_code'],
-                projects: site['projects']
-              });
-              count++;
-              if (count % 1000 == 0) {
-                console.log(count);
+            for (let sitegroup of SITES) {
+              for (let site of <Array <Site> >sitegroup) {
+                let projects = site['projects'];
+                let siteID;
+                for (let project in projects) {
+                  siteID = siteID + "_" + project;
+                }
+                this._db.put({
+                  _id: siteID,
+                  id: site['id'],
+                  name: site['name'],
+                  usgs_scode: site['usgs_scode'],
+                  description: site['description'],
+                  latitude: site['latitude'],
+                  longitude: site['longitude'],
+                  datum: site['datum'],
+                  method: site['method'],
+                  site_status: site['site_status'],
+                  nwis_customer_code: site['nwis_customer_code'],
+                  projects: site['projects']
+                });
+                count++;
+                if (count % 1000 == 0) {
+                  console.log(count);
+                }
               }
             }
             console.log("end put sites");
@@ -124,7 +131,7 @@ export class SiteService {
           selector: {projects: {$elemMatch: {$eq: val}}},
           //selector: {_id: {$elemMatch: {$regex: "^" + val}}},
           fields: ['id', 'name', 'usgs_scode'],
-          sort: ['code']
+          //sort: ['code']
         }).then(function (result) {
           console.log(result);
           return result['docs'];
@@ -133,16 +140,8 @@ export class SiteService {
         });
     }
 
-    public getSitesByProject(val: string) {
-      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 100});
-    }
-
-    public getAll(opts?: any) {
-        if (this._db) {
-            if (!opts) {opts = {include_docs: true}}
-            return this._db.allDocs(opts);
-        }
-        else {return false;}
+    public getAll(opts: any) {
+        return this._db.allDocs(opts);
     }
 
     getSite (id: number | string) {

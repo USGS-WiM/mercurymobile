@@ -98,6 +98,10 @@ export class ProjectService {
       });
     }
 
+    public getProjectByName(val: string) {
+      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 100});
+    }
+
     public getAll(opts?: any) {
         if (this._db) {
             if (!opts) {opts = {include_docs: true}}

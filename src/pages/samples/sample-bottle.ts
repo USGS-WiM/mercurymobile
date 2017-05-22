@@ -22,9 +22,9 @@ export class SampleBottlePage {
   private _errorMessage: string;
 
   mySampleBottle: SampleBottle;
-  myAnalyses: Analysis[];
-  myFilters: Filter[];
-  myPreservations: Preservation[];
+  myAnalyses: Analysis[] = [];
+  myFilters: Filter[] = [];
+  myPreservations: Preservation[] = [];
 
   sampleBottleForm: FormGroup;
   sampleBottleControlsGroup: FormGroup;

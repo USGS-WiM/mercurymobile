@@ -36,7 +36,6 @@ export class SampleListPage {
     this._sampleService.getAll()
       .then(response =>
       {
-          console.log(response);
         for(let i =0; i < response.rows.length; i++) {
           this.samples.push(response.rows[i].doc);
           this.notready = false;
