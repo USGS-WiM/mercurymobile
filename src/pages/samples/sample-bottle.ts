@@ -72,6 +72,7 @@ export class SampleBottlePage {
   _updateControls() {
     this.sampleBottleControls['filterVolume'].setValue(this.mySampleBottle['volume_filtered']);
     this.sampleBottleControls['preservationVolume'].setValue(this.mySampleBottle['preservation_volume']);
+    this.sampleBottleControls['preservationComment'].setValue(this.mySampleBottle['preservation_comment']);
   }
 
   private _getSampleBottle(sampleBottleID: string){
@@ -131,14 +132,13 @@ export class SampleBottlePage {
 
   onSubmit(formValue){
     // TODO: build proper onSubmit function, including validations
-    alert("Submitted!");
     console.log(formValue);
-    this.mySampleBottle['analysis_type'] = formValue.analysis;
-    this.mySampleBottle['filter_type'] = formValue.filterType;
-    this.mySampleBottle['volume_filtered'] = formValue.filterVolume;
-    this.mySampleBottle['preservation_type'] = formValue.preservationType;
-    this.mySampleBottle['preservation_volume'] = formValue.preservationVolume;
-    this.mySampleBottle['preservation_comment'] = formValue.preservationComment;
+    this.mySampleBottle['analysis_type'] = formValue.sampleBottleControlsGroup.analysis;
+    this.mySampleBottle['filter_type'] = formValue.sampleBottleControlsGroup.filterType;
+    this.mySampleBottle['volume_filtered'] = formValue.sampleBottleControlsGroup.filterVolume;
+    this.mySampleBottle['preservation_type'] = formValue.sampleBottleControlsGroup.preservationType;
+    this.mySampleBottle['preservation_volume'] = formValue.sampleBottleControlsGroup.preservationVolume;
+    this.mySampleBottle['preservation_comment'] = formValue.sampleBottleControlsGroup.preservationComment;
     this._samplebottleService.update(this.mySampleBottle).then(response => {
         console.log(response);
         this.navCtrl.pop();

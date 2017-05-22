@@ -124,7 +124,6 @@ export class SampleDetailPage {
       .then(
         response => {
           self.mySample = response.rows[0].doc;
-          console.log(self.mySample);
           if (self.mySample['projectName']) {
               this._getSites(self.mySample['projectName']);
           }
@@ -369,7 +368,17 @@ export class SampleDetailPage {
     let sampleBottleControlRows = this.sampleBottleControls.controls;
     for(let i = 0, j = sampleBottleControlRows.length; i < j; i++) {
       if(sampleBottleControlRows[i] == sampleBottleControlsRow) {
-        sampleBottleControlRows.splice(i, 1);
+        let sampleBottleID = (<FormGroup>this.sampleBottleControls.controls[i]).controls['bottle'].value;
+        if (sampleBottleID == null) {
+          sampleBottleControlRows.splice(i, 1);
+        }
+        else {
+          this._samplebottleService.getOne(sampleBottleID).then(response => {
+              this._samplebottleService.delete(response).then(response => {
+                sampleBottleControlRows.splice(i, 1);
+              });
+          });
+        }
         break;
       }
     }

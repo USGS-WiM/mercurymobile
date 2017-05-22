@@ -85,8 +85,8 @@
       </ion-grid>
       <ion-grid id="body" formGroupName="sampleBottleControls">
         <ion-row>
-          <ion-col width-50>Container</ion-col>
-          <ion-col width-33><div style="padding: 10px;"><button ion-button type="button" style="float: right;" (click)="addRow()"><ion-icon name="add-circle"></ion-icon></button></div></ion-col>
+          <ion-col width-10>Container</ion-col>
+          <ion-col width-10><div style="padding: 10px;"><button ion-button type="button" style="float: left;" (click)="addRow()"><ion-icon name="add-circle"></ion-icon></button></div></ion-col>
         </ion-row>
         <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow" style="border-style: solid;">{{ndx + 1}}
           <ion-col width-50>

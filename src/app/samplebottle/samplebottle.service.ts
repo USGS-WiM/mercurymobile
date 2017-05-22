@@ -43,21 +43,25 @@ export class SampleBottleService {
     }
 
   destroyDB() {
-      this._db.destroy()
+      return this._db.destroy()
         .then(res => {
           this._createDB();
+          return true;
         }).catch(error => {
           console.log(error);
+          return false;
         });
     }
 
   loadDB(data) {
-    this._db.loadIt(data)
+    return this._db.loadIt(data)
       .then(res => {
         console.log("load success");
+        return true;
       })
       .catch( error => {
         console.log(error);
+        return false;
       });
   }
 
@@ -68,12 +72,14 @@ export class SampleBottleService {
       dumpedString += chunk.toString();
     });
 
-    this._db.dump(stream)
+    return this._db.dump(stream)
       .then(function() {
         //console.log('dumpDB SUCCESS! ' + dumpedString);
         APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
+        return true;
       }).catch(function(err) {
         console.log('dumpDB ERROR! ', err);
+        return false;
     });
   }
 

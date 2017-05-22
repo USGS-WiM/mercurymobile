@@ -24,18 +24,16 @@ export class SampleListPage {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedSample = navParams.get('sample');
 
-    //this._sampleService.destroyDB();
-    //this._sampleService.initDB();
     this._getSamples();
 
   }
 
   private _getSamples(){
     this.notready = true;
-    //this._sampleService.getSamples()
     this._sampleService.getAll()
       .then(response =>
       {
+        this.samples.length = 0;
         for(let i =0; i < response.rows.length; i++) {
           this.samples.push(response.rows[i].doc);
           this.notready = false;
@@ -52,6 +50,14 @@ export class SampleListPage {
 
   editSample(sample_id){
     this.openPage(sample_id);
+  }
+
+  deleteSample(sampleID) {
+      this._sampleService.getOne(sampleID).then(response => {
+        this._sampleService.delete(response).then(response => {
+          this._getSamples();
+        });
+      });
   }
 
   openPage(sample_id) {
