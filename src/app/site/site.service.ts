@@ -118,6 +118,18 @@ export class SiteService {
       });
     }
 
+    add(sample) {
+      return this._db.post(sample);
+    }
+
+    update(sample) {
+        return this._db.put(sample);
+    }
+
+    delete(sample) {
+        return this._db.remove(sample);
+    }
+
     findSite(val: string) {
       return this._db.find({
         selector: {id: val},
@@ -144,6 +156,10 @@ export class SiteService {
         }).catch(function (err) {
           console.log(err);
         });
+    }
+
+    public getSiteByID(val: string) {
+        return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 1});
     }
 
     public getAll(opts: any) {

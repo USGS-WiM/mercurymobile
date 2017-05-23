@@ -59,195 +59,46 @@ export class ConfigPage {
         };
         reader.readAsBinaryString(selectedFiles[0]);
     }
-    //         switch(type) {
-    //             case 'acids':
-    //                 self.notready = true;
-    //                 self._acidService.loadDB(reader.result).then(response => {self.notready = false;});
-    //                 break;
-    //             case 'analyses':
-    //                 self.notready = true;
-    //                 self._analysisService.loadDB(reader.result).then(response => {self.notready = false;});
-    //                 break;
-    //             case 'bottles':
-    //                 self.notready = true;
-    //                 self._bottleService.loadDB(reader.result).then(response => {self.notready = false;});
-    //                 break;
-    //             case 'filters':
-    //                 self.notready = true;
-    //                 self._filterService.loadDB(reader.result).then(response => {self.notready = false;});
-    //                 break;
-    //             case 'mediums':
-    //                 self.notready = true;
-    //                 self._mediumService.loadDB(reader.result).then(response => {self.notready = false;});
-    //                 break;
-    //             case 'preservations':
-    //                 self.notready = true;
-    //                 self._preservationService.loadDB(reader.result).then(response => {console.log(response); self.notready = false;});
-    //                 break;
-    //             case 'projects':
-    //                 self.notready = true;
-    //                 self._projectService.loadDB(reader.result).then(response => {self.notready = false;});
-    //                 break;
-    //             case 'samples':
-    //                 self.notready = true;
-    //                 self._sampleService.loadDB(reader.result).then(response => {self.notready = false;});
-    //                 break;
-    //             case 'samplebottles':
-    //                 self.notready = true;
-    //                 self._samplebottleService.loadDB(reader.result).then(response => {self.notready = false;});
-    //                 break;
-    //             case 'sites':
-    //                 self.notready = true;
-    //                 self._siteService.loadDB(reader.result).then(response => {self.notready = false;});
-    //                 break;
-    //         }
-
-    //     };
-    //     reader.readAsBinaryString(selectedFiles[0]);
-    // }
-
     
-    dumpFile(srv: string) {
+    dumpFile(service: string) {
         let self = this;
-        let filename = srv + "_" + APP_UTILITIES.TODAY + ".txt";
         self.notready = true;
-        self.myServices[srv].getAll({include_docs: false, limit: 1}).then(response => {
+        if (service == "all") {
+            let services = Object.keys(self.myServices);
+            for (let service of services) {
+                this._callDump(service);
+            }
+        }
+        else {
+            this._callDump(service);
+        }
+    }
+
+    private _callDump(service: string) {
+        let filename = service + "_" + APP_UTILITIES.TODAY + ".txt";
+        this.myServices[service].getAll({include_docs: false, limit: 1}).then(response => {
             if (response.total_rows > 0) {
-                self.myServices[srv].dumpDB(filename).then(response => {self.notready = false;});
+                this.myServices[service].dumpDB(filename).then(response => {this.notready = false;});
             }
         });
     }
-        // switch(type) {
-        //     case 'acids':
-        //         self.notready = true;
-        //         self._acidService.getAll({include_docs: false, limit: 1}).then(response => {
-        //             if (response.total_rows > 0) {
-        //               self._acidService.dumpDB(filename).then(response => {self.notready = false;});
-        //             }
-        //         });
-        //         break;
-        //     case 'analyses':
-        //         self.notready = true;
-        //         self._analysisService.getAll({include_docs: false, limit: 1}).then(response => {
-        //             if (response.total_rows > 0) {
-        //               self._analysisService.dumpDB(filename).then(response => {self.notready = false;});
-        //             }
-        //         });
-        //         break;
-        //     case 'bottles':
-        //         self.notready = true;
-        //         self._bottleService.getAll({include_docs: false, limit: 1}).then(response => {
-        //             if (response.total_rows > 0) {
-        //               self._bottleService.dumpDB(filename).then(response => {self.notready = false;});
-        //             }
-        //         });
-        //         break;
-        //     case 'filters':
-        //         self.notready = true;
-        //         self._filterService.getAll({include_docs: false, limit: 1}).then(response => {
-        //             if (response.total_rows > 0) {
-        //               self._filterService.dumpDB(filename).then(response => {self.notready = false;});
-        //             }
-        //         });
-        //         break;
-        //     case 'mediums':
-        //         self.notready = true;
-        //         self._mediumService.getAll({include_docs: false, limit: 1}).then(response => {
-        //             if (response.total_rows > 0) {
-        //               self._mediumService.dumpDB(filename).then(response => {self.notready = false;});
-        //             }
-        //         });
-        //         break;
-        //     case 'preservations':
-        //         self.notready = true;
-        //         self._preservationService.getAll({include_docs: false, limit: 1}).then(response => {
-        //             if (response.total_rows > 0) {
-        //               self._preservationService.dumpDB(filename).then(response => {self.notready = false;});
-        //             }
-        //         });
-        //         break;
-        //     case 'projects':
-        //         self.notready = true;
-        //         self._projectService.getAll({include_docs: false, limit: 1}).then(response => {
-        //             if (response.total_rows > 0) {
-        //               self._projectService.dumpDB(filename).then(response => {self.notready = false;});
-        //             }
-        //         });
-        //         break;
-        //     case 'samples':
-        //         self.notready = true;
-        //         self._sampleService.getAll({include_docs: false, limit: 1}).then(response => {
-        //             if (response.total_rows > 0) {
-        //               self._sampleService.dumpDB(filename).then(response => {self.notready = false;});
-        //             }
-        //         });
-        //         break;
-        //     case 'samplebottles':
-        //         self.notready = true;
-        //         self._samplebottleService.getAll({include_docs: false, limit: 1}).then(response => {
-        //             if (response.total_rows > 0) {
-        //               self._samplebottleService.dumpDB(filename).then(response => {self.notready = false;});
-        //             }
-        //         });
-        //         break;
-        //     case 'sites':
-        //         self.notready = true;
-        //         self._siteService.getAll({include_docs: false, limit: 1}).then(response => {
-        //             if (response.total_rows > 0) {
-        //               self._siteService.dumpDB(filename).then(response => {self.notready = false;});
-        //             }
-        //         });
-        //         break;
-        // }
-    // }
 
-    destroyDB(srv: string) {
+    destroyDB(service: string) {
         let self = this;
         self.notready = true;
-        self.myServices[srv].destroyDB().then(response => {self.notready = false;});
+        if (service == "all") {
+            let services = Object.keys(self.myServices);
+            for (let service of services) {
+                this._callDestroy(service);
+            }
+        }
+        else {
+            this._callDestroy(service);
+        }
     }
-    //     switch(type) {
-    //         case 'acids':
-    //             self.notready = true;
-    //             self._acidService.destroyDB().then(response => {self.notready = false;});
-    //             break;
-    //         case 'analyses':
-    //             self.notready = true;
-    //             self._analysisService.destroyDB().then(response => {self.notready = false;});
-    //             break;
-    //         case 'bottles':
-    //             self.notready = true;
-    //             self._bottleService.destroyDB().then(response => {self.notready = false;});
-    //             break;
-    //         case 'filters':
-    //             self.notready = true;
-    //             self._filterService.destroyDB().then(response => {self.notready = false;});
-    //             break;
-    //         case 'mediums':
-    //             self.notready = true;
-    //             self._mediumService.destroyDB().then(response => {self.notready = false;});
-    //             break;
-    //         case 'preservations':
-    //             self.notready = true;
-    //             self._preservationService.destroyDB().then(response => {self.notready = false;});
-    //             break;
-    //         case 'projects':
-    //             self.notready = true;
-    //             self._projectService.destroyDB().then(response => {self.notready = false;});
-    //             break;
-    //         case 'samples':
-    //             self.notready = true;
-    //             self._sampleService.destroyDB().then(response => {self.notready = false;});
-    //             break;
-    //         case 'samplebottles':
-    //             self.notready = true;
-    //             self._samplebottleService.destroyDB().then(response => {self.notready = false;});
-    //             break;
-    //         case 'sites':
-    //             self.notready = true;
-    //             self._siteService.destroyDB().then(response => {self.notready = false;});
-    //             break;
-    //     }
-    // }
+
+    private _callDestroy(service: string) {
+        this.myServices[service].destroyDB().then(response => {this.notready = false;});
+    }
 
 }

@@ -415,9 +415,4 @@ export class SampleDetailPage {
       });
   }
 
-  dumpDB(){
-    let filename = this.mySample['projectName'].replace(/\s/g,'') + "_" + this.mySample['siteName'].replace(/\s/g,'') + "_" + APP_UTILITIES.TODAY + ".txt";
-    this._sampleService.dumpDB(filename);
-  }
-
 }

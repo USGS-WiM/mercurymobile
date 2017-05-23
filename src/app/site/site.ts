@@ -1,6 +1,6 @@
 export class Site {
   constructor (
-    name: string,
+    name?: string,
     usgs_sid?: string,
     usgs_scode?: string,
     description?: string,

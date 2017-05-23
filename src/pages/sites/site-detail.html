@@ -18,6 +18,7 @@
   <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>
   <div [hidden]="notready">
     <form [formGroup]="siteForm" *ngIf="active" (ngSubmit)="onSubmit(siteForm.value)">
+      <div id="sitegroup" formGroupName="sitegroup">
       <ion-input type="number" [hidden]="true" formControlName="id"></ion-input>
       <ion-label>Site Name</ion-label>
       <ion-item><ion-input type="text" formControlName="name"></ion-input></ion-item>
@@ -44,6 +45,7 @@
         <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="false">{{project.name}}</ion-option>
       </ion-select></ion-item>
       <div><button ion-button type="submit">Submit</button></div>
+      </div>
     </form>
   </div>
 </ion-content>
