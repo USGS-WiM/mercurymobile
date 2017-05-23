@@ -41,7 +41,6 @@ export class SiteListPage {
     .then(response =>
       {
         this.sites.length = 0;
-        console.log(response);
         this.siteCount = response.total_rows;
         this.resultPages = Math.ceil(this.siteCount / this._pageSize);
         for(let i = 0, j = response.rows.length; i < j; i++) {
@@ -96,13 +95,13 @@ export class SiteListPage {
     this.openModal(null);
   }
 
-  editSite(site_id){
-    this.openModal(site_id);
+  editSite(site_name){
+    this.openModal(site_name);
   }
 
-  openModal(site_id) {
+  openModal(site_name) {
     let opts = {showBackdrop: false, enableBackdropDismiss: false};
-    let modal = this.modalCtrl.create(SiteDetailPage, {id: site_id}, opts);
+    let modal = this.modalCtrl.create(SiteDetailPage, {name: site_name}, opts);
     modal.present();
   }
 

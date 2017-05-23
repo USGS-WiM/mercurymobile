@@ -15,8 +15,8 @@ export class SiteDetailPage {
   isReadOnly: Boolean = true;
   notready: Boolean = true;
   private _errorMessage: string;
-  site_ID: number;
-  mySite: Site;
+  site_name: number;
+  mySite: Site = new Site();
   myProjects: Project[] = [];
   private _myOriginalProjects = [];
   private _mySite_fields;
@@ -51,12 +51,9 @@ export class SiteDetailPage {
       private _projectService: ProjectService
   ) {
     this._getProjects();
-    this.mySite = new Site();
-    console.log(this.mySite);
 
     // get the fields for the object type
     this._mySite_fields = Object.keys(this.mySite);
-    console.log(this._mySite_fields);
 
     // make the controls for the control group
     this._siteControls = this._makeControls(this._mySite_fields);
@@ -66,17 +63,21 @@ export class SiteDetailPage {
     this.sitegroup = new FormGroup(this._siteControls);
     console.log(this.sitegroup);
 
+    // build the form
     this.siteForm = fb.group({
       sitegroup: this.sitegroup
     });
+    console.log(this.siteForm);
 
-    // If we navigated to this page, we will have an item available as a nav param
-    this.site_ID = this.navParams.get('id');
+    // get the Site name from the route; if we navigated to this page, we will have an item available as a nav param
+    this.site_name = this.navParams.get('name');
 
-    if (this.site_ID) {
+    // if the Site name exists, get the site details
+    if (this.site_name) {
       this.isReadOnly = true;
-      this._getSite(this.site_ID);
+      this._getSite(this.site_name);
     }
+    // otherwise, this is a new site
     else {
       this.isReadOnly = false;
       this.notready = false;
@@ -84,19 +85,18 @@ export class SiteDetailPage {
 
   }
 
-  private _getSite(site_id){
-    console.log(site_id + " (" + typeof site_id + ")")
-    this._siteService.getSiteByID(site_id.toString())
+  private _getSite(site_name){
+    this._siteService.getOne(site_name)
       .then(
         response => {
           console.log(response);
-          this.mySite = response.rows[0].doc;
-          this._myOriginalProjects = response.rows[0].doc['projects'];
+          this.mySite = response;
+          this._myOriginalProjects = response['projects'];
           this._updateControls(this._mySite_fields, this._siteControls, this.mySite);
           this.mySite = response;
           this.notready = false;
         },
-        error => this._errorMessage = <any>error);
+        error => console.log(error));//this._errorMessage = <any>error);
   }
 
   private _getProjects() {
@@ -136,11 +136,17 @@ export class SiteDetailPage {
         console.log(response);
         // TODO: update projects to include the new site
         if (this.mySite['projects'] != this._myOriginalProjects) {
+          // get all the new projects
+          // for each project
+          // get list of sites (and the rest of the project's details)
+          // add this site to the existing site
+          // update the project with the same details as before, plus this site included in the list of sites
+
           // let newProjects = [];
           // this._projectService.update(newProjects).then(response => {
           //   console.log(response);
           //   this.dismiss();
-          // }
+          // });
           this.dismiss();
         }
         else {this.dismiss();}

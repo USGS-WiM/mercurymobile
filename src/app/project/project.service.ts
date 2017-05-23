@@ -92,6 +92,18 @@ export class ProjectService {
       });
     }
 
+    add(sample) {
+      return this._db.post(sample);
+    }
+
+    update(sample) {
+        return this._db.put(sample);
+    }
+
+    delete(sample) {
+        return this._db.remove(sample);
+    }
+
     findProject(val: string) {
       this._db.find({
         selector: {_id: val},
@@ -117,18 +129,18 @@ export class ProjectService {
     }
 
     getAllProjects() {
-      if (!this._projects) {
-          this._db.allDocs({ include_docs: true})
-              .then(docs => {
-                  this._projects = docs.rows.map(row => {
-                      return row.doc;
-                  });
-                  Promise.resolve(this._projects);
-              });
-      } else {
-          return Promise.resolve(this._projects);
-      }
-  }
+        if (!this._projects) {
+            this._db.allDocs({ include_docs: true})
+                .then(docs => {
+                    this._projects = docs.rows.map(row => {
+                        return row.doc;
+                    });
+                    Promise.resolve(this._projects);
+                });
+        } else {
+            return Promise.resolve(this._projects);
+        }
+    }
 
     getProject (id: number | string) {
         let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS });

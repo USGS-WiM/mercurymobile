@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title *ngIf="site_ID">
-      Edit Site {{site_ID}}
+    <ion-title *ngIf="site_name">
+      Edit Site {{site_name}}
     </ion-title>
-    <ion-title *ngIf="!site_ID">
+    <ion-title *ngIf="!site_name">
       Add Site
     </ion-title>
     <ion-buttons start>
@@ -18,34 +18,58 @@
   <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>
   <div [hidden]="notready">
     <form [formGroup]="siteForm" *ngIf="active" (ngSubmit)="onSubmit(siteForm.value)">
-      <div id="sitegroup" formGroupName="sitegroup">
-      <ion-input type="number" [hidden]="true" formControlName="id"></ion-input>
-      <ion-label>Site Name</ion-label>
-      <ion-item><ion-input type="text" formControlName="name"></ion-input></ion-item>
-      <ion-label>USGS SID</ion-label>
-      <ion-item><ion-input type="text" formControlName="usgs_sid"></ion-input></ion-item>
-      <ion-label>USGS SCode</ion-label>
-      <ion-item><ion-input type="text" formControlName="usgs_scode"></ion-input></ion-item>
-      <ion-label>Description</ion-label>
-      <ion-item><ion-input type="text" formControlName="description"></ion-input></ion-item>
-      <ion-label>Latitude</ion-label>
-      <ion-item><ion-input type="text" formControlName="latitude"></ion-input></ion-item>
-      <ion-label>Longitude</ion-label>
-      <ion-item><ion-input type="text" formControlName="longitude"></ion-input></ion-item>
-      <ion-label>Datum</ion-label>
-      <ion-item><ion-input type="text" formControlName="datum"></ion-input></ion-item>
-      <ion-label>Method</ion-label>
-      <ion-item><ion-input type="text" formControlName="method"></ion-input></ion-item>
-      <ion-label>Site Status</ion-label>
-      <ion-item><ion-input type="text" formControlName="status"></ion-input></ion-item>
-      <ion-label>NWIS Customer Code</ion-label>
-      <ion-item><ion-input type="text" formControlName="nwis_customer_code"></ion-input></ion-item>
-      <ion-label>Project(s)</ion-label>
-      <ion-item><ion-select [multiple]="true" formControlName="projects">
-        <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="false">{{project.name}}</ion-option>
-      </ion-select></ion-item>
-      <div><button ion-button type="submit">Submit</button></div>
-      </div>
+      <ion-grid id="sitegroup" formGroupName="sitegroup">
+        <ion-row>
+          <ion-input type="number" [hidden]="true" formControlName="id"></ion-input>
+        </ion-row>
+        <ion-row>
+          <ion-col width-25><ion-label>Site Name</ion-label></ion-col>
+          <ion-col width-75><ion-item><ion-input type="text" formControlName="name"></ion-input></ion-item></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-25><ion-label>USGS SID</ion-label></ion-col>
+          <ion-col width-75><ion-item><ion-input type="text" formControlName="usgs_sid"></ion-input></ion-item></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-25><ion-label>USGS SCode</ion-label></ion-col>
+          <ion-col width-75><ion-item><ion-input type="text" formControlName="usgs_scode"></ion-input></ion-item></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-25><ion-label>Description</ion-label></ion-col>
+          <ion-col width-75><ion-item><ion-input type="text" formControlName="description"></ion-input></ion-item></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-25><ion-label>Latitude</ion-label></ion-col>
+          <ion-col width-75><ion-item><ion-input type="text" formControlName="latitude"></ion-input></ion-item></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-25><ion-label>Longitude</ion-label></ion-col>
+          <ion-col width-75><ion-item><ion-input type="text" formControlName="longitude"></ion-input></ion-item></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-25><ion-label>Datum</ion-label></ion-col>
+          <ion-col width-75><ion-item><ion-input type="text" formControlName="datum"></ion-input></ion-item></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-25><ion-label>Method</ion-label></ion-col>
+          <ion-col width-75><ion-item><ion-input type="text" formControlName="method"></ion-input></ion-item></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-25><ion-label>Site Status</ion-label></ion-col>
+          <ion-col width-75><ion-item><ion-input type="text" formControlName="site_status"></ion-input></ion-item></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-25><ion-label>NWIS Customer Code</ion-label></ion-col>
+          <ion-col width-75><ion-item><ion-input type="text" formControlName="nwis_customer_code"></ion-input></ion-item></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col width-25><ion-label>Project(s)</ion-label></ion-col>
+          <ion-col width-75><ion-item><ion-select [multiple]="true" formControlName="projects">
+            <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="false">{{project.name}}</ion-option>
+          </ion-select></ion-item></ion-col>
+        </ion-row>
+      </ion-grid>
+      <div><button ion-button type="submit">Save</button></div>
     </form>
   </div>
 </ion-content>

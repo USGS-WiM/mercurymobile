@@ -166,6 +166,11 @@ export class SiteService {
         return this._db.allDocs(opts);
     }
 
+    public getOne(_id: string) {
+        console.log(_id);
+        return this._db.get(_id);
+    }
+
     getSite (id: number | string) {
         let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS });
 

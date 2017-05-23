@@ -328,7 +328,7 @@ export class SampleDetailPage {
     this.mySites = projects[0]['sites'];
   }
 
-  siteNameChange(siteName: number) {
+  siteNameChange(siteName: string) {
     let sites = this.mySites.filter(function(site: Site) {return site['name'] == siteName});
     this.siteNumber.setValue(sites[0]['id']);
     this.mySample['siteName'] = sites[0]['name'];
