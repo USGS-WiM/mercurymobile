@@ -72,7 +72,7 @@
           <ion-col width-50>
             <ion-label>Medium</ion-label>
             <ion-item>
-              <ion-select class="select-wide" formControlName="sampleMedium">
+              <ion-select class="select-wide" formControlName="sampleMedium" (ionChange)="mediumChange(mName.text.split(' - ')[0])" #mName>
                 <ion-option *ngFor="let medium of myMediums" [value]="medium.id" [selected]="medium.id == mySample.medium">{{medium.nwis_code}} - {{medium.description}}</ion-option>
               </ion-select>
             </ion-item>
@@ -85,7 +85,7 @@
       </ion-grid>
       <ion-grid id="body" formGroupName="sampleBottleControls">
         <ion-row>
-          <ion-col width-10>Container</ion-col>
+          <ion-col width-10>Containers</ion-col>
           <ion-col width-10><div style="padding: 10px;"><button ion-button type="button" style="float: left;" (click)="addRow()"><ion-icon name="add-circle"></ion-icon></button></div></ion-col>
         </ion-row>
         <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow" style="border-style: solid;">{{ndx + 1}}

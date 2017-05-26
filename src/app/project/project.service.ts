@@ -116,6 +116,18 @@ export class ProjectService {
       });
     }
 
+    findProjectByID(val: number) {
+      return this._db.find({
+        selector: {id: val},
+        //fields: ['_id', 'id', 'name', 'sites']
+        //sort: ['code']
+      }).then(function (result) {
+        return result['docs'];
+      }).catch(function (err) {
+        console.log('project find error');
+      });
+    }
+
     public getProjectByName(val: string) {
       return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 100});
     }

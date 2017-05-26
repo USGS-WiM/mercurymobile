@@ -57,17 +57,14 @@ export class SiteDetailPage {
 
     // make the controls for the control group
     this._siteControls = this._makeControls(this._mySite_fields);
-    console.log(this._siteControls);
 
     // populate the control groups with the controls
     this.sitegroup = new FormGroup(this._siteControls);
-    console.log(this.sitegroup);
 
     // build the form
     this.siteForm = fb.group({
       sitegroup: this.sitegroup
     });
-    console.log(this.siteForm);
 
     // get the Site name from the route; if we navigated to this page, we will have an item available as a nav param
     this.site_name = this.navParams.get('name');
@@ -103,7 +100,6 @@ export class SiteDetailPage {
     this._projectService.getAll()
       .then(response =>
       {
-        //console.log(response);
         for(let i =0; i < response.rows.length; i++) {
           this.myProjects.push(response.rows[i].doc);
         }
@@ -131,23 +127,21 @@ export class SiteDetailPage {
     this.mySite['nwis_customer_code'] = formValue.sitegroup.nwis_customer_code;
     this.mySite['projects'] = formValue.sitegroup.projects;
     this.mySite['id'] = formValue.sitegroup.id;
-    this.mySite['_id'] = formValue.sitegroup.id;
+    this.mySite['_id'] = formValue.sitegroup.name;
     this._siteService.update(this.mySite).then(response => {
-        console.log(response);
-        // TODO: update projects to include the new site
         if (this.mySite['projects'] != this._myOriginalProjects) {
-          // get all the new projects
-          // for each project
-          // get list of sites (and the rest of the project's details)
-          // add this site to the existing site
-          // update the project with the same details as before, plus this site included in the list of sites
-
-          // let newProjects = [];
-          // this._projectService.update(newProjects).then(response => {
-          //   console.log(response);
-          //   this.dismiss();
-          // });
-          this.dismiss();
+          let newSite = {"id": this.mySite['id'], "name": this.mySite['name'], "usgs_scode": this.mySite['usgs_scode']}
+          for (let projectID of this.mySite['projects']) {
+            if (this._myOriginalProjects.indexOf(projectID) < 0) {
+              this._projectService.findProjectByID(projectID).then(response => {
+                let project = response[0];
+                project['sites'].push(newSite);
+                this._projectService.update(project).then(response => {
+                  this.dismiss();
+                });
+              });
+            }
+          }
         }
         else {this.dismiss();}
     });

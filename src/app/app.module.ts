@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
+import {BrowserModule} from '@angular/platform-browser';
 import {IonicApp, IonicModule} from 'ionic-angular';
 import {AppComponent} from './app.component';
 import {AcidService} from './acid/acid.service';
@@ -32,7 +33,7 @@ import {ConfigPage} from '../pages/config/config';
     SiteListPage, SiteDetailPage, SampleBottlePage, ConfigPage
   ],
   imports: [
-    IonicModule.forRoot(AppComponent), ReactiveFormsModule, HttpModule
+    IonicModule.forRoot(AppComponent), ReactiveFormsModule, HttpModule, BrowserModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

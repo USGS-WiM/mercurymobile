@@ -1,31 +1,37 @@
-import {Component} from '@angular/core';
+import {Component, OnInit, OnChanges} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Sample} from '../../app/sample/sample';
 import {SampleService} from '../../app/sample/sample.service';
+import {SampleBottleService} from '../../app/samplebottle/samplebottle.service';
 import {SampleDetailPage} from './sample-detail';
 
 
 @Component({
   templateUrl: 'sample-list.html'
 })
-export class SampleListPage {
-  selectedSample: Sample;
+export class SampleListPage implements OnInit, OnChanges {
   samples: Sample[] = [];
   sampleCount: number = 0;
   currentPage: number = 1;
   resultPages = Math.ceil(this.sampleCount / 100);
   notready: Boolean = true;
   private _errorMessage: string;
+  callback: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              private _sampleService: SampleService
-  ) {
-    // If we navigated to this page, we will have an item available as a nav param
-    this.selectedSample = navParams.get('sample');
+              private _sampleService: SampleService,
+              private _samplebottleService: SampleBottleService
+  ) {}
 
-    this._getSamples();
+  ngOnInit() {
+    console.log("ngOnInit");
+    this._getSamples();    
+  }
 
+  ngOnChanges() {
+    console.log("ngOnChanges");
+    this._getSamples();   
   }
 
   private _getSamples(){
@@ -54,6 +60,12 @@ export class SampleListPage {
 
   deleteSample(sampleID) {
       this._sampleService.getOne(sampleID).then(response => {
+        let sampbottles = response['sample_bottles'];
+        for (let sampbottle of sampbottles) {
+          this._samplebottleService.getOne(sampbottle['_id']).then(response => {
+            this._samplebottleService.delete(response).then(response => {console.log(response);});
+          });
+        }
         this._sampleService.delete(response).then(response => {
           this._getSamples();
         });
@@ -61,8 +73,9 @@ export class SampleListPage {
   }
 
   openPage(sample_id) {
-    this.navCtrl.push(SampleDetailPage, {
-      sample: sample_id
-    });
+      this.navCtrl.push(SampleDetailPage, {
+        sample: sample_id
+      });
   }
+
 }

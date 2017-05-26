@@ -37,24 +37,28 @@ export class AcidSelectPage {
         });
   }
 
-  filterAcids(event: any) {
+  filterAcids(event: any, element: any) {
     this.notready = true;
     let val = event.target.value;
     console.log(val);
     if (val && val.trim() != ''){
-      this._acidService.getAcidsByName(val)
+      this._acidService.getAcidsByName(val.toUpperCase())
         .then(response =>
         {
           this.acids.length = 0;
           for(let i = 0; i < response.rows.length; i++) {
             this.acids.push(response.rows[i]['id']);
           }
+          setTimeout(() => {			
+              element.setFocus();
+          },50);
           this.notready = false;
         }, error => {
           this._errorMessage = <any>error;
           this.notready = false;
         });
     }
+    else {this.notready = false;};
   }
 
   selectAcid(acid) {

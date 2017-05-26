@@ -105,6 +105,10 @@ export class MediumService {
       });
     }
 
+    public getMediumsByName(val: string) {
+      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: false, limit: 100});
+    }
+
     public getAll(opts?: any) {
         if (this._db) {
             if (!opts) {opts = {include_docs: true}}

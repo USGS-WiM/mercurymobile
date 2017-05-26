@@ -93,7 +93,7 @@ export class AcidService {
       return this._db.find({
         selector: {id: val},
         fields: ['id', 'code'],
-        sort: ['_id']
+        //sort: ['_id']
       }).then(function (result) {
         return result['docs'];
       }).catch(function (err) {
@@ -102,7 +102,7 @@ export class AcidService {
     }
 
     public getAcidsByName(val: string) {
-      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: false, limit: 100});
+      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 100});
     }
 
     public getAll(opts?: any) {
