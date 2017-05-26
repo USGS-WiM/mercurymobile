@@ -52,21 +52,25 @@ export class ProjectService {
     }
 
     destroyDB() {
-      this._db.destroy()
+      return this._db.destroy()
         .then(res => {
           this._createDB();
+          return true;
         }).catch(error => {
           console.log(error);
+          return false;
         });
     }
 
     loadDB(data) {
-      this._db.loadIt(data)
+      return this._db.loadIt(data)
         .then(res => {
           console.log("load success");
+          return true;
         })
         .catch( error => {
           console.log(error);
+          return false;
         });
     }
 
@@ -77,13 +81,27 @@ export class ProjectService {
         dumpedString += chunk.toString();
       });
 
-      this._db.dump(stream)
+      return this._db.dump(stream)
         .then(function() {
           //console.log('dumpDB SUCCESS! ' + dumpedString);
           APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
+          return true;
         }).catch(function(err) {
           console.log('dumpDB ERROR! ', err);
+          return false;
       });
+    }
+
+    add(sample) {
+      return this._db.post(sample);
+    }
+
+    update(sample) {
+        return this._db.put(sample);
+    }
+
+    delete(sample) {
+        return this._db.remove(sample);
     }
 
     findProject(val: string) {
@@ -98,23 +116,43 @@ export class ProjectService {
       });
     }
 
-    public getAll() {
-        return this._db.allDocs({include_docs: true});
+    findProjectByID(val: number) {
+      return this._db.find({
+        selector: {id: val},
+        //fields: ['_id', 'id', 'name', 'sites']
+        //sort: ['code']
+      }).then(function (result) {
+        return result['docs'];
+      }).catch(function (err) {
+        console.log('project find error');
+      });
+    }
+
+    public getProjectByName(val: string) {
+      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 100});
+    }
+
+    public getAll(opts?: any) {
+        if (this._db) {
+            if (!opts) {opts = {include_docs: true}}
+            return this._db.allDocs(opts);
+        }
+        else {return false;}
     }
 
     getAllProjects() {
-      if (!this._projects) {
-          this._db.allDocs({ include_docs: true})
-              .then(docs => {
-                  this._projects = docs.rows.map(row => {
-                      return row.doc;
-                  });
-                  Promise.resolve(this._projects);
-              });
-      } else {
-          return Promise.resolve(this._projects);
-      }
-  }
+        if (!this._projects) {
+            this._db.allDocs({ include_docs: true})
+                .then(docs => {
+                    this._projects = docs.rows.map(row => {
+                        return row.doc;
+                    });
+                    Promise.resolve(this._projects);
+                });
+        } else {
+            return Promise.resolve(this._projects);
+        }
+    }
 
     getProject (id: number | string) {
         let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS });

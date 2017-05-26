@@ -8,12 +8,18 @@ import {SampleService} from "../../app/sample/sample.service";
 import {SampleBottleService} from "../../app/samplebottle/samplebottle.service";
 import {AcidService} from "../../app/acid/acid.service";
 import {BottleService} from "../../app/bottle/bottle.service";
+import {AnalysisService} from "../../app/analysis/analysis.service";
+import {FilterService} from "../../app/filter/filter.service";
+import {PreservationService} from "../../app/preservation/preservation.service";
 
 
 @Component({
     templateUrl: 'config.html'
 })
 export class ConfigPage {
+    notready: Boolean = false;
+    myServices = {};
+
     constructor(public navCtrl: NavController,
                 private _sampleService: SampleService,
                 private _samplebottleService: SampleBottleService,
@@ -21,7 +27,20 @@ export class ConfigPage {
                 private _siteService: SiteService,
                 private _mediumService: MediumService,
                 private _acidService: AcidService,
-                private _bottleService: BottleService) {
+                private _bottleService: BottleService,
+                private _analysisService: AnalysisService,
+                private _filterService: FilterService,
+                private _preservationService: PreservationService) {
+        this.myServices["acids"] = this._acidService;
+        this.myServices["analyses"] = this._analysisService;
+        this.myServices["bottles"] = this._bottleService;
+        this.myServices["filters"] = this._filterService;
+        this.myServices["mediums"] = this._mediumService;
+        this.myServices["preservations"] = this._preservationService;
+        this.myServices["projects"] = this._projectService;
+        this.myServices["samples"] = this._sampleService;
+        this.myServices["samplebottles"] = this._samplebottleService;
+        this.myServices["sites"] = this._siteService;
     }
 
     fileDragHover(fileInput) {
@@ -29,140 +48,57 @@ export class ConfigPage {
         fileInput.preventDefault();
     }
 
-    loadFile(type: string, fileInput: any) {
+    loadFile(srv: string, fileInput: any) {
         let self = this;
         this.fileDragHover(fileInput);
         let selectedFiles = <Array<File>> fileInput.target.files || fileInput.dataTransfer.files;
         let reader = new FileReader();
         reader.onload = function (e) {
-            switch(type) {
-                case 'acids':
-                    self._acidService.loadDB(reader.result);
-                    break;
-                case 'analyses':
-                    //self._analysisService.loadDB(reader.result);
-                    break;
-                case 'bottles':
-                    self._bottleService.loadDB(reader.result);
-                    break;
-                case 'filters':
-                    //self._filterService.loadDB(reader.result);
-                    break;
-                case 'mediums':
-                    self._mediumService.loadDB(reader.result);
-                    break;
-                case 'preservations':
-                    //self._preservationService.loadDB(reader.result);
-                    break;
-                case 'projects':
-                    self._projectService.loadDB(reader.result);
-                    break;
-                case 'samples':
-                    self._sampleService.loadDB(reader.result);
-                    break;
-                case 'samplebottles':
-                    //self._samplebottleService.loadDB(reader.result);
-                    break;
-                case 'sites':
-                    self._siteService.loadDB(reader.result);
-                    break;
-            }
-
+            self.notready = true;
+            self.myServices[srv].loadDB(reader.result).then(response => {self.notready = false;});
         };
         reader.readAsBinaryString(selectedFiles[0]);
     }
-
-    dumpFiles(type: string) {
+    
+    dumpFile(service: string) {
         let self = this;
-        let filename = type + "_" + APP_UTILITIES.TODAY + ".txt";
-        switch(type) {
-            case 'acids':
-                if (self._acidService.getAll().total_rows > 0) {
-                  self._acidService.dumpDB(filename);
-                }
-                break;
-            case 'analyses':
-                //if (self._analysisService.getAll().total_rows > 0) {
-                  //self._analysisService.dumpDB(filename);
-                //}
-                break;
-            case 'bottles':
-                if (self._bottleService.getAll().total_rows > 0) {
-                  self._bottleService.dumpDB(filename);
-                }
-                break;
-            case 'filters':
-                //if (self._filterService.getAll().total_rows > 0) {
-                  //self._filterService.dumpDB(filename);
-                //}
-                break;
-            case 'mediums':
-                if (self._mediumService.getAll().total_rows > 0) {
-                  self._mediumService.dumpDB(filename);
-                }
-                break;
-            case 'preservations':
-                //if (self._preservationService.getAll().total_rows > 0) {
-                  //self._preservationService.dumpDB(filename);
-                //}
-                break;
-            case 'projects':
-                if (self._projectService.getAll().total_rows > 0) {
-                  self._projectService.dumpDB(filename);
-                }
-                break;
-            case 'samples':
-                if (self._sampleService.getAll().total_rows > 0) {
-                  self._sampleService.dumpDB(filename);
-                }
-                break;
-            case 'samplebottles':
-                //if (self._samplebottleService.getAll().total_rows > 0) {
-                  //self._samplebottleService.dumpDB(filename);
-                //}
-                break;
-            case 'sites':
-                if (self._siteService.getAll({include_docs: false, limit: 100}).total_rows > 0) {
-                  self._siteService.dumpDB(filename);
-                }
-                break;
+        self.notready = true;
+        if (service == "all") {
+            let services = Object.keys(self.myServices);
+            for (let service of services) {
+                this._callDump(service);
+            }
+        }
+        else {
+            this._callDump(service);
         }
     }
 
-    destroyDB(type: string) {
+    private _callDump(service: string) {
+        let filename = service + "_" + APP_UTILITIES.TODAY + ".txt";
+        this.myServices[service].getAll({include_docs: false, limit: 1}).then(response => {
+            if (response.total_rows > 0) {
+                this.myServices[service].dumpDB(filename).then(response => {this.notready = false;});
+            }
+        });
+    }
+
+    destroyDB(service: string) {
         let self = this;
-        switch(type) {
-            case 'acids':
-                self._acidService.destroyDB();
-                break;
-            case 'analyses':
-                //self._analysisService.destroyDB();
-                break;
-            case 'bottles':
-                self._bottleService.destroyDB();
-                break;
-            case 'filters':
-                //self._filterService.destroyDB();
-                break;
-            case 'mediums':
-                self._mediumService.destroyDB();
-                break;
-            case 'preservations':
-                //self._preservationService.destroyDB();
-                break;
-            case 'projects':
-                self._projectService.destroyDB();
-                break;
-            case 'samples':
-                self._sampleService.destroyDB();
-                break;
-            case 'samplebottles':
-                //self._samplebottleService.destroyDB();
-                break;
-            case 'sites':
-                self._siteService.destroyDB();
-                break;
+        self.notready = true;
+        if (service == "all") {
+            let services = Object.keys(self.myServices);
+            for (let service of services) {
+                this._callDestroy(service);
+            }
         }
+        else {
+            this._callDestroy(service);
+        }
+    }
+
+    private _callDestroy(service: string) {
+        this.myServices[service].destroyDB().then(response => {this.notready = false;});
     }
 
 }

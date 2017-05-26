@@ -24,7 +24,7 @@ export class BottleSelectPage {
   }
 
   private _getBottles() {
-    this._bottleService.getAll()
+    this._bottleService.getAll({include_docs: true, limit: 100})
       .then(response =>
         {
           for(let i = 0; i < response.rows.length; i++) {
@@ -37,23 +37,27 @@ export class BottleSelectPage {
         });
   }
 
-  filterBottles(event: any) {
+  filterBottles(event: any, element: any) {
     this.notready = true;
     let val = event.target.value;
     if (val && val.trim() != ''){
-      this._bottleService.getBottlesByName(val)
+      this._bottleService.getBottlesByName(val.toUpperCase())
         .then(response =>
         {
           this.bottles.length = 0;
           for(let i = 0; i < response.rows.length; i++) {
             this.bottles.push(response.rows[i]['id']);
           }
+          setTimeout(() => {			
+              element.setFocus();
+          },50);
           this.notready = false;
         }, error => {
           this._errorMessage = <any>error;
           this.notready = false;
         });
     }
+    else {this.notready = false;};
   }
 
   selectBottle(bottle) {

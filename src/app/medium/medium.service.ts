@@ -53,21 +53,25 @@ export class MediumService {
     }
 
     destroyDB() {
-      this._db.destroy()
+      return this._db.destroy()
         .then(res => {
           this._createDB();
+          return true;
         }).catch(error => {
           console.log(error);
+          return false;
         });
     }
 
     loadDB(data) {
-      this._db.loadIt(data)
+      return this._db.loadIt(data)
         .then(res => {
           console.log("load success");
+          return true;
         })
         .catch( error => {
           console.log(error);
+          return false;
         });
     }
 
@@ -78,12 +82,14 @@ export class MediumService {
         dumpedString += chunk.toString();
       });
 
-      this._db.dump(stream)
+      return this._db.dump(stream)
         .then(function() {
           //console.log('dumpDB SUCCESS! ' + dumpedString);
           APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
+          return true;
         }).catch(function(err) {
           console.log('dumpDB ERROR! ', err);
+          return false;
       });
     }
 
@@ -99,8 +105,16 @@ export class MediumService {
       });
     }
 
-    public getAll() {
-        return this._db.allDocs({include_docs: true});
+    public getMediumsByName(val: string) {
+      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: false, limit: 100});
+    }
+
+    public getAll(opts?: any) {
+        if (this._db) {
+            if (!opts) {opts = {include_docs: true}}
+            return this._db.allDocs(opts);
+        }
+        else {return false;}
     }
 
     getMedium (id: number | string) {

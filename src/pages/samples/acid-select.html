@@ -14,7 +14,7 @@
 <ion-content>
   <div [hidden]="!notready" align="center" id="loading-spinner"><ion-spinner></ion-spinner></div>
   <div [hidden]="notready">
-    <ion-searchbar (input)="filterAcids($event)" placeholder="Filter by text"></ion-searchbar>
+    <ion-searchbar (input)="filterAcids($event, searchbar)" placeholder="Filter by text" #searchbar></ion-searchbar>
     <ion-list>
       <ion-item *ngFor="let acid of acids">
         <ion-label>{{acid}}</ion-label>

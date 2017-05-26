@@ -5,7 +5,7 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
-import {APP_UTILITIES}   from '../../app/app.utilities';
+import {APP_UTILITIES}   from '../app.utilities';
 import {BOTTLES} from './bottles';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
@@ -59,21 +59,25 @@ export class BottleService {
     }
 
     destroyDB() {
-      this._db.destroy()
+      return this._db.destroy()
         .then(res => {
           this._createDB();
+          return true;
         }).catch(error => {
           console.log(error);
+          return false;
         });
     }
 
     loadDB(data) {
-      this._db.loadIt(data)
+      return this._db.loadIt(data)
         .then(res => {
           console.log("load success");
+          return true;
         })
         .catch( error => {
           console.log(error);
+          return false;
         });
     }
 
@@ -84,12 +88,14 @@ export class BottleService {
         dumpedString += chunk.toString();
       });
 
-      this._db.dump(stream)
+      return this._db.dump(stream)
         .then(function() {
           //console.log('dumpDB SUCCESS! ' + dumpedString);
           APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
+          return true;
         }).catch(function(err) {
           console.log('dumpDB ERROR! ', err);
+          return false;
       });
     }
 
@@ -109,8 +115,12 @@ export class BottleService {
       return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: false, limit: 100});
     }
 
-    public getAll() {
-        return this._db.allDocs({include_docs: false, limit: 100});
+    public getAll(opts?: any) {
+        if (this._db) {
+            if (!opts) {opts = {include_docs: true}}
+            return this._db.allDocs(opts);
+        }
+        else {return false;}
     }
 
     getBottle (id: number | string) {

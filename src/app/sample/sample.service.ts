@@ -1,6 +1,6 @@
 import {Injectable}     from '@angular/core';
 //import {Http, Response, Headers, RequestOptions, URLSearchParams} from '@angular/http';
-import {Sample}           from './sample';
+//import {Sample}           from './sample';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_UTILITIES}   from '../../app/app.utilities';
@@ -41,22 +41,26 @@ export class SampleService{
       this._db = new PouchDB('samples');
     }
 
-    destroyDB() {
-      this._db.destroy()
+  destroyDB() {
+      return this._db.destroy()
         .then(res => {
           this._createDB();
+          return true;
         }).catch(error => {
           console.log(error);
+          return false;
         });
     }
 
   loadDB(data) {
-    this._db.loadIt(data)
+    return this._db.loadIt(data)
       .then(res => {
         console.log("load success");
+        return true;
       })
       .catch( error => {
         console.log(error);
+        return false;
       });
   }
 
@@ -67,12 +71,14 @@ export class SampleService{
       dumpedString += chunk.toString();
     });
 
-    this._db.dump(stream)
+    return this._db.dump(stream)
       .then(function() {
         //console.log('dumpDB SUCCESS! ' + dumpedString);
         APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
+        return true;
       }).catch(function(err) {
         console.log('dumpDB ERROR! ', err);
+        return false;
     });
   }
 
@@ -88,28 +94,30 @@ export class SampleService{
       return this._db.remove(sample);
   }
 
-  public getAll() {
-      return this._db.allDocs({include_docs: true});
+  public getSampleByID(val: string) {
+      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 1});
   }
 
-  // Binary search, the array is by default sorted by _id.
-  // private findIndex(array, id) {
-  //     let low = 0, high = array.length, mid;
-  //     while (low < high) {
-  //     mid = (low + high) >>> 1;
-  //     array[mid]._id < id ? low = mid + 1 : high = mid
-  //     }
-  //     return low;
+  public getAll(opts?: any) {
+      if (this._db) {
+          if (!opts) {opts = {include_docs: true}}
+          return this._db.allDocs(opts);
+      }
+      else {return false;}
+  }
+
+  public getOne(_id: string) {
+      return this._db.get(_id);
+  }
+
+  // getSample(id: number | string): Promise<Sample> {
+  //   let newid: number = +id - 1;
+  //   return Promise.resolve(SAMPLES[newid]);
   // }
 
-  getSample(id: number | string): Promise<Sample> {
-    let newid: number = +id - 1;
-    return Promise.resolve(SAMPLES[newid]);
-  }
-
-  getSamples(): Promise<Sample[]> {
-    return Promise.resolve(SAMPLES);
-  }
+  // getSamples(): Promise<Sample[]> {
+  //   return Promise.resolve(SAMPLES);
+  // }
 
     // constructor (private http: Http) {}
     //

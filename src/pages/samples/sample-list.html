@@ -8,13 +8,16 @@
 </ion-header>
 
 <ion-content>
+  <button ion-button type="button" (click)="addSample()"><ion-icon name="add-circle"></ion-icon></button>
+
   <pre id="display"></pre>
-  <ion-list>
-    <button ion-item *ngFor="let sample of samples" (click)="editSample(sample.id)">
-      <ion-icon name="beaker" item-left></ion-icon>
-      {{sample.projectName}}, {{sample.siteName}}, {{sample.date}}
-    </button>
-  </ion-list>
+  <ion-grid>
+    <ion-row *ngFor="let sample of samples">
+      <ion-col width-50><button ion-item (click)="editSample(sample.id)"><ion-icon name="beaker" item-left></ion-icon>{{sample.id}}: {{sample.projectName}}, {{sample.siteName}}, {{sample.date}}</button></ion-col>
+      <ion-col width-10><button ion-button (click)="editSample(sample.id)"><ion-icon name="list"></ion-icon></button></ion-col>
+      <ion-col width-10><button ion-button type="button" (click)="deleteSample(sample._id)"><ion-icon name="remove-circle"></ion-icon></button></ion-col>
+    </ion-row>
+  </ion-grid>
   <div *ngIf="selectedSample" padding>
     You navigated here from <b>{{selectedSample.title}}</b>
   </div>

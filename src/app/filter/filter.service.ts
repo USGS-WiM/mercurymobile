@@ -5,11 +5,14 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
+import {APP_UTILITIES}   from '../app.utilities';
 import {FILTERS} from './filters';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
 import load from 'pouchdb-load';
 import replicationStream from 'pouchdb-replication-stream';
+import MemoryStream from 'memorystream';
+
 
 @Injectable()
 export class FilterService {
@@ -49,12 +52,44 @@ export class FilterService {
     }
 
     destroyDB() {
-      this._db.destroy()
+      return this._db.destroy()
         .then(res => {
           this._createDB();
+          return true;
         }).catch(error => {
           console.log(error);
+          return false;
         });
+    }
+
+    loadDB(data) {
+      return this._db.loadIt(data)
+        .then(res => {
+          console.log("load success");
+          return true;
+        })
+        .catch( error => {
+          console.log(error);
+          return false;
+        });
+    }
+
+    dumpDB(filename: string) {
+      let dumpedString = '';
+      let stream = new MemoryStream();
+      stream.on('data', function(chunk) {
+        dumpedString += chunk.toString();
+      });
+
+      return this._db.dump(stream)
+        .then(function() {
+          //console.log('dumpDB SUCCESS! ' + dumpedString);
+          APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
+          return true;
+        }).catch(function(err) {
+          console.log('dumpDB ERROR! ', err);
+          return false;
+      });
     }
 
     findFilter(val: string) {
@@ -69,8 +104,12 @@ export class FilterService {
       });
     }
 
-    public getAll() {
-        return this._db.allDocs({include_docs: true});
+    public getAll(opts?: any) {
+        if (this._db) {
+            if (!opts) {opts = {include_docs: true}}
+            return this._db.allDocs(opts);
+        }
+        else {return false;}
     }
 
     getFilter (id: number | string) {

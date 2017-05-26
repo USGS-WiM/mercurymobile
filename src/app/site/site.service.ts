@@ -34,24 +34,31 @@ export class SiteService {
           if(result.total_rows === 0) {
             console.log("start put sites");
             let count = 0;
-            for (let site of SITES) {
-              this._db.put({
-                _id: site['name'],
-                id: site['id'],
-                name: site['name'],
-                usgs_scode: site['usgs_scode'],
-                description: site['description'],
-                latitude: site['latitude'],
-                longitude: site['longitude'],
-                datum: site['datum'],
-                method: site['method'],
-                site_status: site['site_status'],
-                nwis_customer_code: site['nwis_customer_code'],
-                projects: site['projects']
-              });
-              count++;
-              if (count % 1000 == 0) {
-                console.log(count);
+            for (let sitegroup of SITES) {
+              for (let site of <Array <Site> >sitegroup) {
+                let projects = site['projects'];
+                let siteID;
+                for (let project in projects) {
+                  siteID = siteID + "_" + project;
+                }
+                this._db.put({
+                  _id: siteID,
+                  id: site['id'],
+                  name: site['name'],
+                  usgs_scode: site['usgs_scode'],
+                  description: site['description'],
+                  latitude: site['latitude'],
+                  longitude: site['longitude'],
+                  datum: site['datum'],
+                  method: site['method'],
+                  site_status: site['site_status'],
+                  nwis_customer_code: site['nwis_customer_code'],
+                  projects: site['projects']
+                });
+                count++;
+                if (count % 1000 == 0) {
+                  console.log(count);
+                }
               }
             }
             console.log("end put sites");
@@ -68,21 +75,25 @@ export class SiteService {
     }
 
     destroyDB() {
-      this._db.destroy()
+      return this._db.destroy()
         .then(res => {
           this._createDB();
+          return true;
         }).catch(error => {
           console.log(error);
+          return false;
         });
     }
 
     loadDB(data) {
-      this._db.loadIt(data)
+      return this._db.loadIt(data)
         .then(res => {
           console.log("load success");
+          return true;
         })
         .catch( error => {
           console.log(error);
+          return false;
         });
     }
 
@@ -96,13 +107,27 @@ export class SiteService {
         console.log(count);
       });
 
-      this._db.dump(stream)
+      return this._db.dump(stream)
         .then(function() {
           //console.log('dumpDB SUCCESS! ' + dumpedString);
           APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
+          return true;
         }).catch(function(err) {
           console.log('dumpDB ERROR! ', err);
+          return false;
       });
+    }
+
+    add(sample) {
+      return this._db.post(sample);
+    }
+
+    update(sample) {
+        return this._db.put(sample);
+    }
+
+    delete(sample) {
+        return this._db.remove(sample);
     }
 
     findSite(val: string) {
@@ -124,7 +149,7 @@ export class SiteService {
           selector: {projects: {$elemMatch: {$eq: val}}},
           //selector: {_id: {$elemMatch: {$regex: "^" + val}}},
           fields: ['id', 'name', 'usgs_scode'],
-          sort: ['code']
+          //sort: ['code']
         }).then(function (result) {
           console.log(result);
           return result['docs'];
@@ -133,12 +158,17 @@ export class SiteService {
         });
     }
 
-    public getSitesByProject(val: string) {
-      return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 100});
+    public getSiteByID(val: string) {
+        return this._db.allDocs({startkey: val, endkey: val+'\uffff', include_docs: true, limit: 1});
     }
 
     public getAll(opts: any) {
         return this._db.allDocs(opts);
+    }
+
+    public getOne(_id: string) {
+        console.log(_id);
+        return this._db.get(_id);
     }
 
     getSite (id: number | string) {
