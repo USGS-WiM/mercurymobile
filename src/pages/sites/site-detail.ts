@@ -86,7 +86,6 @@ export class SiteDetailPage {
     this._siteService.getOne(site_name)
       .then(
         response => {
-          console.log(response);
           this.mySite = response;
           this._myOriginalProjects = response['projects'];
           this._updateControls(this._mySite_fields, this._siteControls, this.mySite);
@@ -114,7 +113,6 @@ export class SiteDetailPage {
 
   onSubmit(formValue){
     // TODO: build proper onSubmit function, including validations
-    console.log(formValue);
     this.mySite['name'] = formValue.sitegroup.name;
     this.mySite['usgs_sid'] = formValue.sitegroup.usgs_sid;
     this.mySite['usgs_scode'] = formValue.sitegroup.usgs_scode;

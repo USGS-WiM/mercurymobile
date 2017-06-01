@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Sample} from '../../app/sample/sample';
 import {SampleService} from '../../app/sample/sample.service';
@@ -9,7 +9,7 @@ import {SampleDetailPage} from './sample-detail';
 @Component({
   templateUrl: 'sample-list.html'
 })
-export class SampleListPage implements OnInit, OnChanges {
+export class SampleListPage implements OnInit {
   samples: Sample[] = [];
   sampleCount: number = 0;
   currentPage: number = 1;
@@ -25,13 +25,7 @@ export class SampleListPage implements OnInit, OnChanges {
   ) {}
 
   ngOnInit() {
-    console.log("ngOnInit");
     this._getSamples();    
-  }
-
-  ngOnChanges() {
-    console.log("ngOnChanges");
-    this._getSamples();   
   }
 
   private _getSamples(){
@@ -63,7 +57,7 @@ export class SampleListPage implements OnInit, OnChanges {
         let sampbottles = response['sample_bottles'];
         for (let sampbottle of sampbottles) {
           this._samplebottleService.getOne(sampbottle['_id']).then(response => {
-            this._samplebottleService.delete(response).then(response => {console.log(response);});
+            this._samplebottleService.delete(response);
           });
         }
         this._sampleService.delete(response).then(response => {

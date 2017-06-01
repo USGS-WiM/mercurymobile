@@ -3,6 +3,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {IonicApp, IonicModule} from 'ionic-angular';
+import {StatusBar} from '@ionic-native/status-bar';
 import {AppComponent} from './app.component';
 import {AcidService} from './acid/acid.service';
 import {AnalysisService} from './analysis/analysis.service';
@@ -42,7 +43,7 @@ import {ConfigPage} from '../pages/config/config';
   ],
   providers: [
     AcidService, AnalysisService, AuthenticationService, BottleService, FilterService, MediumService,
-    PreservationService, ProjectService, SampleService, SampleBottleService, SiteService, UserService
+    PreservationService, ProjectService, SampleService, SampleBottleService, SiteService, UserService, StatusBar
   ]
 })
 export class AppModule {}

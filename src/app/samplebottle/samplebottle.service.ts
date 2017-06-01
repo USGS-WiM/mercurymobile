@@ -56,7 +56,6 @@ export class SampleBottleService {
   loadDB(data) {
     return this._db.loadIt(data)
       .then(res => {
-        console.log("load success");
         return true;
       })
       .catch( error => {
@@ -74,7 +73,6 @@ export class SampleBottleService {
 
     return this._db.dump(stream)
       .then(function() {
-        //console.log('dumpDB SUCCESS! ' + dumpedString);
         APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
         return true;
       }).catch(function(err) {
@@ -99,7 +97,6 @@ export class SampleBottleService {
       this._db.find({
           selector: {name: val},
           fields: ['id', 'name']
-          //sort: ['_id']
       }).then(function (result) {
           return result['docs'];
       }).catch(function (err) {
@@ -132,29 +129,4 @@ export class SampleBottleService {
     return Promise.resolve(SAMPLEBOTTLES);
   }
 
-    // constructor (private http: Http) {}
-    //
-    // getSampleBottle (id: number | string) {
-    //     let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS });
-    //
-    //     return this.http.get(APP_SETTINGS.SAMPLEBOTTLES_URL+id+'/', options)
-    //         .map(res => <SampleBottle> res.json())
-    //         .catch(this.handleError);
-    // }
-    //
-    // getSampleBottles (searchArgs?: URLSearchParams) {
-    //     let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS, search: searchArgs });
-    //
-    //     return this.http.get(APP_SETTINGS.SAMPLEBOTTLES_URL, options)
-    //         .map(res => <SampleBottle[]> res.json())
-    //         .catch(this.handleError);
-    // }
-    //
-    // private handleError (error: Response) {
-    //     // TODO figure out a better error handler
-    //     // in a real world app, we may send the server to some remote logging infrastructure
-    //     // instead of just logging it to the console
-    //     console.error(error);
-    //     return Observable.throw(error.json().error || 'Server error');
-    // }
 }

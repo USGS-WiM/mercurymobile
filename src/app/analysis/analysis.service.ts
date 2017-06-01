@@ -66,7 +66,6 @@ export class AnalysisService {
     loadDB(data) {
       return this._db.loadIt(data)
         .then(res => {
-          console.log("load success");
           return true;
         })
         .catch( error => {
@@ -76,7 +75,6 @@ export class AnalysisService {
     }
 
     dumpDB(filename: string) {
-      //console.log("in dumpDB " + filename);
       let dumpedString = '';
       let stream = new MemoryStream();
       stream.on('data', function(chunk) {
@@ -85,7 +83,6 @@ export class AnalysisService {
 
       return this._db.dump(stream)
         .then(function() {
-          //console.log('dumpDB SUCCESS! ' + dumpedString);
           APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
           return true;
         }).catch(function(err) {
@@ -97,8 +94,7 @@ export class AnalysisService {
     findAnalysis(val: string) {
       this._db.find({
         selector: {_id: val},
-        fields: ['id', 'analysis'],
-        sort: ['analysis']
+        fields: ['id', 'analysis']
       }).then(function (result) {
         return result['docs'];
       }).catch(function (err) {

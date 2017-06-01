@@ -65,7 +65,6 @@ export class ProjectService {
     loadDB(data) {
       return this._db.loadIt(data)
         .then(res => {
-          console.log("load success");
           return true;
         })
         .catch( error => {
@@ -83,7 +82,6 @@ export class ProjectService {
 
       return this._db.dump(stream)
         .then(function() {
-          //console.log('dumpDB SUCCESS! ' + dumpedString);
           APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
           return true;
         }).catch(function(err) {
@@ -108,7 +106,6 @@ export class ProjectService {
       this._db.find({
         selector: {_id: val},
         fields: ['id', 'name']
-        //sort: ['code']
       }).then(function (result) {
         return result['docs'];
       }).catch(function (err) {
@@ -120,7 +117,6 @@ export class ProjectService {
       return this._db.find({
         selector: {id: val},
         //fields: ['_id', 'id', 'name', 'sites']
-        //sort: ['code']
       }).then(function (result) {
         return result['docs'];
       }).catch(function (err) {

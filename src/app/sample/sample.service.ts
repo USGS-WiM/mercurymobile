@@ -1,6 +1,4 @@
 import {Injectable}     from '@angular/core';
-//import {Http, Response, Headers, RequestOptions, URLSearchParams} from '@angular/http';
-//import {Sample}           from './sample';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_UTILITIES}   from '../../app/app.utilities';
@@ -9,6 +7,7 @@ import PouchDB from 'pouchdb';
 import PouchDBLoad from 'pouchdb-load';
 import replicationStream from 'pouchdb-replication-stream';
 import MemoryStream from 'memorystream';
+
 
 @Injectable()
 export class SampleService{
@@ -55,7 +54,6 @@ export class SampleService{
   loadDB(data) {
     return this._db.loadIt(data)
       .then(res => {
-        console.log("load success");
         return true;
       })
       .catch( error => {
@@ -73,7 +71,6 @@ export class SampleService{
 
     return this._db.dump(stream)
       .then(function() {
-        //console.log('dumpDB SUCCESS! ' + dumpedString);
         APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
         return true;
       }).catch(function(err) {
@@ -109,40 +106,5 @@ export class SampleService{
   public getOne(_id: string) {
       return this._db.get(_id);
   }
-
-  // getSample(id: number | string): Promise<Sample> {
-  //   let newid: number = +id - 1;
-  //   return Promise.resolve(SAMPLES[newid]);
-  // }
-
-  // getSamples(): Promise<Sample[]> {
-  //   return Promise.resolve(SAMPLES);
-  // }
-
-    // constructor (private http: Http) {}
-    //
-    // getSample (id: number | string) {
-    //     let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS });
-    //
-    //     return this.http.get(APP_SETTINGS.SAMPLES_URL+id+'/', options)
-    //         .map(res => <Sample> res.json())
-    //         .catch(this.handleError);
-    // }
-    //
-    // getSamples (searchArgs?: URLSearchParams) {
-    //     let options = new RequestOptions({ headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS, search: searchArgs });
-    //
-    //     return this.http.get(APP_SETTINGS.SAMPLES_URL, options)
-    //         .map(res => <Sample[]> res.json())
-    //         .catch(this.handleError);
-    // }
-    //
-    // private handleError (error: Response) {
-    //     // TODO figure out a better error handler
-    //     // in a real world app, we may send the server to some remote logging infrastructure
-    //     // instead of just logging it to the console
-    //     console.error(error);
-    //     return Observable.throw(error.json().error || 'Server error');
-    // }
 
 }

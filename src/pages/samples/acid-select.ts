@@ -40,7 +40,6 @@ export class AcidSelectPage {
   filterAcids(event: any, element: any) {
     this.notready = true;
     let val = event.target.value;
-    console.log(val);
     if (val && val.trim() != ''){
       this._acidService.getAcidsByName(val.toUpperCase())
         .then(response =>

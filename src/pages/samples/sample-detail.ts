@@ -108,9 +108,7 @@ export class SampleDetailPage {
         this.mySample['id'] = id;
         this.mySample['_id'] = id.toString();
         this.sample_ID = id;
-        console.log(this.mySample);
         this._sampleService.update(this.mySample).then(response => {
-            console.log(response);
             for (let i = 0, j = this._defaultRowCount; i < j; i++){
                 this.addRow();
             }
@@ -128,7 +126,6 @@ export class SampleDetailPage {
           this._getProjects();
           this._getMediums();
           self.mySample = response.rows[0].doc;
-          console.log(self.mySample);
           if (self.mySample['projectName']) {
               this._getSites(self.mySample['projectName']);
           }
@@ -160,7 +157,6 @@ export class SampleDetailPage {
               let samplebottle = response;
               this.mySampleBottles.push(samplebottle);
               let acid = samplebottle['preservation_acid'];
-              console.log("sb acid: " + acid);
               this.addRow(samplebottle);
               if (acid && !this._selectedAcid) {
                 this._selectedAcid = acid;
@@ -237,11 +233,9 @@ export class SampleDetailPage {
   }
 
   private _getAcidName(acidID: number) {
-    console.log(acidID);
     this._acidService.findAcid(acidID)
       .then(
         response => {
-          console.log(response);
           this.sampleAcid.setValue(response[0].code);
         }, error => {
         this._errorMessage = <any>error;
@@ -255,16 +249,9 @@ export class SampleDetailPage {
           this.mySampleBottles.push(bottle);
           // include the PouchDB internal ID for quick retrieval
           bottle['_id'] = bottleID;
-          this._samplebottleService.update(bottle).then(response => {
-              console.log(response);
-              console.log(this.mySampleBottles);
-          });
+          this._samplebottleService.update(bottle);
       });
   }
-
-  // private _updateSampleBottle() {
-  //
-  // }
 
   openBottleSelect(rowIndex: number) {
     let opts = {showBackdrop: false, enableBackdropDismiss: false};
@@ -284,7 +271,6 @@ export class SampleDetailPage {
     modal.onDidDismiss(data => {
       (<FormGroup>this.sampleHeaderControls).controls['sampleAcid'].setValue(data);
       this._acidService.getAcidsByName(data).then(response => {
-        console.log(response);
         this._selectedAcid = response.rows[0].doc.id;
       });
     });
@@ -292,25 +278,12 @@ export class SampleDetailPage {
   }
 
   editSampleBottle(rowIndex: number){
-    console.log(this.mySampleBottles);
     let sbName = (<FormGroup>this.sampleBottleControls.controls[rowIndex]).controls['bottle'].value;
-    console.log(sbName);
     if (sbName == null) {alert("Please select a bottle first!")}
     else {
-        console.log(this.mySampleBottles);
-        // let samplebottles = this.mySampleBottles.filter(function (sb) {
-        //     console.log(sb);
-        //     return sb['bottle_string'] == sbName;
-        // });
         this._bottleService.getBottlesByName(sbName).then(response => {
-            console.log(response.rows[0]['id']);
             this.openPage(response.rows[0]['id']);
         });
-        // console.log(samplebottles);
-        // if (samplebottles.length > 0) {
-        //     this.openPage(samplebottles[0]['bottle']);
-        // }
-        // else {this.openPage(null);}
     }
   }
 
@@ -325,7 +298,6 @@ export class SampleDetailPage {
     this.projectNumber.setValue(projects[0]['id']);
     this.mySample['projectName'] = projects[0]['name'];
     this.mySample['projectNumber'] = projects[0]['id'];
-    //this._getSites(projects[0]['sites']);
     this.mySites = projects[0]['sites'];
   }
 
@@ -334,7 +306,6 @@ export class SampleDetailPage {
     this.projectName.setValue(projects[0]['id']);
     this.mySample['projectName'] = projects[0]['name'];
     this.mySample['projectNumber'] = projects[0]['id'];
-    //this._getSites(projects[0]['sites']);
     this.mySites = projects[0]['sites'];
   }
 
@@ -353,7 +324,7 @@ export class SampleDetailPage {
   }
 
   mediumChange(mName: string) {
-    let mediums = this.myMediums.filter(function(medium: Medium) {return medium['medium'] == mName});
+    let mediums = this.myMediums.filter(function(medium: Medium) {return medium['nwis_code'] == mName});
     this.mySample['medium'] = mediums[0]['id'];
   }
 
@@ -385,14 +356,11 @@ export class SampleDetailPage {
       if(sampleBottleControlRows[i] == sampleBottleControlsRow) {
         let sampleBottleID = (<FormGroup>this.sampleBottleControls.controls[i]).controls['bottle'].value;
         if (sampleBottleID == null) {
-          console.log("empty row");
           sampleBottleControlRows.splice(i, 1);
         }
         else {
-          console.log("not empty row");
           this._samplebottleService.getOne(sampleBottleID).then(response => {
               this._samplebottleService.delete(response).then(response => {
-                console.log(response);
                 sampleBottleControlRows.splice(i, 1);
                 this.mySampleBottles.splice(i, 1);
               });
@@ -414,14 +382,21 @@ export class SampleDetailPage {
     this.mySample['comment'] = formValue.sampleCommentControls.sampleComment;
     // update the sample
     this._sampleService.update(this.mySample).then(result => {
-        console.log(result);
-        console.log(self._selectedAcid);
         for (let i = 0, j = this.mySampleBottles.length; i < j; i++) {
             // update samplebottles with acid
-            console.log(this.mySampleBottles[i]);
-            this.mySampleBottles[i]['preservation_acid'] = self._selectedAcid;
-            console.log(this.mySampleBottles[i]);
-            this._samplebottleService.update(this.mySampleBottles[i]).then(response => {console.log(response);});
+            this._samplebottleService.getOne(this.mySampleBottles[i]['_id']).then(response => {
+              return this._samplebottleService.update({
+                '_id': response['_id'],
+                '_rev': response['_rev'],
+                'analysis_type': response['analysis_type'],
+                'filter_type': response['filter_type'],
+                'volume_filtered': response['volume_filtered'],
+                'preservation_type': response['preservation_type'],
+                'preservation_volume': response['preservation_volume'],
+                'preservation_comment': response['preservation_comment'],
+                'preservation_acid': self._selectedAcid
+              });
+            });
         }
         this.navCtrl.pop();
     })
@@ -430,12 +405,10 @@ export class SampleDetailPage {
   deleteSample() {
       for (let sampbottle of this.mySampleBottles) {
         this._samplebottleService.getOne(sampbottle['_id']).then(response => {
-          this._samplebottleService.delete(response).then(response => {console.log(response);});
+          this._samplebottleService.delete(response);
         });
       }
       this._sampleService.delete(this.mySample['id']).then(response => {
-          console.log("sample deleted");
-          console.log(response);
           this.navCtrl.pop();
       });
   }

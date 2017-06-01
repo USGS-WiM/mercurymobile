@@ -62,7 +62,6 @@ export class AcidService {
     loadDB(data) {
       return this._db.loadIt(data)
         .then(res => {
-          console.log("load success");
           return true;
         })
         .catch(error => {
@@ -80,7 +79,6 @@ export class AcidService {
 
       return this._db.dump(stream)
         .then(function() {
-          //console.log('dumpDB SUCCESS! ' + dumpedString);
           APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
           return true;
         }).catch(function(err) {
@@ -93,7 +91,6 @@ export class AcidService {
       return this._db.find({
         selector: {id: val},
         fields: ['id', 'code'],
-        //sort: ['_id']
       }).then(function (result) {
         return result['docs'];
       }).catch(function (err) {
