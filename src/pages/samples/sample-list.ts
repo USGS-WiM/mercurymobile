@@ -54,11 +54,13 @@ export class SampleListPage implements OnInit {
 
   deleteSample(sampleID) {
       this._sampleService.getOne(sampleID).then(response => {
-        let sampbottles = response['sample_bottles'];
-        for (let sampbottle of sampbottles) {
-          this._samplebottleService.getOne(sampbottle['_id']).then(response => {
-            this._samplebottleService.delete(response);
-          });
+        if (response['sample_bottles']) {
+          let sampbottles = response['sample_bottles'];
+          for (let sampbottle of sampbottles) {
+            this._samplebottleService.getOne(sampbottle['_id']).then(response => {
+              this._samplebottleService.delete(response);
+            });
+          }
         }
         this._sampleService.delete(response).then(response => {
           this._getSamples();

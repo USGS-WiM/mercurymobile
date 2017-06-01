@@ -88,7 +88,6 @@ export class SiteService {
     loadDB(data) {
       return this._db.loadIt(data)
         .then(res => {
-          console.log("load success");
           return true;
         })
         .catch( error => {
