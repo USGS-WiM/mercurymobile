@@ -17,7 +17,7 @@
 <ion-content>
   <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>
   <div [hidden]="notready">
-    <form [formGroup]="siteForm" *ngIf="active" (ngSubmit)="onSubmit(siteForm.value)">
+    <form (keydown.enter)="$event.preventDefault()" [formGroup]="siteForm" *ngIf="active" (ngSubmit)="onSubmit(siteForm.value)">
       <ion-grid id="sitegroup" formGroupName="sitegroup">
         <ion-row>
           <ion-input type="number" [hidden]="true" formControlName="id"></ion-input>

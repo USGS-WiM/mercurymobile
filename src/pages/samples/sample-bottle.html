@@ -10,7 +10,7 @@
 <ion-content>
   <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>
   <div [hidden]="notready">
-    <form [formGroup]="sampleBottleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleBottleForm.value)">
+    <form (keydown.enter)="$event.preventDefault()" [formGroup]="sampleBottleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleBottleForm.value)">
       <ion-grid id="body" formGroupName="sampleBottleControlsGroup">
         <ion-row>
           <ion-col width-10>Analysis</ion-col>
