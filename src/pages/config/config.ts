@@ -60,7 +60,10 @@ export class ConfigPage {
         let reader = new FileReader();
         reader.onload = function (e) {
             self.notready = true;
-            self.myServices[srv].loadDB(reader.result).then(response => {self.notready = false;});
+            self.myServices[srv].destroyDB().then(response => {
+                self.myServices[srv].loadDB(reader.result).then(response => {self.notready = false;});
+            });
+            
         };
         reader.readAsBinaryString(selectedFiles[0]);
     }
