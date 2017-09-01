@@ -136,7 +136,7 @@ export class SampleDetailPage {
               this._getSites(self.mySample['projectName']);
           }
           this.sampleDate.setValue(self.mySample['date']);
-          this.sampleTime.setValue(self.mySample['time']);
+          this.sampleTime.setValue(self._timeToText(self.mySample['time']));
           this.sampleDepth.setValue(self.mySample['depth']);
           this.sampleRep.setValue(self.mySample['replicate']);
           this.sampleMedium.setValue(self.mySample['medium']);
@@ -268,6 +268,22 @@ export class SampleDetailPage {
       });
   }
 
+  private _timeToText(time: string) {
+    return time.substring(0, 5).replace(':', '');
+  }
+
+  private _textToTime(text: string) {
+    if (text.length === 3) {
+      return text.slice(0, 1) + ':' + text.slice(1, 3) + ':00';
+    }
+    else if (text.length === 4) {
+      return text.slice(0, 2) + ':' + text.slice(2, 4) + ':00';
+    }
+    else {
+      return '00:00:00';
+    }
+  }
+
   openBottleSelect(rowIndex: number) {
     let opts = {showBackdrop: false, enableBackdropDismiss: false};
     let modal = this.modalCtrl.create(BottleSelectPage, {}, opts);
@@ -390,7 +406,7 @@ export class SampleDetailPage {
     let self = this;
     // TODO: build proper onSubmit function, including validations (especially assigning acid to samplebottles)
     this.mySample['date'] = formValue.sampleHeaderControls.sampleDate;
-    this.mySample['time'] = formValue.sampleHeaderControls.sampleTime;
+    this.mySample['time'] = this._textToTime(formValue.sampleHeaderControls.sampleTime);
     this.mySample['depth'] = formValue.sampleHeaderControls.sampleDepth;
     this.mySample['replicate'] = formValue.sampleHeaderControls.sampleRep;
     this.mySample['sample_bottles'] = this.mySampleBottles;

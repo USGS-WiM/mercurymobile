@@ -1,6 +1,6 @@
 # Mercury Mobile
 ### Version 1
-### Built on Angular 4.1.0, Ionic Framework 3.2.1, and PouchDB 6.2.0
+### Built on Angular 4.3.6, Ionic Framework 3.12.1, and PouchDB 6.2.0
 
 
 ----------
