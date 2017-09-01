@@ -79,7 +79,6 @@ export class SampleBottlePage {
     this._samplebottleService.getOne(sampleBottleID)
       .then(
         response => {
-            console.log(response);
           if (typeof response == "undefined") {alert("undefined"); this.notready = false;}
           else {
             this.mySampleBottle = response;
@@ -132,7 +131,6 @@ export class SampleBottlePage {
 
   onSubmit(formValue){
     // TODO: build proper onSubmit function, including validations
-    console.log(formValue);
     this.mySampleBottle['analysis_type'] = formValue.sampleBottleControlsGroup.analysis;
     this.mySampleBottle['filter_type'] = formValue.sampleBottleControlsGroup.filterType;
     this.mySampleBottle['volume_filtered'] = formValue.sampleBottleControlsGroup.filterVolume;
@@ -140,7 +138,6 @@ export class SampleBottlePage {
     this.mySampleBottle['preservation_volume'] = formValue.sampleBottleControlsGroup.preservationVolume;
     this.mySampleBottle['preservation_comment'] = formValue.sampleBottleControlsGroup.preservationComment;
     this._samplebottleService.update(this.mySampleBottle).then(response => {
-        console.log(response);
         this.navCtrl.pop();
     });
   }

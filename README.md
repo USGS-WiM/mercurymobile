@@ -1,6 +1,6 @@
 # Mercury Mobile
 ### Version 1
-### Built on Angular 2.2.1, Ionic Framework 2.0.0, and PouchDB 6.2.0
+### Built on Angular 4.1.0, Ionic Framework 3.2.1, and PouchDB 6.2.0
 
 
 ----------
@@ -14,8 +14,6 @@ cd to the new local repo folder and run `npm install` to install other dependenc
 run `npm install -g cordova ionic` to install the Ionic Framework
 
 run `ionic serve` to run in browser with watch for debugging
-
-run `ionic build` to build project
 
 ---
 

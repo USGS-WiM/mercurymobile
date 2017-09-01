@@ -88,7 +88,6 @@ export class SiteService {
     loadDB(data) {
       return this._db.loadIt(data)
         .then(res => {
-          console.log("load success");
           return true;
         })
         .catch( error => {
@@ -100,16 +99,12 @@ export class SiteService {
     dumpDB(filename: string) {
       let dumpedString = '';
       let stream = new MemoryStream();
-      let count = 0;
       stream.on('data', function(chunk) {
         dumpedString += chunk.toString();
-        count++;
-        console.log(count);
       });
 
       return this._db.dump(stream)
         .then(function() {
-          //console.log('dumpDB SUCCESS! ' + dumpedString);
           APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
           return true;
         }).catch(function(err) {
@@ -136,7 +131,6 @@ export class SiteService {
         fields: ['id', 'name', 'usgs_sid', 'usgs_scode',
           'description', 'latitude', 'longitude', 'datum',
           'method', 'site_status', 'nwis_customer_code', 'projects']
-        //sort: ['site']
       }).then(function (result) {
         return result['docs'][0];
       }).catch(function (err) {
@@ -148,10 +142,8 @@ export class SiteService {
         return this._db.find({
           selector: {projects: {$elemMatch: {$eq: val}}},
           //selector: {_id: {$elemMatch: {$regex: "^" + val}}},
-          fields: ['id', 'name', 'usgs_scode'],
-          //sort: ['code']
+          fields: ['id', 'name', 'usgs_scode']
         }).then(function (result) {
-          console.log(result);
           return result['docs'];
         }).catch(function (err) {
           console.log(err);
@@ -167,7 +159,6 @@ export class SiteService {
     }
 
     public getOne(_id: string) {
-        console.log(_id);
         return this._db.get(_id);
     }
 

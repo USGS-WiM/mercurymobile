@@ -66,7 +66,6 @@ export class MediumService {
     loadDB(data) {
       return this._db.loadIt(data)
         .then(res => {
-          console.log("load success");
           return true;
         })
         .catch( error => {
@@ -84,7 +83,6 @@ export class MediumService {
 
       return this._db.dump(stream)
         .then(function() {
-          //console.log('dumpDB SUCCESS! ' + dumpedString);
           APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
           return true;
         }).catch(function(err) {
@@ -97,7 +95,6 @@ export class MediumService {
       this._db.find({
         selector: {_id: val},
         fields: ['id', 'medium']
-        //sort: ['code']
       }).then(function (result) {
         return result['docs'];
       }).catch(function (err) {

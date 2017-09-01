@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {Platform, MenuController, Nav} from 'ionic-angular';
-import {StatusBar} from 'ionic-native';
+import {StatusBar} from '@ionic-native/status-bar';
 import {HomePage} from '../pages/home/home';
 import {SampleListPage} from '../pages/samples/sample-list';
 import {SiteListPage} from '../pages/sites/site-list';
@@ -19,7 +19,8 @@ export class AppComponent {
 
   constructor(
     public platform: Platform,
-    public menu: MenuController
+    public menu: MenuController,
+    public statusBar: StatusBar
   ) {
     sessionStorage.setItem('username', 'admin');
     sessionStorage.setItem('password', 'm3rcury@dm1n');
@@ -39,7 +40,7 @@ export class AppComponent {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      StatusBar.styleDefault();
+      this.statusBar.styleDefault();
     });
   }
 
@@ -49,4 +50,9 @@ export class AppComponent {
     // navigate to the new page if it is not the current page
     this.nav.setRoot(page.component);
   }
+
+  // exitApp() {
+  //   alert("clicked Exit");
+  //   this.platform.exitApp();
+  // }
 }

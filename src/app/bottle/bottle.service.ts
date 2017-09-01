@@ -27,7 +27,6 @@ export class BottleService {
     }
 
     initDB() {
-      console.log("start init bottles");
       this._db.allDocs()
         .then(result => {
           //console.log(result.total_rows);
@@ -72,7 +71,6 @@ export class BottleService {
     loadDB(data) {
       return this._db.loadIt(data)
         .then(res => {
-          console.log("load success");
           return true;
         })
         .catch( error => {
@@ -90,7 +88,6 @@ export class BottleService {
 
       return this._db.dump(stream)
         .then(function() {
-          //console.log('dumpDB SUCCESS! ' + dumpedString);
           APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
           return true;
         }).catch(function(err) {
@@ -102,8 +99,7 @@ export class BottleService {
     findBottle(val: string) {
       this._db.find({
         selector: {_id: val},
-        fields: ['id', 'name'],
-        sort: ['_id']
+        fields: ['id', 'name']
       }).then(function (result) {
         return result['docs'];
       }).catch(function (err) {
