@@ -19,6 +19,7 @@ export class SiteListPage {
   currentPage: number = 1;
   resultPages = Math.ceil(this.siteCount / this._pageSize);
   notready: Boolean = true;
+  showPageButtons: Boolean = true;
   private _errorMessage: string;
 
   constructor(public navCtrl: NavController,
@@ -44,10 +45,16 @@ export class SiteListPage {
         this.siteCount = response.total_rows;
         this.resultPages = Math.ceil(this.siteCount / this._pageSize);
         for(let i = 0, j = response.rows.length; i < j; i++) {
-          this.sites.push(response.rows[i].doc);
+            this.sites.push(response.rows[i].doc);
         }
-        this._firstSite = response.rows[0].doc['_id'];
-        this._lastSite = response.rows[this._pageSize - 1].doc['_id'];
+        if (this.siteCount > 100) {
+          this.showPageButtons = true;
+          this._firstSite = response.rows[0].doc['_id'];
+          this._lastSite = response.rows[this._pageSize - 1].doc['_id'];
+        }
+        else {
+          this.showPageButtons = false;
+        }
         this.notready = false;
       }, error => {
         this._errorMessage = <any>error;

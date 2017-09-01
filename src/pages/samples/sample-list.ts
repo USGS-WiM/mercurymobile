@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams, AlertController} from 'ionic-angular';
 import {Sample} from '../../app/sample/sample';
 import {SampleService} from '../../app/sample/sample.service';
 import {SampleBottleService} from '../../app/samplebottle/samplebottle.service';
@@ -20,6 +20,7 @@ export class SampleListPage implements OnInit {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
+              public alertCtrl: AlertController,
               private _sampleService: SampleService,
               private _samplebottleService: SampleBottleService
   ) {}
@@ -66,6 +67,28 @@ export class SampleListPage implements OnInit {
           this._getSamples();
         });
       });
+  }
+
+  showConfirm(sampleID) {
+    let confirm = this.alertCtrl.create({
+      title: 'Delete this sample?',
+      message: 'Are you sure you want to delete this sample?\n(This will delete all sample bottles in this sample.)',
+      buttons: [
+        {
+          text: 'No',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.deleteSample(sampleID);
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 
   openPage(sample_id) {

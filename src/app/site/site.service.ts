@@ -33,16 +33,15 @@ export class SiteService {
           //console.log(result.total_rows);
           if(result.total_rows === 0) {
             console.log("start put sites");
-            let count = 0;
-            for (let sitegroup of SITES) {
-              for (let site of <Array <Site> >sitegroup) {
-                let projects = site['projects'];
-                let siteID;
-                for (let project in projects) {
-                  siteID = siteID + "_" + project;
-                }
+            // let count = 0;
+            for (let site of SITES) {
+                // let projects = site['projects'];
+                // let siteID;
+                // for (let project in projects) {
+                //   siteID = siteID + "_" + project;
+                // }
                 this._db.put({
-                  _id: siteID,
+                  _id: site['name'],
                   id: site['id'],
                   name: site['name'],
                   usgs_scode: site['usgs_scode'],
@@ -55,14 +54,13 @@ export class SiteService {
                   nwis_customer_code: site['nwis_customer_code'],
                   projects: site['projects']
                 });
-                count++;
-                if (count % 1000 == 0) {
-                  console.log(count);
-                }
+                // count++;
+                // if (count % 1000 == 0) {
+                //   console.log(count);
+                // }
               }
             }
             console.log("end put sites");
-          }
         })
         .catch( error => {
           console.log(error)

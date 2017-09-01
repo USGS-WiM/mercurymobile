@@ -13,9 +13,10 @@
   <pre id="display"></pre>
   <ion-grid>
     <ion-row *ngFor="let sample of samples">
-      <ion-col width-50><button ion-item (click)="editSample(sample.id)"><ion-icon name="beaker" item-left></ion-icon>{{sample.id}}: {{sample.projectName}}, {{sample.siteName}}, {{sample.date}}</button></ion-col>
-      <ion-col width-10><button ion-button (click)="editSample(sample.id)"><ion-icon name="list"></ion-icon></button></ion-col>
-      <ion-col width-10><button ion-button type="button" (click)="deleteSample(sample._id)"><ion-icon name="remove-circle"></ion-icon></button></ion-col>
+      <ion-col col-6><button ion-item><ion-icon name="beaker" item-left></ion-icon>{{sample.id}}: {{sample.projectName}}, {{sample.siteName}}, {{sample.date}}</button></ion-col>
+      <ion-col col-2><div style="padding: 10px;"><button ion-button (click)="editSample(sample.id)"><ion-icon name="list"></ion-icon></button></div></ion-col>
+      <ion-col col-2><div style="padding: 10px;"><button ion-button type="button" (click)="showConfirm(sample._id)"><ion-icon name="remove-circle"></ion-icon></button></div></ion-col>
+      <ion-col col-2></ion-col>
     </ion-row>
   </ion-grid>
   <div *ngIf="selectedSample" padding>

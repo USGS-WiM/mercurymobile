@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, FormArray, FormBuilder} from "@angular/forms";
-import {ModalController, NavController, NavParams} from 'ionic-angular';
+import {ModalController, NavController, NavParams, AlertController} from 'ionic-angular';
 import {Project} from '../../app/project/project';
 import {Site} from '../../app/site/site';
 import {Sample} from '../../app/sample/sample';
@@ -26,6 +26,7 @@ export class SampleDetailPage {
   sample_ID: number;
   active: Boolean = true;
   notready: Boolean = true;
+  lookupContainers: Boolean = false;
   private _errorMessage: string;
   private _defaultRowCount: number = 8;
   private _numRowsAdded: number = 0;
@@ -56,6 +57,7 @@ export class SampleDetailPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
+              public alertCtrl: AlertController,
               public modalCtrl: ModalController,
               public fb: FormBuilder,
               private _sampleService: SampleService,
@@ -116,6 +118,10 @@ export class SampleDetailPage {
         });
     }
 
+  }
+
+  toggleLookupContainers() {
+    this.lookupContainers = !this.lookupContainers;
   }
 
   private _getSample(sampleID: number){
@@ -196,6 +202,15 @@ export class SampleDetailPage {
       {
         for(let i =0; i < response.rows.length; i++) {
           this.myProjects.push(response.rows[i].doc);
+        }
+        // if there is only one project, automatically select it and filter the sites
+        if (this.myProjects.length == 1) {
+          let proj = this.myProjects[0];
+          this.projectName.setValue(proj['id']);
+          this.projectNumber.setValue(proj['id']);
+          this.mySample['projectName'] = proj['name'];
+          this.mySample['projectNumber'] = proj['id'];
+          this.mySites = proj['sites'];
         }
       }, error => {
         this._errorMessage = <any>error;
@@ -411,6 +426,28 @@ export class SampleDetailPage {
       this._sampleService.delete(this.mySample['id']).then(response => {
           this.navCtrl.pop();
       });
+  }
+
+  showConfirm() {
+    let confirm = this.alertCtrl.create({
+      title: 'Delete this sample?',
+      message: 'Are you sure you want to delete this sample?\n(This will delete all sample bottles in this sample.)',
+      buttons: [
+        {
+          text: 'No',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.deleteSample();
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 
 }

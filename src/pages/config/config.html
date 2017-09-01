@@ -13,59 +13,59 @@
   <div [hidden]="notready">
   <ion-grid>
     <ion-row>
-      <ion-col width-25><button ion-button type="button" (click)="dumpFile('acids')">Export Acids</button></ion-col>
-      <ion-col width-25><label ion-button for="fileSelectAcids">Import Acids</label><input id="fileSelectAcids" type="file" multiple (change)="loadFile('acids', $event)" style="display: none;" /></ion-col>
-      <ion-col width-25><button ion-button type="button" (click)="destroyDB('acids')">Empty Acids</button></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="dumpFile('acids')">Export Acids</button></ion-col>
+      <ion-col col-4><label ion-button for="fileSelectAcids">Import Acids</label><input id="fileSelectAcids" type="file" multiple (change)="loadFile('acids', $event)" style="display: none;" /></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="destroyDB('acids')">Empty Acids</button></ion-col>
     </ion-row>
     <ion-row>
-      <ion-col width-25><button ion-button type="button" (click)="dumpFile('analyses')">Export Analyses</button></ion-col>
-      <ion-col width-25><label ion-button for="fileSelectAnalyses">Import Analyses</label><input id="fileSelectAnalyses" type="file" multiple (change)="loadFile('analyses', $event)" style="display: none;" /></ion-col>
-      <ion-col width-25><button ion-button type="button" (click)="destroyDB('analyses')">Empty Analyses</button></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="dumpFile('analyses')">Export Analyses</button></ion-col>
+      <ion-col col-4><label ion-button for="fileSelectAnalyses">Import Analyses</label><input id="fileSelectAnalyses" type="file" multiple (change)="loadFile('analyses', $event)" style="display: none;" /></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="destroyDB('analyses')">Empty Analyses</button></ion-col>
     </ion-row>
     <ion-row>
-      <ion-col width-25><button ion-button type="button" (click)="dumpFile('bottles')">Export Bottles</button></ion-col>
-      <ion-col width-25><label ion-button for="fileSelectBottles">Import Bottles</label><input id="fileSelectBottles" type="file" multiple (change)="loadFile('bottles', $event)" style="display: none;" /></ion-col>
-      <ion-col width-25><button ion-button type="button" (click)="destroyDB('bottles')">Empty Bottles</button></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="dumpFile('bottles')">Export Bottles</button></ion-col>
+      <ion-col col-4><label ion-button for="fileSelectBottles">Import Bottles</label><input id="fileSelectBottles" type="file" multiple (change)="loadFile('bottles', $event)" style="display: none;" /></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="destroyDB('bottles')">Empty Bottles</button></ion-col>
     </ion-row>
     <ion-row>
-      <ion-col width-25><button ion-button type="button" (click)="dumpFile('filters')">Export Filters</button></ion-col>
-      <ion-col width-25><label ion-button for="fileSelectFilters">Import Filters</label><input id="fileSelectFilters" type="file" multiple (change)="loadFile('filters', $event)" style="display: none;" /></ion-col>
-      <ion-col width-25><button ion-button type="button" (click)="destroyDB('filters')">Empty Filters</button></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="dumpFile('filters')">Export Filters</button></ion-col>
+      <ion-col col-4><label ion-button for="fileSelectFilters">Import Filters</label><input id="fileSelectFilters" type="file" multiple (change)="loadFile('filters', $event)" style="display: none;" /></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="destroyDB('filters')">Empty Filters</button></ion-col>
     </ion-row>
     <ion-row>
-      <ion-col width-25><button ion-button type="button" (click)="dumpFile('mediums')">Export Mediums</button></ion-col>
-      <ion-col width-25><label ion-button for="fileSelectMediums">Import Mediums</label><input id="fileSelectMediums" type="file" multiple (change)="loadFile('mediums', $event)" style="display: none;" /></ion-col>
-      <ion-col width-25><button ion-button type="button" (click)="destroyDB('mediums')">Empty Mediums</button></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="dumpFile('mediums')">Export Mediums</button></ion-col>
+      <ion-col col-4><label ion-button for="fileSelectMediums">Import Mediums</label><input id="fileSelectMediums" type="file" multiple (change)="loadFile('mediums', $event)" style="display: none;" /></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="destroyDB('mediums')">Empty Mediums</button></ion-col>
     </ion-row>
     <ion-row>
-      <ion-col width-25><button ion-button type="button" (click)="dumpFile('preservations')">Export Preservations</button></ion-col>
-      <ion-col width-25><label ion-button for="fileSelectPreservations">Import Preservations</label><input id="fileSelectPreservations" type="file" multiple (change)="loadFile('preservations', $event)" style="display: none;" /></ion-col>
-      <ion-col width-25><button ion-button type="button" (click)="destroyDB('preservations')">Empty Preservations</button></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="dumpFile('preservations')">Export Preservations</button></ion-col>
+      <ion-col col-4><label ion-button for="fileSelectPreservations">Import Preservations</label><input id="fileSelectPreservations" type="file" multiple (change)="loadFile('preservations', $event)" style="display: none;" /></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="destroyDB('preservations')">Empty Preservations</button></ion-col>
     </ion-row>
     <ion-row>
-      <ion-col width-25><button ion-button type="button" (click)="dumpFile('projects')">Export Projects</button></ion-col>
-      <ion-col width-25><label ion-button for="fileSelectProjects">Import Projects</label><input id="fileSelectProjects" type="file" multiple (change)="loadFile('projects', $event)" style="display: none;" /></ion-col>
-      <ion-col width-25><button ion-button type="button" (click)="destroyDB('projects')">Empty Projects</button></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="dumpFile('projects')">Export Projects</button></ion-col>
+      <ion-col col-4><label ion-button for="fileSelectProjects">Import Projects</label><input id="fileSelectProjects" type="file" multiple (change)="loadFile('projects', $event)" style="display: none;" /></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="destroyDB('projects')">Empty Projects</button></ion-col>
     </ion-row>
     <ion-row>
-      <ion-col width-25><button ion-button type="button" (click)="dumpFile('samples')">Export Samples</button></ion-col>
-      <ion-col width-25><label ion-button for="fileSelectSamples">Import Samples</label><input id="fileSelectSamples" type="file" multiple (change)="loadFile('samples', $event)" style="display: none;" /></ion-col>
-      <ion-col width-25><button ion-button type="button" (click)="destroyDB('samples')">Empty Samples</button></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="dumpFile('samples')">Export Samples</button></ion-col>
+      <ion-col col-4><label ion-button for="fileSelectSamples">Import Samples</label><input id="fileSelectSamples" type="file" multiple (change)="loadFile('samples', $event)" style="display: none;" /></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="destroyDB('samples')">Empty Samples</button></ion-col>
     </ion-row>
     <ion-row>
-      <ion-col width-25><button ion-button type="button" (click)="dumpFile('samplebottles')">Export SampleBottles</button></ion-col>
-      <ion-col width-25><label ion-button for="fileSelectSampleBottles">Import SampleBottles</label><input id="fileSelectSampleBottles" type="file" multiple (change)="loadFile('samplebottles', $event)" style="display: none;" /></ion-col>
-      <ion-col width-25><button ion-button type="button" (click)="destroyDB('samplebottles')">Empty SampleBottles</button></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="dumpFile('samplebottles')">Export SampleBottles</button></ion-col>
+      <ion-col col-4><label ion-button for="fileSelectSampleBottles">Import SampleBottles</label><input id="fileSelectSampleBottles" type="file" multiple (change)="loadFile('samplebottles', $event)" style="display: none;" /></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="destroyDB('samplebottles')">Empty SampleBottles</button></ion-col>
     </ion-row>
     <ion-row>
-      <ion-col width-25><button ion-button type="button" (click)="dumpFile('sites')">Export Sites</button></ion-col>
-      <ion-col width-25><label ion-button for="fileSelectSites">Import Sites</label><input id="fileSelectSites" type="file" multiple (change)="loadFile('sites', $event)" style="display: none;" /></ion-col>
-      <ion-col width-25><button ion-button type="button" (click)="destroyDB('sites')">Empty Sites</button></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="dumpFile('sites')">Export Sites</button></ion-col>
+      <ion-col col-4><label ion-button for="fileSelectSites">Import Sites</label><input id="fileSelectSites" type="file" multiple (change)="loadFile('sites', $event)" style="display: none;" /></ion-col>
+      <ion-col col-4><button ion-button type="button" (click)="destroyDB('sites')">Empty Sites</button></ion-col>
     </ion-row>
     <ion-row>
-      <ion-col width-25><button ion-button color="secondary" type="button" (click)="dumpFile('all')"><strong>Export ALL</strong></button></ion-col>
-      <ion-col width-25><!--<label ion-button for="fileSelectAll"><strong>Import ALL</strong></label><input id="fileSelectAll" type="file" multiple (change)="loadFile('all', $event)" style="display: none;" />--></ion-col>
-      <ion-col width-25><button ion-button color="secondary" type="button" (click)="destroyDB('all')"><strong>Empty ALL</strong></button></ion-col>
+      <ion-col col-4><button ion-button color="secondary" type="button" (click)="dumpFile('all')"><strong>Export ALL</strong></button></ion-col>
+      <ion-col col-4><!--<label ion-button for="fileSelectAll"><strong>Import ALL</strong></label><input id="fileSelectAll" type="file" multiple (change)="loadFile('all', $event)" style="display: none;" />--></ion-col>
+      <ion-col col-4><button ion-button color="secondary" type="button" (click)="destroyDB('all')"><strong>Empty ALL</strong></button></ion-col>
     </ion-row>
   </ion-grid>
   </div>
