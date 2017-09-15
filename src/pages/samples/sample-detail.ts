@@ -7,7 +7,7 @@ import {Sample} from '../../app/sample/sample';
 import {SampleBottle} from '../../app/samplebottle/samplebottle';
 import {Medium} from "../../app/medium/medium";
 import {ProjectService} from '../../app/project/project.service';
-import {SiteService} from '../../app/site/site.service';
+// import {SiteService} from '../../app/site/site.service';
 import {MediumService} from "../../app/medium/medium.service";
 import {SampleService} from "../../app/sample/sample.service";
 import {SampleBottleService} from "../../app/samplebottle/samplebottle.service";
@@ -24,9 +24,10 @@ import {SampleBottlePage} from './sample-bottle';
 })
 export class SampleDetailPage {
   sample_ID: number;
-  active: Boolean = true;
-  notready: Boolean = true;
-  lookupContainers: Boolean = false;
+  clone = false;
+  active = true;
+  notready = true;
+  lookupContainers = false;
   private _errorMessage: string;
   private _defaultRowCount: number = 8;
   private _numRowsAdded: number = 0;
@@ -63,7 +64,7 @@ export class SampleDetailPage {
               private _sampleService: SampleService,
               private _samplebottleService: SampleBottleService,
               private _projectService: ProjectService,
-              private _siteService: SiteService,
+              // private _siteService: SiteService,
               private _mediumService: MediumService,
               private _acidService: AcidService,
               private _bottleService: BottleService
@@ -98,18 +99,25 @@ export class SampleDetailPage {
 
     // If we navigated to this page, we will have an item available as a nav param
     this.sample_ID = this.navParams.get('sample');
+    this.clone = this.navParams.get('clone');
 
+    // if the sample exists retrieve its data, otherwise set up a new empty sample
     if (this.sample_ID) {
-      this._getSample(this.sample_ID);
-    }
-    else {
+      this._getSample(this.sample_ID, this.clone);
+    } else {
         this._getProjects();
         this._getMediums();
+        // this a new sample, so set all values to empty of equivalent
         this.mySample = new Sample('', 0, '', 0, null, null, 0, 0, 0, [], '');
+        // force setting of depth and rep input fields to zero
+        this.sampleDepth.setValue('0');
+        this.sampleRep.setValue('0');
+        // set sample id to some random unique number
         let id = Date.now() % 10000000000;
         this.mySample['id'] = id;
         this.mySample['_id'] = id.toString();
         this.sample_ID = id;
+        // save this new sample, and add empty sample bottle slots
         this._sampleService.update(this.mySample).then(response => {
             for (let i = 0, j = this._defaultRowCount; i < j; i++){
                 this.addRow();
@@ -124,34 +132,63 @@ export class SampleDetailPage {
     this.lookupContainers = !this.lookupContainers;
   }
 
-  private _getSample(sampleID: number){
+  private _getSample(sampleID: number, clone: boolean){
     let self = this;
     this._sampleService.getSampleByID(sampleID.toString())
       .then(
         response => {
-          this._getProjects();
+          const sample = response.rows[0].doc;
           this._getMediums();
-          self.mySample = response.rows[0].doc;
-          if (self.mySample['projectName']) {
-              this._getSites(self.mySample['projectName']);
+
+          // if this is a clone, set common values and empty remaining values and assign new ID
+          if (clone) {
+            // if the source sample used acid, grab that acid value
+            if (sample['sample_bottles'] && sample['sample_bottles'].length > 0) {
+              this._getSampleBottles(sample['sample_bottles']);
+            }
+            // create a new new sample with cloned values from source sample
+            // this.mySample = new Sample(sample['projectName'], sample['projectNumber'], sample['siteName'], sample['siteNumber'], sample['date'], null, 0, 0, sample['medium'], [], '');
+            this.mySample['projectName'] = sample['projectName'];
+            this.mySample['projectNumber'] = sample['projectNumber'];
+            this.mySample['siteName'] = sample['siteName'];
+            this.mySample['siteNumber'] = sample['siteNumber'];
+            this.mySample['date'] = sample['date'];
+            this.mySample['medium'] = sample['medium'];
+            // set new sample id to some random unique number
+            let id = Date.now() % 10000000000;
+            this.mySample['id'] = id;
+            this.mySample['_id'] = id.toString();
+            this.sample_ID = id;
+            // save this new cloned sample, and add empty sample bottle slots
+            this._sampleService.update(this.mySample).then(response => console.log(response), error => console.log(error));
+          } else {
+            this.mySample = sample;
           }
-          this.sampleDate.setValue(self.mySample['date']);
-          this.sampleTime.setValue(self._timeToText(self.mySample['time']));
-          this.sampleDepth.setValue(self.mySample['depth']);
-          this.sampleRep.setValue(self.mySample['replicate']);
-          this.sampleMedium.setValue(self.mySample['medium']);
-          this.sampleComment.setValue(self.mySample['comment']);
-          if (self.mySample['sample_bottles'] && self.mySample['sample_bottles'].length > 0) {
-            this._numSampleBottles = self.mySample['sample_bottles'].length;
-            this._getSampleBottles(self.mySample['sample_bottles']);
+
+          if (this.mySample['projectName']) {
+            this._getProjects(this.mySample['projectName']);
+            this._getSites(this.mySample['projectName']);
+          } else {
+            this._getProjects();
           }
-          else {
-              self.mySample['sample_bottles'] = [];
+          this.sampleDate.setValue(this.mySample['date']);
+          this.sampleMedium.setValue(this.mySample['medium']);
+          this.sampleComment.setValue(this.mySample['comment']);
+          this.sampleTime.setValue(this._timeToText(this.mySample['time']));
+          this.sampleDepth.setValue(this.mySample['depth']);
+          this.sampleRep.setValue(this.mySample['replicate']);
+          if (this.mySample['sample_bottles'] && this.mySample['sample_bottles'].length > 0) {
+            this._numSampleBottles = this.mySample['sample_bottles'].length;
+            this._getSampleBottles(this.mySample['sample_bottles']);
+            this.notready = false;
+          } else {
+              this.mySample['sample_bottles'] = [];
               for (let i = 0, j = this._defaultRowCount; i < j; i++){
                 this.addRow();
               }
               this.notready = false;
           }
+
         },
         error => this._errorMessage = <any>error)
         .catch(err => console.log(err));
@@ -161,42 +198,27 @@ export class SampleDetailPage {
       for (let i = 0, j = sampBottles.length; i < j; i++) {
           this._samplebottleService.getOne(sampBottles[i]['_id']).then(response => {
               let samplebottle = response;
-              this.mySampleBottles.push(samplebottle);
+              // if this sample is not a clone, populate the sample bottle list
+              if (!this.clone) {
+                this.mySampleBottles.push(samplebottle);
+                this.addRow(samplebottle);
+              }
+              // populate the sample's acid field if any of the sample bottles have used an acid
               let acid = samplebottle['preservation_acid'];
-              this.addRow(samplebottle);
               if (acid && !this._selectedAcid) {
                 this._selectedAcid = acid;
                 this._getAcidName(this._selectedAcid);
               }
           });
       }
+      
+      if (this.clone) {
+        this.mySample['sample_bottles'].length = 0;
+      }
       this.notready = false;
-    // this._samplebottleService.getSampleBottles(new URLSearchParams('sample='+sampleID))
-    //   .then(
-    //     response => {
-    //       this.mySampleBottles = response;
-    //       for (let i = 0, j = this.mySampleBottles.length; i < j; i++){
-    //         // if (!this.sampleAcid.value) {
-    //         //   let acid = this.mySampleBottles[i]['preservation_acid'];
-    //         //   if (acid) {
-    //         //     let acids = response.filter(function (a) {return a['id'] == acid;});
-    //         //     let acidcode = acids[0]['code'];
-    //         //     this.sampleAcid.setValue(acidcode);
-    //         //     break;
-    //         //   }
-    //         // }
-    //         let acid = this.mySampleBottles[i]['preservation_acid'];
-    //         if (acid) {
-    //           this._getAcid(acid);
-    //           break;
-    //         }
-    //         this.addRow(this.mySampleBottles[i]);
-    //       }
-    //     },
-    //     error => this._errorMessage = <any>error);
   }
 
-  private _getProjects() {
+  private _getProjects(projectName?: any) {
     this._projectService.getAll()
       .then(response =>
       {
@@ -268,15 +290,16 @@ export class SampleDetailPage {
       });
   }
 
+  // TODO: fix time so it appears in HTML field, seems to be setting to '00:00:00' every time
   private _timeToText(time: string) {
-    return time.substring(0, 5).replace(':', '');
+    return time? time.substring(0, 5) : ''
   }
 
   private _textToTime(text: string) {
-    if (text.length === 3) {
+    if (text && text.length === 3) {
       return text.slice(0, 1) + ':' + text.slice(1, 3) + ':00';
     }
-    else if (text.length === 4) {
+    else if (text && text.length === 4) {
       return text.slice(0, 2) + ':' + text.slice(2, 4) + ':00';
     }
     else {
@@ -412,25 +435,34 @@ export class SampleDetailPage {
     this.mySample['sample_bottles'] = this.mySampleBottles;
     this.mySample['comment'] = formValue.sampleCommentControls.sampleComment;
     // update the sample
-    this._sampleService.update(this.mySample).then(result => {
-        for (let i = 0, j = this.mySampleBottles.length; i < j; i++) {
-            // update samplebottles with acid
-            this._samplebottleService.getOne(this.mySampleBottles[i]['_id']).then(response => {
-              return this._samplebottleService.update({
-                '_id': response['_id'],
-                '_rev': response['_rev'],
-                'analysis_type': response['analysis_type'],
-                'filter_type': response['filter_type'],
-                'volume_filtered': response['volume_filtered'],
-                'preservation_type': response['preservation_type'],
-                'preservation_volume': response['preservation_volume'],
-                'preservation_comment': response['preservation_comment'],
-                'preservation_acid': self._selectedAcid
-              });
-            });
-        }
+    this._sampleService.getOne(this.mySample['_id']).then(response => {
+      this.mySample['_rev'] = response['_rev'];
+      this._sampleService.update(this.mySample).then(result => {
+        // for (let i = 0, j = this.mySampleBottles.length; i < j; i++) {
+        //     // update samplebottles with acid
+        //     this._samplebottleService.getOne(this.mySampleBottles[i]['_id']).then(response => {
+        //       console.log(response);
+        //       return this._samplebottleService.update({
+        //         '_id': response['_id'],
+        //         '_rev': response['_rev'],
+        //         'analysis_type': response['analysis_type'],
+        //         'filter_type': response['filter_type'],
+        //         'volume_filtered': response['volume_filtered'],
+        //         'preservation_type': response['preservation_type'],
+        //         'preservation_volume': response['preservation_volume'],
+        //         'preservation_comment': response['preservation_comment'],
+        //         'preservation_acid': self._selectedAcid
+        //       });
+        //     });
+        // }
         this.navCtrl.pop();
+      }, error => {console.log(error);})
     })
+    
+  }
+
+  retrySubmitUntilWritten(doc) {
+
   }
 
   deleteSample() {
