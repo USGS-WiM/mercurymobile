@@ -53,6 +53,10 @@ export class SampleListPage implements OnInit {
     this.openPage(sample_id);
   }
 
+  cloneSample(sample_id){
+    this.openPage(sample_id, true);
+  }
+
   deleteSample(sampleID) {
       this._sampleService.getOne(sampleID).then(response => {
         if (response['sample_bottles']) {
@@ -91,9 +95,10 @@ export class SampleListPage implements OnInit {
     confirm.present();
   }
 
-  openPage(sample_id) {
+  openPage(sample_id, clone?) {
       this.navCtrl.push(SampleDetailPage, {
-        sample: sample_id
+        sample: sample_id,
+        clone: clone ? clone : false
       });
   }
 

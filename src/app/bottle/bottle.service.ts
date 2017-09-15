@@ -86,8 +86,9 @@ export class BottleService {
         dumpedString += chunk.toString();
       });
 
-      return this._db.dump(stream)
+      return this._db.dump(stream, {batch_size: 1000})
         .then(function() {
+          // console.log(dumpedString);
           APP_UTILITIES.downloadTXT({filename: filename, data: dumpedString});
           return true;
         }).catch(function(err) {

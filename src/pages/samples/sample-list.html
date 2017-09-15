@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
+    <button ion-button large menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Sample List</ion-title>
@@ -8,15 +8,15 @@
 </ion-header>
 
 <ion-content>
-  <button ion-button type="button" (click)="addSample()"><ion-icon name="add-circle"></ion-icon></button>
+  <button ion-button large type="button" (click)="addSample()"><ion-icon name="add-circle"></ion-icon></button>
 
   <pre id="display"></pre>
   <ion-grid>
     <ion-row *ngFor="let sample of samples">
-      <ion-col col-6><button ion-item><ion-icon name="beaker" item-left></ion-icon>{{sample.id}}: {{sample.projectName}}, {{sample.siteName}}, {{sample.date}}</button></ion-col>
-      <ion-col col-2><div style="padding: 10px;"><button ion-button (click)="editSample(sample.id)"><ion-icon name="list"></ion-icon></button></div></ion-col>
-      <ion-col col-2><div style="padding: 10px;"><button ion-button type="button" (click)="showConfirm(sample._id)"><ion-icon name="remove-circle"></ion-icon></button></div></ion-col>
-      <ion-col col-2></ion-col>
+      <ion-col col-6><button ion-item large><ion-icon name="beaker" item-left></ion-icon>{{sample.id}}: {{sample.projectName}}, {{sample.siteName}}, {{sample.date}}</button></ion-col>
+      <ion-col col-2><div style="padding: 10px;"><button ion-button large (click)="editSample(sample.id)"><ion-icon name="list"></ion-icon></button></div></ion-col>
+      <ion-col col-2><div style="padding: 10px;"><button ion-button large (click)="cloneSample(sample.id)"><ion-icon name="md-copy"></ion-icon></button></div></ion-col>
+      <ion-col col-2><div style="padding: 10px;"><button ion-button large type="button" (click)="showConfirm(sample._id)"><ion-icon name="remove-circle"></ion-icon></button></div></ion-col>
     </ion-row>
   </ion-grid>
   <div *ngIf="selectedSample" padding>
