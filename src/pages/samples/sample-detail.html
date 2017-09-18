@@ -12,82 +12,113 @@
   <div [hidden]="notready">
     <form (keydown.enter)="$event.preventDefault()" [formGroup]="sampleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleForm.value)">
       <ion-grid id="header" formGroupName="sampleHeaderControls">
+        <ion-row>
+            <ion-col col-10></ion-col>
+            <ion-col col-2>
+              <ion-item>
+                <ion-label> Use data entry widgets</ion-label>
+                <ion-toggle (ionChange)="toggleUseWidgets()" [checked]=useWidgets></ion-toggle>
+              </ion-item>
+            </ion-col>
+        </ion-row>
         <ion-row style="border-style: solid;">
           <ion-col col-6>
             <ion-label>Project Name</ion-label>
-            <ion-item>
+            <ion-item *ngIf="useWidgets">
               <ion-select class="select-wide" formControlName="projectName" (ionChange)="projectNameChange(pName.text)" #pName>
                 <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="project.id == mySample.projectNumber">{{project.name}}</ion-option>
               </ion-select>
             </ion-item>
+            <ion-item *ngIf="!useWidgets">
+              <ion-input type="text" formControlName="projectName" (blur)="projectNameChange(pName.value)" #pName></ion-input>
+            </ion-item>
           </ion-col>
           <ion-col col-6>
             <ion-label>Project Number</ion-label>
-            <ion-item>
+            <ion-item *ngIf="useWidgets">
               <ion-select class="select-wide" formControlName="projectNumber" (ionChange)="projectNumberChange(pNumber.text)" #pNumber>
                 <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="project.id == mySample.projectNumber">{{project.id}}</ion-option>
               </ion-select>
+            </ion-item>
+            <ion-item *ngIf="!useWidgets">
+              <ion-input type="text" formControlName="projectNumber" (ionChange)="projectNumberChange(pNumber.value)" #pNumber></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
         <ion-row style="border-style: solid;">
           <ion-col col-6>
             <ion-label>Site Name</ion-label>
-            <ion-item>
+            <ion-item *ngIf="useWidgets">
               <ion-select class="select-wide" formControlName="siteName" (ionChange)="siteNameChange(sName.text)" #sName>
                 <ion-option *ngFor="let site of mySites" [value]="site.id" [selected]="site.id == mySample.siteNumber">{{site.name}}</ion-option>
               </ion-select>
             </ion-item>
+            <ion-item *ngIf="!useWidgets">
+              <ion-input type="text" formControlName="siteName" (ionChange)="siteNameChange(sName.value)" #sName></ion-input>
+            </ion-item>
           </ion-col>
           <ion-col col-6>
             <ion-label>Site Number</ion-label>
-            <ion-item>
+            <ion-item *ngIf="useWidgets">
               <ion-select class="select-wide" formControlName="siteNumber" (ionChange)="siteNumberChange(sName.text)" #sNumber>
                 <ion-option *ngFor="let site of mySites" [value]="site.id" [selected]="site.id == mySample.siteNumber">{{site.usgs_scode}}</ion-option>
               </ion-select>
+              <ion-item *ngIf="!useWidgets">
+                <ion-input type="text" formControlName="siteNumber" (ionChange)="siteNumberChange(sName.value)" #sNumber></ion-input>
+              </ion-item>
             </ion-item>
           </ion-col>
         </ion-row>
         <ion-row style="border-style: solid;">
           <ion-col col-6>
             <ion-label>Date</ion-label>
-            <ion-item><ion-datetime displayFormat="MM/DD/YYYY" formControlName="sampleDate"></ion-datetime></ion-item>
+            <ion-item *ngIf="useWidgets"><ion-datetime displayFormat="MM/DD/YYYY" formControlName="sampleDate"></ion-datetime></ion-item>
+            <ion-item *ngIf="!useWidgets"><ion-input type="text" pattern="^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d\d\d\d$" formControlName="sampleDate"></ion-input></ion-item>
           </ion-col>
           <ion-col col-6>
             <ion-label>Time</ion-label>
-            <ion-item><ion-datetime displayFormat="HH:mm" formControlName="sampleTime"></ion-datetime></ion-item>
-            <!-- <ion-item><ion-input type="text" pattern="^(20|21|22|23|[01]\d|\d)(([0-5]\d){1,2})$" formControlName="sampleTime"></ion-input></ion-item> -->
+            <ion-item *ngIf="useWidgets"><ion-datetime displayFormat="HH:mm" formControlName="sampleTime"></ion-datetime></ion-item>
+            <ion-item *ngIf="!useWidgets"><ion-input type="text" pattern="^(00|0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])$" formControlName="sampleTime"></ion-input></ion-item>
           </ion-col>
         </ion-row>
         <ion-row style="border-style: solid;">
           <ion-col col-6>
             <ion-label>Depth</ion-label>
-            <ion-item><ion-input type="text" formControlName="sampleDepth"></ion-input></ion-item>
+            <ion-item><ion-input type="text" pattern="^[0-9]*\.?[0-9]+$" formControlName="sampleDepth"></ion-input></ion-item>
           </ion-col>
           <ion-col col-6>
             <ion-label>Rep</ion-label>
-            <ion-item><ion-input type="text" formControlName="sampleRep"></ion-input></ion-item>
+            <ion-item><ion-input type="text" pattern="^[0-9]*$" formControlName="sampleRep"></ion-input></ion-item>
           </ion-col>
         </ion-row>
         <ion-row style="border-style: solid;">
           <ion-col col-6>
             <ion-label>Medium</ion-label>
-            <ion-item>
+            <ion-item *ngIf="useWidgets">
               <ion-select class="select-wide" formControlName="sampleMedium" (ionChange)="mediumChange(mName.text.split(' - ')[0])" #mName>
                 <ion-option *ngFor="let medium of myMediums" [value]="medium.id" [selected]="medium.id == mySample.medium">{{medium.nwis_code}} - {{medium.description}}</ion-option>
               </ion-select>
             </ion-item>
+            <ion-item *ngIf="!useWidgets">
+                <ion-input type="text" formControlName="sampleMedium" (ionChange)="mediumChange(mName.value)" #mName></ion-input>
+            </ion-item>
           </ion-col>
           <ion-col col-6>
             <ion-label>Acid</ion-label>
-            <ion-item><ion-input type="string" formControlName="sampleAcid" (click)="openAcidSelect()"></ion-input></ion-item>
+            <ion-item *ngIf="useWidgets"><ion-input type="string" formControlName="sampleAcid" (click)="openAcidSelect()"></ion-input></ion-item>
+            <ion-item *ngIf="!useWidgets"><ion-input type="text" formControlName="sampleAcid" (blur)="acidNameChange(aName.value)" #aName></ion-input></ion-item>
           </ion-col>
         </ion-row>
       </ion-grid>
       <ion-grid id="body" formGroupName="sampleBottleControls">
         <ion-row>
           <ion-col col-2>Containers</ion-col>
-          <ion-col col-2><ion-checkbox (ionChange)="toggleLookupContainers()"></ion-checkbox> Lookup Container IDs</ion-col>
+          <ion-col col-2>
+            <ion-item>
+              <ion-label> Lookup Container IDs</ion-label>
+              <ion-toggle (ionChange)="toggleLookupContainers()"></ion-toggle>
+            </ion-item>
+          </ion-col>
           <ion-col col-2><div style="padding: 10px;"><button ion-button large type="button" style="float: left;" (click)="addRow()"><ion-icon name="add-circle"></ion-icon></button></div></ion-col>
           <ion-col col-6></ion-col>
         </ion-row>
@@ -110,8 +141,8 @@
         </ion-row>
       </ion-grid>
       <div>
-          <button ion-button large type="submit">Save</button>
-          <button ion-button large type="button" (click)="showConfirm()">Delete</button>
+          <button ion-button large type="submit" [disabled]="!sampleForm.valid">Save</button>
+          <button ion-button large type="button" (click)="showConfirm('deleteSampleRow')">Delete</button>
       </div>
     </form>
   </div>
