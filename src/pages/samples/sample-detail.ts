@@ -27,6 +27,7 @@ export class SampleDetailPage {
   clone = false;
   active = true;
   notready = true;
+  useWidgets = true;
   lookupContainers = false;
   private _errorMessage: string;
   private _defaultRowCount: number = 8;
@@ -128,12 +129,15 @@ export class SampleDetailPage {
 
   }
 
+  toggleUseWidgets() {
+    this.useWidgets = !this.useWidgets;
+  }
+
   toggleLookupContainers() {
     this.lookupContainers = !this.lookupContainers;
   }
 
   private _getSample(sampleID: number, clone: boolean){
-    let self = this;
     this._sampleService.getSampleByID(sampleID.toString())
       .then(
         response => {
@@ -211,10 +215,6 @@ export class SampleDetailPage {
               }
           });
       }
-      
-      if (this.clone) {
-        this.mySample['sample_bottles'].length = 0;
-      }
       this.notready = false;
   }
 
@@ -290,17 +290,16 @@ export class SampleDetailPage {
       });
   }
 
-  // TODO: fix time so it appears in HTML field, seems to be setting to '00:00:00' every time
   private _timeToText(time: string) {
     return time? time.substring(0, 5) : ''
   }
 
   private _textToTime(text: string) {
-    if (text && text.length === 3) {
+    if (text && text.length === 4) {
       return text.slice(0, 1) + ':' + text.slice(1, 3) + ':00';
     }
-    else if (text && text.length === 4) {
-      return text.slice(0, 2) + ':' + text.slice(2, 4) + ':00';
+    else if (text && text.length === 5) {
+      return text.slice(0, 2) + ':' + text.slice(3, 5) + ':00';
     }
     else {
       return '00:00:00';
@@ -322,13 +321,24 @@ export class SampleDetailPage {
   openAcidSelect() {
     let opts = {showBackdrop: false, enableBackdropDismiss: false};
     let modal = this.modalCtrl.create(AcidSelectPage, {}, opts);
-    modal.onDidDismiss(data => {
-      (<FormGroup>this.sampleHeaderControls).controls['sampleAcid'].setValue(data);
-      this._acidService.getAcidsByName(data).then(response => {
-        this._selectedAcid = response.rows[0].doc.id;
-      });
+    modal.onDidDismiss(acidName => {
+      if (acidName) {
+        this.acidNameChange(acidName);
+      }
     });
     modal.present();
+  }
+
+  acidNameChange(acidName: string) {
+    this._acidService.getAcidsByName(acidName)
+    .then(response => {
+      this._selectedAcid = response.rows[0].doc.id;
+      (<FormGroup>this.sampleHeaderControls).controls['sampleAcid'].setValue(acidName);
+    })
+    .catch(error => {
+      this.showAlert('Acid not found!', acidName, 'was not found in the database. Please enter a valid acid.');
+    });
+
   }
 
   editSampleBottle(rowIndex: number){
@@ -347,39 +357,59 @@ export class SampleDetailPage {
       });
   }
 
-  projectNameChange(projectName: String) {
+  projectNameChange(projectName: string) {
     let projects = this.myProjects.filter(function(project: Project) {return project['name'] == projectName});
-    this.projectNumber.setValue(projects[0]['id']);
-    this.mySample['projectName'] = projects[0]['name'];
-    this.mySample['projectNumber'] = projects[0]['id'];
-    this.mySites = projects[0]['sites'];
+    if (projects.length < 1) {
+      this.showAlert('Project not found!', projectName, 'was not found in the database. Please enter a valid project name.');
+    } else {
+      this.projectNumber.setValue(projects[0]['id']);
+      this.mySample['projectName'] = projects[0]['name'];
+      this.mySample['projectNumber'] = projects[0]['id'];
+      this.mySites = projects[0]['sites'];
+    }
   }
 
   projectNumberChange(projectNumber: number) {
     let projects = this.myProjects.filter(function(project: Project) {return project['id'] == projectNumber});
-    this.projectName.setValue(projects[0]['id']);
-    this.mySample['projectName'] = projects[0]['name'];
-    this.mySample['projectNumber'] = projects[0]['id'];
-    this.mySites = projects[0]['sites'];
+    if (projects.length < 1) {
+      this.showAlert('Project not found!', projectNumber.toString(), 'was not found in the database. Please enter a valid project number.');
+    } else {
+      this.projectName.setValue(projects[0]['id']);
+      this.mySample['projectName'] = projects[0]['name'];
+      this.mySample['projectNumber'] = projects[0]['id'];
+      this.mySites = projects[0]['sites'];
+    }
   }
 
   siteNameChange(siteName: string) {
     let sites = this.mySites.filter(function(site: Site) {return site['name'] == siteName});
-    this.siteNumber.setValue(sites[0]['id']);
-    this.mySample['siteName'] = sites[0]['name'];
-    this.mySample['siteNumber'] = sites[0]['id'];
+    if (sites.length < 1) {
+      this.showAlert('Site not found!', siteName, 'was not found in the database. Please enter a valid site name.');
+    } else {
+      this.siteNumber.setValue(sites[0]['id']);
+      this.mySample['siteName'] = sites[0]['name'];
+      this.mySample['siteNumber'] = sites[0]['id'];
+    }
   }
 
   siteNumberChange(siteNumber: number) {
     let sites = this.mySites.filter(function(site: Site) {return site['id'] == siteNumber});
-    this.siteName.setValue(sites[0]['id']);
-    this.mySample['siteName'] = sites[0]['name'];
-    this.mySample['siteNumber'] = sites[0]['id'];
+    if (sites.length < 1) {
+      this.showAlert('Site not found!', siteNumber.toString(), 'was not found in the database. Please enter a valid site number.');
+    } else {
+      this.siteName.setValue(sites[0]['id']);
+      this.mySample['siteName'] = sites[0]['name'];
+      this.mySample['siteNumber'] = sites[0]['id'];
+    }
   }
 
   mediumChange(mName: string) {
     let mediums = this.myMediums.filter(function(medium: Medium) {return medium['nwis_code'] == mName});
-    this.mySample['medium'] = mediums[0]['id'];
+    if (mediums.length < 1) {
+      this.showAlert('Medium not found!', mName.toString(), 'was not found in the database. Please enter a valid medium.');
+    } else {
+      this.mySample['medium'] = mediums[0]['id'];
+    }
   }
 
   addRow(samplebottle?: SampleBottle){
@@ -438,31 +468,27 @@ export class SampleDetailPage {
     this._sampleService.getOne(this.mySample['_id']).then(response => {
       this.mySample['_rev'] = response['_rev'];
       this._sampleService.update(this.mySample).then(result => {
-        // for (let i = 0, j = this.mySampleBottles.length; i < j; i++) {
-        //     // update samplebottles with acid
-        //     this._samplebottleService.getOne(this.mySampleBottles[i]['_id']).then(response => {
-        //       console.log(response);
-        //       return this._samplebottleService.update({
-        //         '_id': response['_id'],
-        //         '_rev': response['_rev'],
-        //         'analysis_type': response['analysis_type'],
-        //         'filter_type': response['filter_type'],
-        //         'volume_filtered': response['volume_filtered'],
-        //         'preservation_type': response['preservation_type'],
-        //         'preservation_volume': response['preservation_volume'],
-        //         'preservation_comment': response['preservation_comment'],
-        //         'preservation_acid': self._selectedAcid
-        //       });
-        //     });
-        // }
+        for (let i = 0, j = this.mySampleBottles.length; i < j; i++) {
+            // update samplebottles with acid
+            this._samplebottleService.getOne(this.mySampleBottles[i]['_id']).then(response => {
+              console.log(response);
+              return this._samplebottleService.update({
+                '_id': response['_id'],
+                '_rev': response['_rev'],
+                'analysis_type': response['analysis_type'],
+                'filter_type': response['filter_type'],
+                'volume_filtered': response['volume_filtered'],
+                'preservation_type': response['preservation_type'],
+                'preservation_volume': response['preservation_volume'],
+                'preservation_comment': response['preservation_comment'],
+                'preservation_acid': self._selectedAcid
+              });
+            });
+        }
         this.navCtrl.pop();
       }, error => {console.log(error);})
     })
     
-  }
-
-  retrySubmitUntilWritten(doc) {
-
   }
 
   deleteSample() {
@@ -476,10 +502,24 @@ export class SampleDetailPage {
       });
   }
 
-  showConfirm() {
+  showAlert(ttl?: string, subttl?: string, msg?: string) {
+    let alrt = this.alertCtrl.create({
+      title: ttl ? ttl : 'Alert',
+      subTitle: subttl ? subttl : 'Subtitle',
+      message: msg ? msg : 'Message',
+      buttons: ['OK']
+    });
+    alrt.present();
+  }
+
+  showConfirm(ttl?:string, msg?: string) {
+    if (ttl == 'deleteSampleRow') {
+      ttl = 'Delete this sample?';
+      msg = 'Are you sure you want to delete this sample?\n(This will delete all sample bottles in this sample.)';
+    }
     let confirm = this.alertCtrl.create({
-      title: 'Delete this sample?',
-      message: 'Are you sure you want to delete this sample?\n(This will delete all sample bottles in this sample.)',
+      title: ttl ? ttl : 'Confirm',
+      message: msg ? msg : 'Message',
       buttons: [
         {
           text: 'No',
