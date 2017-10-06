@@ -26,11 +26,11 @@
             <ion-label>Project Name</ion-label>
             <ion-item *ngIf="useWidgets">
               <ion-select class="select-wide" formControlName="projectName" (ionChange)="projectNameChange(pName.text)" #pName>
-                <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="project.id == mySample.projectNumber">{{project.name}}</ion-option>
+                <ion-option *ngFor="let project of myProjects" [value]="project.name" [selected]="project.id == mySample.projectNumber">{{project.name}}</ion-option>
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="projectName" (blur)="projectNameChange(pName.value)" #pName></ion-input>
+              <ion-input type="text" formControlName="projectName" [value]="mySample.projectName" (blur)="projectNameChange(pName.value)" #pName></ion-input>
             </ion-item>
           </ion-col>
           <ion-col col-6>
@@ -41,7 +41,7 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="projectNumber" (ionChange)="projectNumberChange(pNumber.value)" #pNumber></ion-input>
+              <ion-input type="text" formControlName="projectNumber" [value]="mySample.projectNumber" (ionChange)="projectNumberChange(pNumber.value)" #pNumber></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -50,22 +50,22 @@
             <ion-label>Site Name</ion-label>
             <ion-item *ngIf="useWidgets">
               <ion-select class="select-wide" formControlName="siteName" (ionChange)="siteNameChange(sName.text)" #sName>
-                <ion-option *ngFor="let site of mySites" [value]="site.id" [selected]="site.id == mySample.siteNumber">{{site.name}}</ion-option>
+                <ion-option *ngFor="let site of mySites" [value]="site.name" [selected]="site.id == mySample.siteNumber">{{site.name}}</ion-option>
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="siteName" (ionChange)="siteNameChange(sName.value)" #sName></ion-input>
+              <ion-input type="text" formControlName="siteName" [value]="mySample.siteName" (ionChange)="siteNameChange(sName.value)" #sName></ion-input>
             </ion-item>
           </ion-col>
           <ion-col col-6>
             <ion-label>Site Number</ion-label>
             <ion-item *ngIf="useWidgets">
               <ion-select class="select-wide" formControlName="siteNumber" (ionChange)="siteNumberChange(sName.text)" #sNumber>
-                <ion-option *ngFor="let site of mySites" [value]="site.id" [selected]="site.id == mySample.siteNumber">{{site.usgs_scode}}</ion-option>
+                <ion-option *ngFor="let site of mySites" [value]="site.id" [selected]="site.id == mySample.siteNumber">{{site.id}}</ion-option>
               </ion-select>
-              <ion-item *ngIf="!useWidgets">
-                <ion-input type="text" formControlName="siteNumber" (ionChange)="siteNumberChange(sName.value)" #sNumber></ion-input>
-              </ion-item>
+            </ion-item>
+            <ion-item *ngIf="!useWidgets">
+              <ion-input type="text" formControlName="siteNumber" [value]="mySample.siteNumber" (ionChange)="siteNumberChange(sNumber.value)" #sNumber></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -73,7 +73,8 @@
           <ion-col col-6>
             <ion-label>Date</ion-label>
             <ion-item *ngIf="useWidgets"><ion-datetime displayFormat="MM/DD/YYYY" formControlName="sampleDate"></ion-datetime></ion-item>
-            <ion-item *ngIf="!useWidgets"><ion-input type="text" pattern="^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d\d\d\d$" formControlName="sampleDate"></ion-input></ion-item>
+            <ion-item *ngIf="!useWidgets"><ion-input type="text" [value]="mySample.date | date:'MM/dd/y'" formControlName="sampleDate"></ion-input></ion-item>
+            <!-- <ion-item *ngIf="!useWidgets"><ion-input type="text" pattern="^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d\d\d\d$" formControlName="sampleDate"></ion-input></ion-item> -->
           </ion-col>
           <ion-col col-6>
             <ion-label>Time</ion-label>
@@ -96,11 +97,11 @@
             <ion-label>Medium</ion-label>
             <ion-item *ngIf="useWidgets">
               <ion-select class="select-wide" formControlName="sampleMedium" (ionChange)="mediumChange(mName.text.split(' - ')[0])" #mName>
-                <ion-option *ngFor="let medium of myMediums" [value]="medium.id" [selected]="medium.id == mySample.medium">{{medium.nwis_code}} - {{medium.description}}</ion-option>
+                <ion-option *ngFor="let medium of myMediums" [value]="medium.nwis_code" [selected]="medium.id == mySample.mediumNumber">{{medium.nwis_code}} - {{medium.description}}</ion-option>
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-                <ion-input type="text" formControlName="sampleMedium" (ionChange)="mediumChange(mName.value)" #mName></ion-input>
+                <ion-input type="text" formControlName="sampleMedium" [value]="mySample.mediumName" (ionChange)="mediumChange(mName.value)" #mName></ion-input>
             </ion-item>
           </ion-col>
           <ion-col col-6>
@@ -125,7 +126,7 @@
         <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow" style="border-style: solid;">{{ndx + 1}}
           <ion-col col-6>
             <ion-item *ngIf="lookupContainers"><ion-input type="string" formControlName="bottle" (click)="openBottleSelect(ndx)"></ion-input></ion-item>
-            <ion-item *ngIf="!lookupContainers"><ion-input type="string" formControlName="bottle"></ion-input></ion-item>
+            <ion-item *ngIf="!lookupContainers"><ion-input type="string" formControlName="bottle" [value]="sampleBottleControls.controls[ndx].controls['bottle'].value"></ion-input></ion-item>
           </ion-col>
           <ion-col col-2><div style="padding: 10px;"><button ion-button large type="button" style="float: right;" (click)="editSampleBottle(ndx)"><ion-icon name="list"></ion-icon></button></div></ion-col>
           <ion-col col-2><div style="padding: 10px;"><button ion-button large type="button" style="float: right;" (click)="removeRow(sampleBottleControlsRow)"><ion-icon name="remove-circle"></ion-icon></button></div></ion-col>
@@ -141,6 +142,8 @@
         </ion-row>
       </ion-grid>
       <div>
+          <!-- <p>Form value: {{ sampleForm.value | json }}</p> -->
+          <!-- <p>Form status: {{ sampleForm.status | json }}</p> -->
           <button ion-button large type="submit" [disabled]="!sampleForm.valid">Save</button>
           <button ion-button large type="button" (click)="showConfirm('deleteSampleRow')">Delete</button>
       </div>
