@@ -26,12 +26,13 @@ import {BottleSelectPage} from '../pages/samples/bottle-select';
 import {SiteListPage} from '../pages/sites/site-list';
 import {SiteDetailPage} from '../pages/sites/site-detail';
 import {ConfigPage} from '../pages/config/config';
+import {ReversePipe} from './reverse.pipe'
 
 
 @NgModule({
   declarations: [
     AppComponent, HomePage, SampleListPage, SampleDetailPage, AcidSelectPage, BottleSelectPage,
-    SiteListPage, SiteDetailPage, SampleBottlePage, ConfigPage
+    SiteListPage, SiteDetailPage, SampleBottlePage, ConfigPage, ReversePipe
   ],
   imports: [
     IonicModule.forRoot(AppComponent), ReactiveFormsModule, HttpModule, BrowserModule

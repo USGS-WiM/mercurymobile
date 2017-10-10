@@ -16,6 +16,7 @@ import {BottleService} from "../../app/bottle/bottle.service";
 import {BottleSelectPage} from './bottle-select';
 import {AcidSelectPage} from './acid-select';
 import {SampleBottlePage} from './sample-bottle';
+import {APP_UTILITIES}   from '../../app/app.utilities';
 
 
 @Component({
@@ -110,6 +111,9 @@ export class SampleDetailPage {
         this._getMediums();
         // this a new sample, so set all values to empty of equivalent
         this.mySample = new Sample('', 0, '', 0, null, null, 0, 0, 0, [], '');
+        // force setting of date to today
+        this.sampleDate.setValue(APP_UTILITIES.TODAY);
+        this.mySample['sampleDate'] = APP_UTILITIES.TODAY;
         // force setting of depth and rep input fields to zero
         this.sampleDepth.setValue('0');
         this.sampleRep.setValue('0');
@@ -131,6 +135,11 @@ export class SampleDetailPage {
 
   toggleUseWidgets() {
     this.useWidgets = !this.useWidgets;
+    let myDate = this.sampleDate.value;
+    if (myDate.includes('/')) {
+      this.mySample['date'] = myDate.slice(6,10) + '-' + myDate.slice(0,2) + '-' + myDate.slice(3,5);
+      this.sampleDate.setValue(this.mySample['date']);
+    }
   }
 
   toggleLookupContainers() {
@@ -157,14 +166,15 @@ export class SampleDetailPage {
             this.mySample['siteName'] = sample['siteName'];
             this.mySample['siteNumber'] = sample['siteNumber'];
             this.mySample['date'] = sample['date'];
-            this.mySample['medium'] = sample['medium'];
+            this.mySample['mediumName'] = sample['mediumName'];
+            this.mySample['mediumNumber'] = sample['mediumNumber'];
             // set new sample id to some random unique number
             let id = Date.now() % 10000000000;
             this.mySample['id'] = id;
             this.mySample['_id'] = id.toString();
             this.sample_ID = id;
             // save this new cloned sample, and add empty sample bottle slots
-            this._sampleService.update(this.mySample).then(response => console.log(response), error => console.log(error));
+            this._sampleService.update(this.mySample).then(response => {console.log('Clone success'); console.log(response);}, error => console.log(error));
           } else {
             this.mySample = sample;
           }
@@ -408,7 +418,8 @@ export class SampleDetailPage {
     if (mediums.length < 1) {
       this.showAlert('Medium not found!', mName.toString(), 'was not found in the database. Please enter a valid medium.');
     } else {
-      this.mySample['medium'] = mediums[0]['id'];
+      this.mySample['mediumNumber'] = mediums[0]['id'];
+      this.mySample['mediumName'] = mediums[0]['nwis_code'];
     }
   }
 
@@ -458,7 +469,11 @@ export class SampleDetailPage {
   onSubmit(formValue){
     let self = this;
     // TODO: build proper onSubmit function, including validations (especially assigning acid to samplebottles)
-    this.mySample['date'] = formValue.sampleHeaderControls.sampleDate;
+    let myDate = formValue.sampleHeaderControls.sampleDate;
+    if (myDate.includes('/')) {
+      myDate = myDate.slice(6,10) + '-' + myDate.slice(0,2) + '-' + myDate.slice(3,5);
+    }
+    this.mySample['date'] = myDate;
     this.mySample['time'] = this._textToTime(formValue.sampleHeaderControls.sampleTime);
     this.mySample['depth'] = formValue.sampleHeaderControls.sampleDepth;
     this.mySample['replicate'] = formValue.sampleHeaderControls.sampleRep;
@@ -471,7 +486,6 @@ export class SampleDetailPage {
         for (let i = 0, j = this.mySampleBottles.length; i < j; i++) {
             // update samplebottles with acid
             this._samplebottleService.getOne(this.mySampleBottles[i]['_id']).then(response => {
-              console.log(response);
               return this._samplebottleService.update({
                 '_id': response['_id'],
                 '_rev': response['_rev'],
