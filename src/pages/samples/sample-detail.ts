@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, FormArray, FormBuilder} from "@angular/forms";
-import {ModalController, NavController, NavParams, AlertController} from 'ionic-angular';
+import {ViewController, ModalController, NavController, NavParams, AlertController} from 'ionic-angular';
 import {Project} from '../../app/project/project';
 import {Site} from '../../app/site/site';
 import {Sample} from '../../app/sample/sample';
@@ -17,11 +17,13 @@ import {BottleSelectPage} from './bottle-select';
 import {AcidSelectPage} from './acid-select';
 import {SampleBottlePage} from './sample-bottle';
 import {APP_UTILITIES}   from '../../app/app.utilities';
+import {DatePicker} from 'ionic2-date-picker';
 
 
 @Component({
   templateUrl: 'sample-detail.html',
-  styles: ['.select-wide {max-width: 100%;}']
+  styles: ['.select-wide {max-width: 100%;}'],
+  providers: [DatePicker]
 })
 export class SampleDetailPage {
   sample_ID: number;
@@ -62,6 +64,7 @@ export class SampleDetailPage {
               public navParams: NavParams,
               public alertCtrl: AlertController,
               public modalCtrl: ModalController,
+              public viewCtrl: ViewController,
               public fb: FormBuilder,
               private _sampleService: SampleService,
               private _samplebottleService: SampleBottleService,
@@ -69,12 +72,19 @@ export class SampleDetailPage {
               // private _siteService: SiteService,
               private _mediumService: MediumService,
               private _acidService: AcidService,
-              private _bottleService: BottleService
+              private _bottleService: BottleService,
+              public datePicker: DatePicker
   ) {
 
     //moved these two down to _getSample to avoid race condition
     //this._getProjects();
     //this._getMediums();
+
+    this.datePicker = new DatePicker(<any>this.modalCtrl, <any>this.viewCtrl);
+    this.datePicker.onDateSelected.subscribe((date: Date) => {
+      console.log(date);
+      alert(date);
+    });
 
     this.sampleHeaderControls = new FormGroup({
       projectName: this.projectName,
@@ -314,6 +324,10 @@ export class SampleDetailPage {
     else {
       return '00:00:00';
     }
+  }
+
+  openDateSelect() {
+    this.datePicker.showCalendar();
   }
 
   openBottleSelect(rowIndex: number) {
