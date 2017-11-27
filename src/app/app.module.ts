@@ -26,13 +26,14 @@ import {BottleSelectPage} from '../pages/samples/bottle-select';
 import {SiteListPage} from '../pages/sites/site-list';
 import {SiteDetailPage} from '../pages/sites/site-detail';
 import {ConfigPage} from '../pages/config/config';
-import {ReversePipe} from './reverse.pipe'
+import {ReversePipe} from './reverse.pipe';
+import {DatePicker} from 'ionic2-date-picker';
 
 
 @NgModule({
   declarations: [
     AppComponent, HomePage, SampleListPage, SampleDetailPage, AcidSelectPage, BottleSelectPage,
-    SiteListPage, SiteDetailPage, SampleBottlePage, ConfigPage, ReversePipe
+    SiteListPage, SiteDetailPage, SampleBottlePage, ConfigPage, ReversePipe, DatePicker
   ],
   imports: [
     IonicModule.forRoot(AppComponent), ReactiveFormsModule, HttpModule, BrowserModule
@@ -40,7 +41,7 @@ import {ReversePipe} from './reverse.pipe'
   bootstrap: [IonicApp],
   entryComponents: [
     AppComponent, HomePage, SampleListPage, SampleDetailPage, AcidSelectPage, BottleSelectPage,
-    SiteListPage, SiteDetailPage, SampleBottlePage, ConfigPage
+    SiteListPage, SiteDetailPage, SampleBottlePage, ConfigPage, DatePicker
   ],
   providers: [
     AcidService, AnalysisService, AuthenticationService, BottleService, FilterService, MediumService,
