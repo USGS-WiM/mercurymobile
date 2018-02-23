@@ -6,7 +6,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
 import {APP_UTILITIES}   from '../../app/app.utilities';
-import {ACIDS} from './acids';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
 import load from 'pouchdb-load';
@@ -30,13 +29,13 @@ export class AcidService {
       this._db.allDocs()
         .then(result => {
           if(result.total_rows === 0) {
-            for (let acid of ACIDS) {
+            /*for (let acid of ACIDS) {
               this._db.put({
                 _id: acid['code'],
                 id: acid['id'],
                 code: acid['code']
               });
-            }
+            }I*/
           }
         })
         .catch( error => {

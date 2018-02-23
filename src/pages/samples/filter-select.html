@@ -1,0 +1,26 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            Select Filter
+        </ion-title>
+        <ion-buttons start>
+            <button ion-button large (click)="dismiss()">
+                <ion-icon name="md-close"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div [hidden]="!notready" align="center" id="loading-spinner">
+        <ion-spinner></ion-spinner>
+    </div>
+    <div [hidden]="notready">
+        <ion-list>
+            <ion-item *ngFor="let filter of filteres">
+                <ion-label>{{filter}}</ion-label>
+                <ion-radio [checked]="filter === selectedFilter" (click)="selectFilter(acid)"></ion-radio>
+            </ion-item>
+        </ion-list>
+    </div>
+</ion-content>

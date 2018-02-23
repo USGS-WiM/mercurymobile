@@ -8,20 +8,21 @@
 </ion-header>
 
 <ion-content>
-  <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>
+  <div [hidden]="!notready" align="left" id="loading-spinner">
+    <ion-spinner></ion-spinner>
+  </div>
   <div [hidden]="notready">
     <form (keydown.enter)="$event.preventDefault()" [formGroup]="sampleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleForm.value)">
       <ion-grid id="header" formGroupName="sampleHeaderControls">
         <ion-row>
-            <ion-col col-10></ion-col>
-            <ion-col col-2>
-              <ion-item>
-                <ion-label> Use data entry widgets</ion-label>
-                <ion-toggle (ionChange)="toggleUseWidgets()" [checked]=useWidgets></ion-toggle>
-              </ion-item>
-            </ion-col>
+          <ion-col col-12>
+            <ion-item>
+              <ion-label> Use data entry widgets</ion-label>
+              <ion-toggle (ionChange)="toggleUseWidgets()" [checked]=useWidgets></ion-toggle>
+            </ion-item>
+          </ion-col>
         </ion-row>
-        <ion-row style="border-style: solid;">
+        <ion-row class="sampleFormRow">
           <ion-col col-6>
             <ion-label>Project Name</ion-label>
             <ion-item *ngIf="useWidgets">
@@ -30,7 +31,8 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="projectName" [value]="mySample.projectName" (blur)="projectNameChange(pName.value)" #pName></ion-input>
+              <ion-input type="text" formControlName="projectName" [value]="mySample.projectName" (blur)="projectNameChange(pName.value)"
+                #pName></ion-input>
             </ion-item>
           </ion-col>
           <ion-col col-6>
@@ -41,11 +43,12 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="projectNumber" [value]="mySample.projectNumber" (ionChange)="projectNumberChange(pNumber.value)" #pNumber></ion-input>
+              <ion-input type="text" formControlName="projectNumber" [value]="mySample.projectNumber" (ionChange)="projectNumberChange(pNumber.value)"
+                #pNumber></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
-        <ion-row style="border-style: solid;">
+        <ion-row class="sampleFormRow">
           <ion-col col-6>
             <ion-label>Site Name</ion-label>
             <ion-item *ngIf="useWidgets">
@@ -65,35 +68,46 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="siteNumber" [value]="mySample.siteNumber" (ionChange)="siteNumberChange(sNumber.value)" #sNumber></ion-input>
+              <ion-input type="text" formControlName="siteNumber" [value]="mySample.siteNumber" (ionChange)="siteNumberChange(sNumber.value)"
+                #sNumber></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
-        <ion-row style="border-style: solid;">
+        <ion-row class="sampleFormRow">
           <ion-col col-6>
             <ion-label>Date</ion-label>
-            <ion-item *ngIf="useWidgets"><ion-input type="string" formControlName="sampleAcid" (click)="openDateSelect()"></ion-input></ion-item>
+            <ion-item *ngIf="useWidgets">
+              <ion-input type="string" formControlName="sampleDate" (click)="openDateSelect()"></ion-input>
+            </ion-item>
             <!-- <ion-item *ngIf="useWidgets"><ion-input type="text" [value]="mySample.date | date:'MM/dd/y'" formControlName="sampleDate"></ion-input></ion-item> -->
-            <ion-item *ngIf="!useWidgets"><ion-input type="text" [value]="mySample.date | date:'MM/dd/y'" formControlName="sampleDate"></ion-input></ion-item>
+            <ion-item *ngIf="!useWidgets">
+              <ion-input type="text" [value]="mySample.date | date:'MM/dd/y'" formControlName="sampleDate"></ion-input>
+            </ion-item>
             <!-- <ion-item *ngIf="!useWidgets"><ion-input type="text" pattern="^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d\d\d\d$" formControlName="sampleDate"></ion-input></ion-item> -->
           </ion-col>
           <ion-col col-6>
             <ion-label>Time</ion-label>
-            <ion-item ><ion-input type="text" pattern="^(00|0[0-9]|1[0-9]|2[0-3])([0-5][0-9])$" formControlName="sampleTime"></ion-input></ion-item>
+            <ion-item>
+              <ion-input type="text" pattern="^(00|0[0-9]|1[0-9]|2[0-3])([0-5][0-9])$" formControlName="sampleTime"></ion-input>
+            </ion-item>
           </ion-col>
         </ion-row>
-        <ion-row style="border-style: solid;">
+        <ion-row class="sampleFormRow">
           <ion-col col-6>
             <ion-label>Depth</ion-label>
-            <ion-item><ion-input type="text" pattern="^[0-9]*\.?[0-9]+$" formControlName="sampleDepth"></ion-input></ion-item>
+            <ion-item>
+              <ion-input type="text" pattern="^[0-9]*\.?[0-9]+$" formControlName="sampleDepth"></ion-input>
+            </ion-item>
           </ion-col>
           <ion-col col-6>
             <ion-label>Rep</ion-label>
-            <ion-item><ion-input type="text" pattern="^[0-9]*$" formControlName="sampleRep"></ion-input></ion-item>
+            <ion-item>
+              <ion-input type="text" pattern="^[0-9]*$" formControlName="sampleRep"></ion-input>
+            </ion-item>
           </ion-col>
         </ion-row>
-        <ion-row style="border-style: solid;">
-          <ion-col col-6>
+        <ion-row class="sampleFormRow">
+          <ion-col col-4>
             <ion-label>Medium</ion-label>
             <ion-item *ngIf="useWidgets">
               <ion-select class="select-wide" formControlName="sampleMedium" (ionChange)="mediumChange(mName.text.split(' - ')[0])" #mName>
@@ -101,51 +115,145 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-                <ion-input type="text" formControlName="sampleMedium" [value]="mySample.mediumName" (ionChange)="mediumChange(mName.value)" #mName></ion-input>
+              <ion-input type="text" formControlName="sampleMedium" [value]="mySample.mediumName" (ionChange)="mediumChange(mName.value)"
+                #mName></ion-input>
             </ion-item>
           </ion-col>
-          <ion-col col-6>
+          <ion-col col-4>
             <ion-label>Acid</ion-label>
-            <ion-item *ngIf="useWidgets"><ion-input type="string" formControlName="sampleAcid" (click)="openAcidSelect()"></ion-input></ion-item>
-            <ion-item *ngIf="!useWidgets"><ion-input type="text" formControlName="sampleAcid" (blur)="acidNameChange(aName.value)" #aName></ion-input></ion-item>
+            <ion-item *ngIf="useWidgets">
+              <ion-input type="string" formControlName="sampleAcid" (click)="openAcidSelect()"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="!useWidgets">
+              <ion-input type="text" formControlName="sampleAcid" (blur)="acidNameChange(aName.value)" #aName></ion-input>
+            </ion-item>
           </ion-col>
+          <ion-col col-4>
+              <ion-label>Filter</ion-label>
+              <ion-item *ngIf="useWidgets">                  
+                <ion-select formControlName="sampleFilter" class="full-width-select">
+                  <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="false">{{filter.filter}}</ion-option>
+                </ion-select>                    
+              </ion-item>
+              <ion-item *ngIf="!useWidgets">
+                <ion-input type="text" formControlName="sampleFilter" (blur)="filterNameChange(aName.value)" #aName></ion-input>
+              </ion-item>
+            </ion-col>
         </ion-row>
       </ion-grid>
+
+      <!-- start Bottles -->
       <ion-grid id="body" formGroupName="sampleBottleControls">
         <ion-row>
-          <ion-col col-2>Containers</ion-col>
-          <ion-col col-2>
-            <ion-item>
-              <ion-label> Lookup Container IDs</ion-label>
+          <ion-col col-8>
+            <h3>Containers</h3>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-7>
+            <ion-item class="option-box">
+              <ion-label>Lookup Container IDs</ion-label>
               <ion-toggle (ionChange)="toggleLookupContainers()"></ion-toggle>
             </ion-item>
           </ion-col>
-          <ion-col col-2><div style="padding: 10px;"><button ion-button large type="button" style="float: left;" (click)="addRow()"><ion-icon name="add-circle"></ion-icon></button></div></ion-col>
-          <ion-col col-6></ion-col>
-        </ion-row>
-        <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow" style="border-style: solid;">{{ndx + 1}}
-          <ion-col col-6>
-            <ion-item *ngIf="lookupContainers"><ion-input type="string" formControlName="bottle" (click)="openBottleSelect(ndx)"></ion-input></ion-item>
-            <ion-item *ngIf="!lookupContainers"><ion-input type="string" formControlName="bottle" [value]="sampleBottleControls.controls[ndx].controls['bottle'].value"></ion-input></ion-item>
+          <ion-col col-5>
+            <button style="float:right;" ion-button medium type="button" (click)="addRow()">
+              <ion-icon name="add-circle"></ion-icon> &nbsp;Add Container</button>
           </ion-col>
-          <ion-col col-2><div style="padding: 10px;"><button ion-button large type="button" style="float: right;" (click)="editSampleBottle(ndx)"><ion-icon name="list"></ion-icon></button></div></ion-col>
-          <ion-col col-2><div style="padding: 10px;"><button ion-button large type="button" style="float: right;" (click)="removeRow(sampleBottleControlsRow)"><ion-icon name="remove-circle"></ion-icon></button></div></ion-col>
-          <ion-col col-2></ion-col>
+        </ion-row>
+
+        <ion-row style="margin-top:10px;">
+          <ion-col col-2 class="text-center" text-center>Container</ion-col>          
+          <ion-col col-2 class="text-center" text-center>Analysis</ion-col>          
+          <ion-col col-2 class="text-center" text-center>Filter Volume</ion-col>
+          <ion-col col-3 class="text-center" text-center>Preservation</ion-col>          
+          <ion-col col-2 class="text-center" text-center>Acid Volume</ion-col>
+          <ion-col col-1></ion-col>          
+        </ion-row>
+        
+        <!--
+        <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow"
+          class="sampleFormRow">{{ndx + 1}}
+          <ion-col col-7>
+            <ion-item *ngIf="lookupContainers">
+              <ion-input type="string" formControlName="bottle" (click)="openBottleSelect(ndx)"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="!lookupContainers">
+              <ion-input type="string" formControlName="bottle" [value]="sampleBottleControls.controls[ndx].controls['bottle'].value"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-2>
+            <div style="float:right;">
+              <button ion-button large type="button" (click)="editSampleBottle(ndx)">
+                <ion-icon name="list"></ion-icon>
+              </button>
+              <button ion-button large type="button" (click)="removeRow(sampleBottleControlsRow)">
+                <ion-icon name="remove-circle"></ion-icon>
+              </button>
+            </div>
+          </ion-col>
+        </ion-row>-->
+
+        <!-- bottle integration {{ndx + 1}} -->
+        <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow">
+          
+          <ion-col col-2>
+            <ion-item *ngIf="lookupContainers">
+                <ion-input type="string" formControlName="bottle" (click)="openBottleSelect(ndx)" class="full-width-select"></ion-input>
+              </ion-item>
+              <ion-item *ngIf="!lookupContainers">
+                <ion-input type="string" (ionBlur)="addNewBottle($event);" formControlName="bottle" [value]="sampleBottleControls.controls[ndx].controls['bottle'].value" class="full-width-select"></ion-input>
+              </ion-item>
+          </ion-col>          
+          <ion-col col-2>
+            <ion-item>
+              <ion-select formControlName="analysis" class="full-width-select">
+                <ion-option *ngFor="let analysis of myAnalyses" [value]="analysis.id" [selected]="false">{{analysis.analysis}}</ion-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>          
+          <ion-col col-2>
+            <ion-item>
+              <ion-input type="number" formControlName="filterVolume" class="full-width-select"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-3>
+            <ion-item>
+              <ion-select formControlName="preservationType" class="full-width-select">
+                <ion-option *ngFor="let preservation of myPreservations" [value]="preservation.id" [selected]="false">{{preservation.preservation}}</ion-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>          
+          <ion-col col-2>
+            <ion-item>
+              <ion-input type="number" formControlName="preservationVolume" class="full-width-select"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-1>
+              <button ion-button color="danger" small type="button" (click)="removeRow(sampleBottleControlsRow)" style="float:right">
+                <ion-icon name="remove-circle"></ion-icon>
+              </button>
+          </ion-col>          
         </ion-row>
       </ion-grid>
+      <!-- end Bottles -->
+
       <ion-grid id="comments" formGroupName="sampleCommentControls">
         <ion-row>
           <ion-col>
             <ion-label>Comments</ion-label>
-            <ion-item><ion-input type="text" formControlName="sampleComment"></ion-input></ion-item>
+            <ion-item>
+              <ion-input type="text" formControlName="sampleComment"></ion-input>
+            </ion-item>
           </ion-col>
         </ion-row>
       </ion-grid>
       <div>
-          <!-- <p>Form value: {{ sampleForm.value | json }}</p> -->
-          <!-- <p>Form status: {{ sampleForm.status | json }}</p> -->
-          <button ion-button large type="submit" [disabled]="!sampleForm.valid">Save</button>
-          <button ion-button large type="button" (click)="showConfirm('deleteSampleRow')">Delete</button>
+        <!-- <p>Form value: {{ sampleForm.value | json }}</p> -->
+        <!-- <p>Form status: {{ sampleForm.status | json }}</p> -->
+        <button ion-button block large color="secondary" type="submit">Save</button>
+        <!--<button ion-button large type="submit" [disabled]="!sampleForm.valid">Save</button>-->
+        <!--<button ion-button large type="button" (click)="showConfirm('deleteSampleRow')">Delete</button> just do this from the sample list -->
       </div>
     </form>
   </div>

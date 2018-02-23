@@ -11,7 +11,7 @@
   <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>
   <div [hidden]="notready">
     <form (keydown.enter)="$event.preventDefault()" [formGroup]="sampleBottleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleBottleForm.value)">
-      <ion-grid id="body" formGroupName="sampleBottleControlsGroup">
+      <ion-grid id="body" formGroupName="sampleBottleControls">
         <ion-row>
           <ion-col width-10>Analysis</ion-col>
           <ion-col width-90>

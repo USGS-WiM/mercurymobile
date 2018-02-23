@@ -98,9 +98,12 @@ export class SampleBottleService {
           selector: {name: val},
           fields: ['id', 'name']
       }).then(function (result) {
+          if (!result) {
+            return false;
+          }
           return result['docs'];
       }).catch(function (err) {
-          console.log('bottle find error');
+          console.log('bottle find error');          
       });
   }
 

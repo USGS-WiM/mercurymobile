@@ -7,16 +7,30 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-  <button ion-button large type="button" (click)="addSample()"><ion-icon name="add-circle"></ion-icon></button>
-
+<ion-content>    
+  <button class="floaty-button" ion-button medium type="button" (click)="updateBulkSampleAcids()"><ion-icon name="add-circle"></ion-icon> &nbsp;Update Acids For Selected Samples</button>
+  <button class="floaty-button" ion-button medium type="button" (click)="addSample()"><ion-icon name="add-circle"></ion-icon> &nbsp;Add Sample</button>
   <pre id="display"></pre>
   <ion-grid>
-    <ion-row *ngFor="let sample of samples | reverse">
-      <ion-col col-6><button ion-item large><ion-icon name="beaker" item-left></ion-icon>{{sample.date}}, {{sample.projectName}}, {{sample.siteName}}</button></ion-col>
-      <ion-col col-2><div style="padding: 10px;"><button ion-button large (click)="editSample(sample.id)"><ion-icon name="list"></ion-icon></button></div></ion-col>
-      <ion-col col-2><div style="padding: 10px;"><button ion-button large (click)="cloneSample(sample.id)"><ion-icon name="md-copy"></ion-icon></button></div></ion-col>
-      <ion-col col-2><div style="padding: 10px;"><button ion-button large type="button" (click)="showConfirm(sample._id)"><ion-icon name="remove-circle"></ion-icon></button></div></ion-col>
+    <ion-row *ngFor="let sample of samples">
+      <ion-col col-1>
+          <ion-item>              
+            <ion-checkbox name="bulkUpdateSamples" (click)="updateBulkSamples(sample.id)"></ion-checkbox>
+          </ion-item>
+      </ion-col>
+      <ion-col col-8>
+        <button ion-item large>
+          <ion-icon name="beaker" item-left></ion-icon>
+          {{sample.date}}, {{sample.projectName}}, {{sample.siteName}}
+        </button>
+      </ion-col>
+      <ion-col col-3>
+        <div style="float:right;">
+            <button ion-button medium (click)="editSample(sample.id)"><ion-icon name="list"></ion-icon></button>
+            <button ion-button medium (click)="cloneSample(sample.id)"><ion-icon name="md-copy"></ion-icon></button>
+            <button ion-button color="danger" medium type="button" (click)="showConfirm(sample._id)"><ion-icon name="remove-circle"></ion-icon></button>
+        </div>        
+      </ion-col>      
     </ion-row>
   </ion-grid>
   <div *ngIf="selectedSample" padding>

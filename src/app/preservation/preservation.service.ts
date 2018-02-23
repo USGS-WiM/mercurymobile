@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
 import {APP_UTILITIES}   from '../app.utilities';
-import {PRESERVATIONS} from './preservations';
+//import {PRESERVATIONS} from './preservations';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
 import load from 'pouchdb-load';
@@ -32,14 +32,14 @@ export class PreservationService {
         .then(result => {
           if(result.total_rows === 0) {
             //this._db.bulkDocs(PRESERVATIONS);
-            for (let preservation of PRESERVATIONS) {
+            /*for (let preservation of PRESERVATIONS) {
               //this._db.post(analysis);
               this._db.put({
                 _id: preservation['preservation'],
                 id: preservation['id'],
                 preservation: preservation['preservation']
               });
-            }
+            }*/
           }
         })
         .catch( error => {

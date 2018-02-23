@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
 import {APP_UTILITIES}   from '../app.utilities';
-import {FILTERS} from './filters';
+//import {FILTERS} from './filters';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
 import load from 'pouchdb-load';
@@ -32,14 +32,14 @@ export class FilterService {
         .then(result => {
           if(result.total_rows === 0) {
             //this._db.bulkDocs(FILTERS);
-            for (let filter of FILTERS) {
+            /*for (let filter of FILTERS) {
               //this._db.post(analysis);
               this._db.put({
                 _id: filter['filter'],
                 id: filter['id'],
                 filter: filter['filter']
               });
-            }
+            }*/
           }
         })
         .catch( error => {
