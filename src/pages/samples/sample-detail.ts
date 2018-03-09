@@ -431,19 +431,11 @@ export class SampleDetailPage {
   }
 
   private _timeToText(time: string) {
-    return time? time.substring(0, 5) : ''
+    return time;
   }
 
-  private _textToTime(text: string) {
-    if (text && text.length === 4) {
-      return text.slice(0, 1) + ':' + text.slice(1, 3) + ':00';
-    }
-    else if (text && text.length === 5) {
-      return text.slice(0, 2) + ':' + text.slice(3, 5) + ':00';
-    }
-    else {
-      return '00:00:00';
-    }
+  private _textToTime(text: string) {    
+    return text;
   }
 
   openDateSelect() {
@@ -640,8 +632,8 @@ export class SampleDetailPage {
       
     this.mySample['date'] = myDate;
     this.mySample['time'] = this._textToTime(formValue.sampleHeaderControls.sampleTime);
-    this.mySample['depth'] = formValue.sampleHeaderControls.sampleDepth;
-    this.mySample['replicate'] = formValue.sampleHeaderControls.sampleRep;
+    this.mySample['depth'] = parseInt(formValue.sampleHeaderControls.sampleDepth);
+    this.mySample['replicate'] = parseInt(formValue.sampleHeaderControls.sampleRep);
     this.mySample['sample_bottles'] = this.mySampleBottles;
     this.mySample['comment'] = formValue.sampleCommentControls.sampleComment;
     this.mySample['filter'] = formValue.sampleHeaderControls.sampleFilter;
@@ -675,15 +667,14 @@ export class SampleDetailPage {
               });
             }
         }
-
+        /*
         this.navCtrl.pop().then(() => {        
           this.events.publish('custom-user-events');
         });
-        
+        */
       }, error => {
         console.log(error);})
-    })
-    
+    })    
   }
 
   deleteSample() {
