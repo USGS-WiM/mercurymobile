@@ -26,7 +26,7 @@
           <ion-col col-6>
             <ion-label>Project Name</ion-label>
             <ion-item *ngIf="useWidgets">
-              <ion-select class="select-wide" formControlName="projectName" (ionChange)="projectNameChange(pName.text)" #pName>
+              <ion-select class="full-width-select" formControlName="projectName" (ionChange)="projectNameChange(pName.text)" #pName>
                 <ion-option *ngFor="let project of myProjects" [value]="project.name" [selected]="project.id == mySample.projectNumber">{{project.name}}</ion-option>
               </ion-select>
             </ion-item>
@@ -38,7 +38,7 @@
           <ion-col col-6>
             <ion-label>Project Number</ion-label>
             <ion-item *ngIf="useWidgets">
-              <ion-select class="select-wide" formControlName="projectNumber" (ionChange)="projectNumberChange(pNumber.text)" #pNumber>
+              <ion-select  class="full-width-select" formControlName="projectNumber" (ionChange)="projectNumberChange(pNumber.text)" #pNumber>
                 <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="project.id == mySample.projectNumber">{{project.id}}</ion-option>
               </ion-select>
             </ion-item>
@@ -52,7 +52,7 @@
           <ion-col col-6>
             <ion-label>Site Name</ion-label>
             <ion-item *ngIf="useWidgets">
-              <ion-select class="select-wide" formControlName="siteName" (ionChange)="siteNameChange(sName.text)" #sName>
+              <ion-select class="full-width-select" formControlName="siteName" (ionChange)="siteNameChange(sName.text)" #sName>
                 <ion-option *ngFor="let site of mySites" [value]="site.name" [selected]="site.id == mySample.siteNumber">{{site.name}}</ion-option>
               </ion-select>
             </ion-item>
@@ -63,7 +63,7 @@
           <ion-col col-6>
             <ion-label>Site Number</ion-label>
             <ion-item *ngIf="useWidgets">
-              <ion-select class="select-wide" formControlName="siteNumber" (ionChange)="siteNumberChange(sName.text)" #sNumber>
+              <ion-select class="full-width-select" formControlName="siteNumber" (ionChange)="siteNumberChange(sName.text)" #sNumber>
                 <ion-option *ngFor="let site of mySites" [value]="site.id" [selected]="site.id == mySample.siteNumber">{{site.id}}</ion-option>
               </ion-select>
             </ion-item>
@@ -110,7 +110,7 @@
           <ion-col col-4>
             <ion-label>Medium</ion-label>
             <ion-item *ngIf="useWidgets">
-              <ion-select class="select-wide" formControlName="sampleMedium" (ionChange)="mediumChange(mName.text.split(' - ')[0])" #mName>
+              <ion-select class="full-width-select" formControlName="sampleMedium" (ionChange)="mediumChange(mName.text.split(' - ')[0])" #mName>
                 <ion-option *ngFor="let medium of myMediums" [value]="medium.nwis_code" [selected]="medium.id == mySample.mediumNumber">{{medium.nwis_code}} - {{medium.description}}</ion-option>
               </ion-select>
             </ion-item>

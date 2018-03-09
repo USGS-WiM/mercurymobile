@@ -97,6 +97,14 @@ export class BottleService {
       });
     }
 
+    add(name: string) {
+      this._db.put({
+        _id: name,
+        id: name,
+        name: name
+      });
+    }
+
     findBottle(val: string) {
       this._db.find({
         selector: {_id: val},

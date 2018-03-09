@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, FormArray, FormBuilder} from "@angular/forms";
-import {ViewController, ModalController, NavController, NavParams, AlertController} from 'ionic-angular';
+import {ViewController, ModalController, NavController, NavParams, AlertController, Events} from 'ionic-angular';
 import {Project} from '../../app/project/project';
 import {Site} from '../../app/site/site';
 import {Sample} from '../../app/sample/sample';
@@ -46,6 +46,7 @@ export class SampleDetailPage {
   private _numSampleBottles: number = 0;
   private _selectedAcid: number;
   private _selectedFilter: string;
+  
 
   mySample: Sample = new Sample(null, null, null, null, null, null, null, null, null, null, null, null, null);
   mySampleBottles: SampleBottle[] = [];
@@ -91,7 +92,8 @@ export class SampleDetailPage {
               public datePicker: DatePickerProvider,
               private _analysisService: AnalysisService,
               private _filterService: FilterService,
-              private _preservationService: PreservationService
+              private _preservationService: PreservationService,
+              private events: Events
   ) {
 
     this.sampleHeaderControls = new FormGroup({
@@ -358,8 +360,12 @@ export class SampleDetailPage {
           {
             text: 'Add New Container',
             handler: () => {
-              console.log('Agree clicked, adding new bottle: ' + ev.value);
-              this._samplebottleService.add({'_id': ev.value, 'name': ev.value});
+              console.log('Agree clicked, adding new bottle: ' + ev.value + " for sample ID: " + this.sample_ID);
+              this._samplebottleService.add({'_id': ev.value, 'name': ev.value, 'id': ev.value});
+              this._bottleService.add(ev.value);
+              //let bottle = new SampleBottle(this.sample_ID, ev.value, null, null, null, null, null, null, null, ev.value, ev.value);
+              //this.mySampleBottles.push(bottle);
+              this._addSampleBottle(ev.value);
             }
           }
         ]
@@ -370,8 +376,7 @@ export class SampleDetailPage {
 
   private _addSampleBottle(bottleName: string) {
     this._bottleService.getBottlesByName(bottleName).then(response => {
-        console.log("New bottle added: " + bottleName);
-        console.log(response);
+        console.log("New bottle added: " + bottleName + " with ID: " + response.rows[0]['id']);        
 
         let bottleID = response.rows[0]['id'];
         let bottle = new SampleBottle(this.sample_ID, bottleID, null, null, null, null, null, null, null, bottleName, bottleID);
@@ -655,45 +660,26 @@ export class SampleDetailPage {
               this._samplebottleService.getOne((<FormGroup>this.sampleBottleControls.controls[i]).controls['bottle'].value).then(response => {
                 console.log("Bottle response update:");
                 console.log(response);
+                var pType = (<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationType'].value;
                 return this._samplebottleService.update({
                   '_id': response['_id'],
                   '_rev': response['_rev'],
                   'analysis_type': (<FormGroup>this.sampleBottleControls.controls[i]).controls['analysis'].value,
                   'filter_type': formValue.sampleHeaderControls.sampleFilter,
-                  'volume_filtered': (<FormGroup>this.sampleBottleControls.controls[i]).controls['filterVolume'].value,
-                  'preservation_type': (<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationType'].value,
-                  'preservation_volume': (<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationVolume'].value,
+                  'volume_filtered': parseInt((<FormGroup>this.sampleBottleControls.controls[i]).controls['filterVolume'].value),
+                  'preservation_type': pType,
+                  'preservation_volume': parseInt((<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationVolume'].value),
                   'preservation_comment': response['preservation_comment'],
-                  'preservation_acid': self._selectedAcid
+                  'preservation_acid': (pType == 8) ? self._selectedAcid : null
                 });
               });
             }
         }
 
-        /*
-        for (let i = 0, j = this.mySampleBottles.length; i < j; i++) {
-          
-          console.log("Sample bottle count: " + this.mySampleBottles.length);
-          console.log(this.mySampleBottles[i]);
-            // update samplebottles with acid
-            this._samplebottleService.getOne(this.mySampleBottles[i]['_id']).then(response => {
-              console.log("bottle service response");
-              console.log(response);
-
-              return this._samplebottleService.update({
-                '_id': response['_id'],
-                '_rev': response['_rev'],
-                'analysis_type': response['analysis_type'],
-                'filter_type': response['filter_type'],
-                'volume_filtered': response['volume_filtered'],
-                'preservation_type': response['preservation_type'],
-                'preservation_volume': response['preservation_volume'],
-                'preservation_comment': response['preservation_comment'],
-                'preservation_acid': self._selectedAcid
-              });
-            });
-        }*/
-        //this.navCtrl.pop();
+        this.navCtrl.pop().then(() => {        
+          this.events.publish('custom-user-events');
+        });
+        
       }, error => {
         console.log(error);})
     })

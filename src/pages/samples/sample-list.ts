@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ModalController, Events } from 'ionic-angular';
 import { Sample } from '../../app/sample/sample';
 import { SampleService } from '../../app/sample/sample.service';
 import { SampleBottleService } from '../../app/samplebottle/samplebottle.service';
@@ -14,18 +14,22 @@ export class SampleListPage implements OnInit {
   samples: Sample[] = [];
   sampleCount: number = 0;
   currentPage: number = 1;
+  selectedAll: boolean = false;
+  selectedSample: string;
   resultPages = Math.ceil(this.sampleCount / 100);
   notready: Boolean = true;
   private _errorMessage: string;
   callback: any;
   private _bulkSamples = Array<string>();
+  
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
     private _sampleService: SampleService,
     private _samplebottleService: SampleBottleService,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
+    private events: Events
   ) { }
 
   ngOnInit() {
@@ -47,8 +51,8 @@ export class SampleListPage implements OnInit {
       });
   }
 
+  // update all selected samples with acid value for acidification bottles
   updateBulkSampleAcids() {
-
     console.log(this._bulkSamples);
 
     if (!this._bulkSamples.length) {      
@@ -92,7 +96,11 @@ export class SampleListPage implements OnInit {
                     'preservation_comment': savedBottle['preservation_comment'],
                     'preservation_acid': data
                   }).then(response => 
-                    {console.log('update success'); console.log(response);}, 
+                    {
+                      console.log('update success'); 
+                      console.log(response);
+                      this.selectedAll = false;
+                    },                     
                     error => { 
                       console.log(error)
                       let alert = this.alertCtrl.create({
@@ -121,12 +129,20 @@ export class SampleListPage implements OnInit {
     modal.present();
   }
 
-  updateBulkSamples(sample_id, checked) {
+  updateBulkSamples(sample_id, checked) {    
     var index = this._bulkSamples.indexOf(sample_id);
     if (index > -1) {
       this._bulkSamples.splice(index, 1);
     } else {
       this._bulkSamples.push(sample_id);
+    }      
+  }
+
+  selectAllSamples(action: boolean) {
+    if (action) {
+      this.selectedAll = true;
+    } else {
+      this.selectedAll = false;
     }
   }
 
@@ -181,6 +197,13 @@ export class SampleListPage implements OnInit {
   }
 
   openPage(sample_id, clone?) {
+    
+    this.events.subscribe('custom-user-events', () => {  
+      console.log("refresh");    
+      this._getSamples();
+      this.events.unsubscribe('custom-user-events');
+    });
+
     this.navCtrl.push(SampleDetailPage, {
       sample: sample_id,
       clone: clone ? clone : false

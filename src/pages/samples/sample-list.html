@@ -7,15 +7,31 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>    
-  <button class="floaty-button" ion-button medium type="button" (click)="updateBulkSampleAcids()"><ion-icon name="add-circle"></ion-icon> &nbsp;Update Acids For Selected Samples</button>
-  <button class="floaty-button" ion-button medium type="button" (click)="addSample()"><ion-icon name="add-circle"></ion-icon> &nbsp;Add Sample</button>
+<ion-content>   
+  <ion-grid>
+      <ion-row>
+        <ion-col col-12>
+            <button class="floaty-button" ion-button medium type="button" (click)="updateBulkSampleAcids()"><ion-icon name="add-circle"></ion-icon> &nbsp;Update Acids For Selected Samples</button>
+            <button class="floaty-button" ion-button medium type="button" (click)="addSample()"><ion-icon name="add-circle"></ion-icon> &nbsp;Add Sample</button>           
+        </ion-col>
+      </ion-row>
+  </ion-grid>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12>
+          <button (click)="selectAllSamples(true)" ion-button small outline color="dark">Select All</button>
+          <button (click)="selectAllSamples(false)" ion-button small outline color="dark">Unselect All</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+    
   <pre id="display"></pre>
   <ion-grid>
     <ion-row *ngFor="let sample of samples">
       <ion-col col-1>
           <ion-item>              
-            <ion-checkbox name="bulkUpdateSamples" (click)="updateBulkSamples(sample.id)"></ion-checkbox>
+            <ion-checkbox name="bulkUpdateSamples" (ionChange)="updateBulkSamples(sample.id)" [checked]="selectedAll"></ion-checkbox>
           </ion-item>
       </ion-col>
       <ion-col col-8>
@@ -33,6 +49,16 @@
       </ion-col>      
     </ion-row>
   </ion-grid>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12>
+          <button (click)="selectAllSamples(true)" ion-button small outline color="dark">Select All</button>
+          <button (click)="selectAllSamples(false)" ion-button small outline color="dark">Unselect All</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
   <div *ngIf="selectedSample" padding>
     You navigated here from <b>{{selectedSample.title}}</b>
   </div>

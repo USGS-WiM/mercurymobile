@@ -28386,10 +28386,7 @@ ion-navbar.toolbar {
   margin: 8px 0px;
 }
 
-.quick-links {width:100%;margin:10px auto;}
-.quick-link {font-size:1.8em;display:inline-block;width:30%; margin:10px auto;}
-.full-width-select, .select-wide {
-  width: 100%;
-  max-width: 100%;
+.full-width-select {
+  width: 100% !important;
+  max-width: 100% !important;
 }
-.floaty-button {float:right;margin-top:10px;}
