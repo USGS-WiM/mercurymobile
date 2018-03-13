@@ -435,6 +435,16 @@ export class SampleDetailPage {
   }
 
   private _textToTime(text: string) {    
+    
+    if (text.length == 4 && !text.match(/:/g)) {
+      text = text.substr(0,2) + ":" + text.substr(2,2);
+    }
+
+    if (text.length == 3 && !text.match(/:/g)) {
+      text = text.substr(0,1) + ":" + text.substr(1,2);
+    }
+
+    console.log(text);
     return text;
   }
 
@@ -688,7 +698,7 @@ export class SampleDetailPage {
         
         this.navCtrl.pop().then(() => {        
           this.events.publish('custom-user-events');
-        });
+        });        
         
       }, error => {
         console.log(error);})
