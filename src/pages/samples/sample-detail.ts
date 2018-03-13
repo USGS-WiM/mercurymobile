@@ -238,8 +238,8 @@ export class SampleDetailPage {
           this.sampleTime.setValue(this._timeToText(this.mySample['time']));
           this.sampleDepth.setValue(this.mySample['depth']);
           this.sampleRep.setValue(this.mySample['replicate']);
-          this.sampleFilter.setValue(this.mySample['filter']);
-          this.sampleAcid.setValue(this.mySample['acid']);
+          //this.sampleFilter.setValue(this.mySample['filter']);
+          //this.sampleAcid.setValue(this.mySample['acid']);
                     
           if (this.mySample['sample_bottles'] && this.mySample['sample_bottles'].length > 0) {            
             this._numSampleBottles = this.mySample['sample_bottles'].length;
@@ -505,11 +505,20 @@ export class SampleDetailPage {
   }
 
   projectNameChange(projectName: string) {
+    console.log("project name select: " + projectName); 
+    
+    if (projectName == null || projectName == "") {
+      return;
+    }
+
     let projects = this.myProjects.filter(function(project: Project) {return project['name'] == projectName});
     if (projects.length < 1) {
       this.showAlert('Project not found!', projectName, 'was not found in the database. Please enter a valid project name.');
     } else {
+      console.log(projects[0]);
+      console.log("current project number: " + this.mySample['projectNumber'] + " updating to " + projects[0]['id']);
       this.projectNumber.setValue(projects[0]['id']);
+      this.projectName.setValue(projects[0]['name']);
       this.mySample['projectName'] = projects[0]['name'];
       this.mySample['projectNumber'] = projects[0]['id'];
       this.mySites = projects[0]['sites'];
@@ -517,11 +526,20 @@ export class SampleDetailPage {
   }
 
   projectNumberChange(projectNumber: number) {
+    console.log("project # select: " + projectNumber); 
+
+    if (projectNumber == null || projectNumber == NaN) {
+      return;
+    }
+
     let projects = this.myProjects.filter(function(project: Project) {return project['id'] == projectNumber});
     if (projects.length < 1) {
-      this.showAlert('Project not found!', projectNumber.toString(), 'was not found in the database. Please enter a valid project number.');
+      this.showAlert('Project # not found!', projectNumber.toString(), 'was not found in the database. Please enter a valid project number.');
     } else {
-      this.projectName.setValue(projects[0]['id']);
+      console.log(projects[0]);
+      console.log("current project name: " + this.mySample['projectName'] + " updating to " + projects[0]['name']);
+      this.projectName.setValue(projects[0]['name']);
+      this.projectNumber.setValue(projects[0]['id']);
       this.mySample['projectName'] = projects[0]['name'];
       this.mySample['projectNumber'] = projects[0]['id'];
       this.mySites = projects[0]['sites'];
@@ -636,8 +654,8 @@ export class SampleDetailPage {
     this.mySample['replicate'] = parseInt(formValue.sampleHeaderControls.sampleRep);
     this.mySample['sample_bottles'] = this.mySampleBottles;
     this.mySample['comment'] = formValue.sampleCommentControls.sampleComment;
-    this.mySample['filter'] = formValue.sampleHeaderControls.sampleFilter;
-    this.mySample['acid'] = formValue.sampleHeaderControls.sampleAcid;
+    //this.mySample['filter'] = formValue.sampleHeaderControls.sampleFilter;
+    //this.mySample['acid'] = formValue.sampleHeaderControls.sampleAcid;
 
     // update the sample
     this._sampleService.getOne(this.mySample['_id']).then(response => {
@@ -667,11 +685,11 @@ export class SampleDetailPage {
               });
             }
         }
-        /*
+        
         this.navCtrl.pop().then(() => {        
           this.events.publish('custom-user-events');
         });
-        */
+        
       }, error => {
         console.log(error);})
     })    

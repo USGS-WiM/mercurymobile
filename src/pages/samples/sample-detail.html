@@ -27,7 +27,7 @@
             <ion-label>Project Name</ion-label>
             <ion-item *ngIf="useWidgets">
               <ion-select class="full-width-select" formControlName="projectName" (ionChange)="projectNameChange(pName.text)" #pName>
-                <ion-option *ngFor="let project of myProjects" [value]="project.name" [selected]="project.id == mySample.projectNumber">{{project.name}}</ion-option>
+                <ion-option *ngFor="let project of myProjects" [value]="project.name" [selected]="project.name == mySample.projectName">{{project.name}}</ion-option>
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
