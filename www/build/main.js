@@ -264,7 +264,7 @@ var BottleService = (function () {
             //console.log(result.total_rows);
             if (result.total_rows === 0) {
                 console.log("start put bottles");
-                var count = 0;
+                //let count = 0;
                 /*for (let bottle of BOTTLES) {
                   this._db.put({
                     _id: bottle['name'],
@@ -931,11 +931,11 @@ SiteService = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SampleListPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_sample_sample_service__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_samplebottle_samplebottle_service__ = __webpack_require__(73);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sample_detail__ = __webpack_require__(285);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__bulk_acid_update__ = __webpack_require__(440);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__bulk_acid_update__ = __webpack_require__(442);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1122,7 +1122,6 @@ var SampleListPage = (function () {
     SampleListPage.prototype.openPage = function (sample_id, clone) {
         var _this = this;
         this.events.subscribe('custom-user-events', function () {
-            console.log("refresh");
             _this._getSamples();
             _this.events.unsubscribe('custom-user-events');
         });
@@ -1134,7 +1133,7 @@ var SampleListPage = (function () {
     return SampleListPage;
 }());
 SampleListPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\sample-list.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button large menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Sample List</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>   \n\n  <ion-grid>\n\n      <ion-row>\n\n        <ion-col col-12>\n\n            <button class="floaty-button" ion-button medium type="button" (click)="updateBulkSampleAcids()"><ion-icon name="add-circle"></ion-icon> &nbsp;Update Acids For Selected Samples</button>\n\n            <button class="floaty-button" ion-button medium type="button" (click)="addSample()"><ion-icon name="add-circle"></ion-icon> &nbsp;Add Sample</button>           \n\n        </ion-col>\n\n      </ion-row>\n\n  </ion-grid>\n\n\n\n  <ion-grid>\n\n    <ion-row>\n\n      <ion-col col-12>\n\n          <button (click)="selectAllSamples(true)" ion-button small outline color="dark">Select All</button>\n\n          <button (click)="selectAllSamples(false)" ion-button small outline color="dark">Unselect All</button>\n\n      </ion-col>\n\n    </ion-row>\n\n  </ion-grid>\n\n    \n\n  <pre id="display"></pre>\n\n  <ion-grid>\n\n    <ion-row *ngFor="let sample of samples">\n\n      <ion-col col-1>\n\n          <ion-item>              \n\n            <ion-checkbox name="bulkUpdateSamples" (ionChange)="updateBulkSamples(sample.id)" [checked]="selectedAll"></ion-checkbox>\n\n          </ion-item>\n\n      </ion-col>\n\n      <ion-col col-8>\n\n        <button ion-item large>\n\n          <ion-icon name="beaker" item-left></ion-icon>\n\n          {{sample.date}}, {{sample.projectName}}, {{sample.siteName}}\n\n        </button>\n\n      </ion-col>\n\n      <ion-col col-3>\n\n        <div style="float:right;">\n\n            <button ion-button medium (click)="editSample(sample.id)"><ion-icon name="list"></ion-icon></button>\n\n            <button ion-button medium (click)="cloneSample(sample.id)"><ion-icon name="md-copy"></ion-icon></button>\n\n            <button ion-button color="danger" medium type="button" (click)="showConfirm(sample._id)"><ion-icon name="remove-circle"></ion-icon></button>\n\n        </div>        \n\n      </ion-col>      \n\n    </ion-row>\n\n  </ion-grid>\n\n\n\n  <ion-grid>\n\n    <ion-row>\n\n      <ion-col col-12>\n\n          <button (click)="selectAllSamples(true)" ion-button small outline color="dark">Select All</button>\n\n          <button (click)="selectAllSamples(false)" ion-button small outline color="dark">Unselect All</button>\n\n      </ion-col>\n\n    </ion-row>\n\n  </ion-grid>\n\n\n\n  <div *ngIf="selectedSample" padding>\n\n    You navigated here from <b>{{selectedSample.title}}</b>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\sample-list.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"D:\projects\mercurymobile\src\pages\samples\sample-list.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button large menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Sample List</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>   \n\n  <ion-grid>\n\n      <ion-row>\n\n        <ion-col col-12>\n\n            <button class="floaty-button" ion-button medium type="button" (click)="updateBulkSampleAcids()"><ion-icon name="add-circle"></ion-icon> &nbsp;Update Acids For Selected Samples</button>\n\n            <button class="floaty-button" ion-button medium type="button" (click)="addSample()"><ion-icon name="add-circle"></ion-icon> &nbsp;Add Sample</button>           \n\n        </ion-col>\n\n      </ion-row>\n\n  </ion-grid>\n\n\n\n  <ion-grid>\n\n    <ion-row>\n\n      <ion-col col-12>\n\n          <button (click)="selectAllSamples(true)" ion-button small outline color="dark">Select All</button>\n\n          <button (click)="selectAllSamples(false)" ion-button small outline color="dark">Unselect All</button>\n\n      </ion-col>\n\n    </ion-row>\n\n  </ion-grid>\n\n    \n\n  <pre id="display"></pre>\n\n  <ion-grid>\n\n    <ion-row *ngFor="let sample of samples">\n\n      <ion-col col-1>\n\n          <ion-item>              \n\n            <ion-checkbox name="bulkUpdateSamples" (ionChange)="updateBulkSamples(sample.id)" [checked]="selectedAll"></ion-checkbox>\n\n          </ion-item>\n\n      </ion-col>\n\n      <ion-col col-8>\n\n        <button ion-item large>\n\n          <ion-icon name="beaker" item-left></ion-icon>\n\n          {{sample.date}}, {{sample.projectName}}, {{sample.siteName}}\n\n        </button>\n\n      </ion-col>\n\n      <ion-col col-3>\n\n        <div style="float:right;">\n\n            <button ion-button medium (click)="editSample(sample.id)"><ion-icon name="list"></ion-icon></button>\n\n            <button ion-button medium (click)="cloneSample(sample.id)"><ion-icon name="md-copy"></ion-icon></button>\n\n            <button ion-button color="danger" medium type="button" (click)="showConfirm(sample._id)"><ion-icon name="remove-circle"></ion-icon></button>\n\n        </div>        \n\n      </ion-col>      \n\n    </ion-row>\n\n  </ion-grid>\n\n\n\n  <ion-grid>\n\n    <ion-row>\n\n      <ion-col col-12>\n\n          <button (click)="selectAllSamples(true)" ion-button small outline color="dark">Select All</button>\n\n          <button (click)="selectAllSamples(false)" ion-button small outline color="dark">Unselect All</button>\n\n      </ion-col>\n\n    </ion-row>\n\n  </ion-grid>\n\n\n\n  <div *ngIf="selectedSample" padding>\n\n    You navigated here from <b>{{selectedSample.title}}</b>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"D:\projects\mercurymobile\src\pages\samples\sample-list.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"],
@@ -1326,9 +1325,9 @@ MediumService = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SiteListPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_site_site_service__ = __webpack_require__(112);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__site_detail__ = __webpack_require__(441);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__site_detail__ = __webpack_require__(443);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1436,7 +1435,7 @@ var SiteListPage = (function () {
     return SiteListPage;
 }());
 SiteListPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\sites\site-list.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button large menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Site List</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <button style="float:right;margin-top:10px;margin-right:10px;" ion-button medium type="button" (click)="addSite()"><ion-icon name="add-circle"></ion-icon> &nbsp;Add Site</button>\n\n  <h3 style="margin-left:10px;">{{siteCount}} Sites</h3>\n\n\n\n  <div *ngIf="showPageButtons" style="padding:8px;width:100%;margin-top:30px;text-align:center;">\n\n      <a (click)="prevPage()" class="sites-nav sites-nav-left">Prev Page</a>\n\n      {{currentPage}} / {{resultPages}}\n\n      <a (click)="nextPage()" class="sites-nav sites-nav-right">Next Page</a>      \n\n  </div>\n\n\n\n  <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>\n\n  <div [hidden]="notready">\n\n    <ion-list>\n\n      <button ion-item large *ngFor="let site of sites" (click)="editSite(site.name)">\n\n        <ion-icon name="pin" item-left></ion-icon>\n\n        {{site.name}} <span *ngIf="site.usgs_scode">{{site.usgs_scode}}</span>\n\n        <div class="item-note" item-right>\n\n          {{site.description}}\n\n        </div>\n\n      </button>\n\n    </ion-list>\n\n    <div *ngIf="selectedSite" padding>\n\n      You navigated here from <b>{{selectedSite.name}}</b>\n\n    </div>\n\n  </div>\n\n\n\n  <div *ngIf="showPageButtons" style="padding:8px; width:100%;margin-top:30px;text-align:center;">\n\n      <a (click)="prevPage()" class="sites-nav sites-nav-left">Prev Page</a>\n\n      {{currentPage}} / {{resultPages}}\n\n      <a (click)="nextPage()" class="sites-nav sites-nav-right">Next Page</a>      \n\n  </div>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\sites\site-list.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"D:\projects\mercurymobile\src\pages\sites\site-list.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button large menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Site List</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <button style="float:right;margin-top:10px;margin-right:10px;" ion-button medium type="button" (click)="addSite()"><ion-icon name="add-circle"></ion-icon> &nbsp;Add Site</button>\n\n  <h3 style="margin-left:10px;">{{siteCount}} Sites</h3>\n\n\n\n  <div *ngIf="showPageButtons" style="padding:8px;width:100%;margin-top:30px;text-align:center;">\n\n      <a (click)="prevPage()" class="sites-nav sites-nav-left">Prev Page</a>\n\n      {{currentPage}} / {{resultPages}}\n\n      <a (click)="nextPage()" class="sites-nav sites-nav-right">Next Page</a>      \n\n  </div>\n\n\n\n  <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>\n\n  <div [hidden]="notready">\n\n    <ion-list>\n\n      <button ion-item large *ngFor="let site of sites" (click)="editSite(site.name)">\n\n        <ion-icon name="pin" item-left></ion-icon>\n\n        {{site.name}} <span *ngIf="site.usgs_scode">{{site.usgs_scode}}</span>\n\n        <div class="item-note" item-right>\n\n          {{site.description}}\n\n        </div>\n\n      </button>\n\n    </ion-list>\n\n    <div *ngIf="selectedSite" padding>\n\n      You navigated here from <b>{{selectedSite.name}}</b>\n\n    </div>\n\n  </div>\n\n\n\n  <div *ngIf="showPageButtons" style="padding:8px; width:100%;margin-top:30px;text-align:center;">\n\n      <a (click)="prevPage()" class="sites-nav sites-nav-left">Prev Page</a>\n\n      {{currentPage}} / {{resultPages}}\n\n      <a (click)="nextPage()" class="sites-nav sites-nav-right">Next Page</a>      \n\n  </div>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"D:\projects\mercurymobile\src\pages\sites\site-list.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"],
@@ -1488,7 +1487,7 @@ webpackEmptyAsyncContext.id = 229;
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__samples_sample_list__ = __webpack_require__(159);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__sites_site_list__ = __webpack_require__(175);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1521,7 +1520,7 @@ var HomePage = (function () {
     return HomePage;
 }());
 HomePage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\home\home.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button large menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Home</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding class="home">\n\n  \n\n    <ion-grid>\n\n      <ion-row>                 \n\n        <ion-col col-12>   \n\n          <h2 text-center>Welcome to Merlin Mobile!</h2>         \n\n          <div class="quick-links"> \n\n            <button ion-button block large (click)="goToOtherPage(\'sites\')">Go To Sites</button>\n\n            <button ion-button block large (click)="goToOtherPage(\'samples\')">Go To Samples</button>\n\n          </div> \n\n        </ion-col>       \n\n      </ion-row>      \n\n    </ion-grid>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\home\home.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"D:\projects\mercurymobile\src\pages\home\home.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button large menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Home</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding class="home">\n\n  \n\n    <ion-grid>\n\n      <ion-row>                 \n\n        <ion-col col-12>   \n\n          <h2 text-center>Welcome to Merlin Mobile!</h2>         \n\n          <div class="quick-links"> \n\n            <button ion-button block large (click)="goToOtherPage(\'sites\')">Go To Sites</button>\n\n            <button ion-button block large (click)="goToOtherPage(\'samples\')">Go To Samples</button>\n\n          </div> \n\n        </ion-col>       \n\n      </ion-row>      \n\n    </ion-grid>\n\n</ion-content>\n\n'/*ion-inline-end:"D:\projects\mercurymobile\src\pages\home\home.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"]])
 ], HomePage);
@@ -1536,27 +1535,26 @@ HomePage = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SampleDetailPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_site_site__ = __webpack_require__(286);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_sample_sample__ = __webpack_require__(526);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_samplebottle_samplebottle__ = __webpack_require__(527);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_project_project_service__ = __webpack_require__(103);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_medium_medium_service__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app_sample_sample_service__ = __webpack_require__(96);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_samplebottle_samplebottle_service__ = __webpack_require__(73);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__app_acid_acid_service__ = __webpack_require__(78);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__app_bottle_bottle_service__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__bottle_select__ = __webpack_require__(314);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__acid_select__ = __webpack_require__(315);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__sample_bottle__ = __webpack_require__(316);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__app_app_utilities__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_ionic2_date_picker__ = __webpack_require__(317);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_ionic2_date_picker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_16_ionic2_date_picker__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__filter_select__ = __webpack_require__(439);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__app_analysis_analysis_service__ = __webpack_require__(110);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__app_filter_filter_service__ = __webpack_require__(79);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__app_preservation_preservation_service__ = __webpack_require__(111);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_sample_sample__ = __webpack_require__(527);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_samplebottle_samplebottle__ = __webpack_require__(528);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_project_project_service__ = __webpack_require__(103);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_medium_medium_service__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_sample_sample_service__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app_samplebottle_samplebottle_service__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_acid_acid_service__ = __webpack_require__(78);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__app_bottle_bottle_service__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__bottle_select__ = __webpack_require__(313);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__acid_select__ = __webpack_require__(314);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__sample_bottle__ = __webpack_require__(315);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__app_app_utilities__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_ionic2_date_picker__ = __webpack_require__(316);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_ionic2_date_picker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15_ionic2_date_picker__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__filter_select__ = __webpack_require__(441);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__app_analysis_analysis_service__ = __webpack_require__(110);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__app_filter_filter_service__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__app_preservation_preservation_service__ = __webpack_require__(111);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1566,7 +1564,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 
@@ -1617,7 +1614,7 @@ var SampleDetailPage = (function () {
         this._defaultRowCount = 8;
         this._numRowsAdded = 0;
         this._numSampleBottles = 0;
-        this.mySample = new __WEBPACK_IMPORTED_MODULE_4__app_sample_sample__["a" /* Sample */](null, null, null, null, null, null, null, null, null, null, null, null, null);
+        this.mySample = new __WEBPACK_IMPORTED_MODULE_3__app_sample_sample__["a" /* Sample */](null, null, null, null, null, null, null, null, null, null, null, null, null);
         this.mySampleBottles = [];
         this.myProjects = [];
         this.mySites = [];
@@ -1671,10 +1668,10 @@ var SampleDetailPage = (function () {
             this._getProjects();
             this._getMediums();
             // this a new sample, so set all values to empty of equivalent
-            this.mySample = new __WEBPACK_IMPORTED_MODULE_4__app_sample_sample__["a" /* Sample */]('', 0, '', 0, null, null, 0, 0, 0, '', '', [], '');
+            this.mySample = new __WEBPACK_IMPORTED_MODULE_3__app_sample_sample__["a" /* Sample */]('', 0, '', 0, null, null, 0, 0, 0, '', '', [], '');
             // force setting of date to today
-            this.sampleDate.setValue(__WEBPACK_IMPORTED_MODULE_15__app_app_utilities__["a" /* APP_UTILITIES */].TODAY);
-            this.mySample['sampleDate'] = __WEBPACK_IMPORTED_MODULE_15__app_app_utilities__["a" /* APP_UTILITIES */].TODAY;
+            this.sampleDate.setValue(__WEBPACK_IMPORTED_MODULE_14__app_app_utilities__["a" /* APP_UTILITIES */].TODAY);
+            this.mySample['sampleDate'] = __WEBPACK_IMPORTED_MODULE_14__app_app_utilities__["a" /* APP_UTILITIES */].TODAY;
             // force setting of depth and rep input fields to zero
             this.sampleDepth.setValue('0');
             this.sampleRep.setValue('0');
@@ -1700,7 +1697,6 @@ var SampleDetailPage = (function () {
         var dateSelected = this.datePicker.showCalendar(this.modalCtrl);
         dateSelected.subscribe(function (date) {
             var theFormattedDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-            console.log(theFormattedDate);
             _this.sampleDate.setValue(theFormattedDate);
             _this.sampleHeaderControls.controls['sampleDate'].setValue(theFormattedDate);
             _this.mySample['sampleDate'] = theFormattedDate;
@@ -1745,15 +1741,14 @@ var SampleDetailPage = (function () {
                 _this.mySample['_id'] = id.toString();
                 _this.sample_ID = id;
                 // save this new cloned sample, and add empty sample bottle slots
-                _this._sampleService.update(_this.mySample).then(function (response) { console.log('Clone success'); console.log(response); }, function (error) { return console.log(error); });
+                _this._sampleService.update(_this.mySample).then(function (response) { }, function (error) { });
             }
             else {
-                console.log(sample);
                 _this.mySample = sample;
             }
             if (_this.mySample['projectName']) {
                 _this._getProjects(_this.mySample['projectName']);
-                _this._getSites(_this.mySample['projectName']);
+                // this._getSites(this.mySample['projectName']);
             }
             else {
                 _this._getProjects();
@@ -1774,13 +1769,12 @@ var SampleDetailPage = (function () {
             else {
                 _this.mySample['sample_bottles'] = [];
                 for (var i = 0, j = _this._defaultRowCount; i < j; i++) {
-                    console.log("empty bottles, adding rows");
                     _this.addRow();
                 }
                 _this.notready = false;
             }
         }, function (error) { return _this._errorMessage = error; })
-            .catch(function (err) { return console.log(err); });
+            .catch(function (err) { return _this._errorMessage = err; });
     };
     SampleDetailPage.prototype._getProjects = function (projectName) {
         var _this = this;
@@ -1792,7 +1786,7 @@ var SampleDetailPage = (function () {
             // if there is only one project, automatically select it and filter the sites
             if (_this.myProjects.length == 1) {
                 var proj = _this.myProjects[0];
-                _this.projectName.setValue(proj['id']);
+                _this.projectName.setValue(proj['name']);
                 _this.projectNumber.setValue(proj['id']);
                 _this.mySample['projectName'] = proj['name'];
                 _this.mySample['projectNumber'] = proj['id'];
@@ -1805,10 +1799,8 @@ var SampleDetailPage = (function () {
     SampleDetailPage.prototype._getSampleBottles = function (sampBottles) {
         var _this = this;
         for (var i = 0, j = sampBottles.length; i < j; i++) {
-            console.log("Retrieving sample bottle ID: " + sampBottles[i]['_id']);
             this._samplebottleService.getOne(sampBottles[i]['_id']).then(function (response) {
                 var samplebottle = response;
-                console.log(samplebottle);
                 // if this sample is not a clone, populate the sample bottle list
                 if (!_this.clone) {
                     _this.mySampleBottles.push(samplebottle);
@@ -1816,9 +1808,14 @@ var SampleDetailPage = (function () {
                 }
                 // populate the sample's acid field if any of the sample bottles have used an acid
                 var acid = samplebottle['preservation_acid'];
-                if (acid && !_this._selectedAcid) {
-                    _this._selectedAcid = acid;
-                    _this._getAcidName(_this._selectedAcid);
+                if (acid && (typeof _this.selectedAcid === 'undefined' || !_this.selectedAcid)) {
+                    _this.selectedAcid = acid;
+                    _this._getAcidName(_this.selectedAcid);
+                }
+                // populate the sample's filter field if any of the sample bottles have used an filter
+                var filter = samplebottle['filter_type'];
+                if (filter && (typeof _this.selectedFilter === 'undefined' || !_this.selectedFilter)) {
+                    _this.selectedFilter = filter;
                 }
             });
         }
@@ -1857,67 +1854,63 @@ var SampleDetailPage = (function () {
             _this._errorMessage = error;
         });
     };
-    SampleDetailPage.prototype.addNewBottle = function (ev) {
+    SampleDetailPage.prototype.addNewBottle = function (ev, ndx) {
         var _this = this;
-        console.log(ev);
-        var result = this._samplebottleService.findSampleBottle(ev.value);
-        console.log(result);
-        if (!result) {
-            var confirm = this.alertCtrl.create({
-                title: 'Add New Container',
-                message: ev.value + ' was not found in the database, add a new Container with this value?',
-                buttons: [
-                    {
-                        text: 'Cancel',
-                        handler: function () {
-                            console.log('Disagree clicked');
+        var newBottleName = ev.value;
+        this._bottleService.getBottlesByName(newBottleName).then(function (response) {
+            var exists = response.rows.length > 0 ? true : false;
+            if (!exists) {
+                var confirm_1 = _this.alertCtrl.create({
+                    title: 'Add New Container',
+                    message: newBottleName + ' was not found in the database, add a new Container with this value?',
+                    buttons: [
+                        {
+                            text: 'Cancel',
+                            handler: function () {
+                                _this.sampleBottleControls.controls[ndx].controls['bottle'].setValue(null);
+                            }
+                        },
+                        {
+                            text: 'Add New Container',
+                            handler: function () {
+                                _this._bottleService.add(newBottleName);
+                                _this._addSampleBottle(newBottleName);
+                            }
                         }
-                    },
-                    {
-                        text: 'Add New Container',
-                        handler: function () {
-                            console.log('Agree clicked, adding new bottle: ' + ev.value + " for sample ID: " + _this.sample_ID);
-                            _this._samplebottleService.add({ '_id': ev.value, 'name': ev.value, 'id': ev.value });
-                            _this._bottleService.add(ev.value);
-                            //let bottle = new SampleBottle(this.sample_ID, ev.value, null, null, null, null, null, null, null, ev.value, ev.value);
-                            //this.mySampleBottles.push(bottle);
-                            _this._addSampleBottle(ev.value);
-                        }
-                    }
-                ]
-            });
-            confirm.present();
-        }
+                    ]
+                });
+                confirm_1.present();
+            }
+        });
     };
     SampleDetailPage.prototype._addSampleBottle = function (bottleName) {
         var _this = this;
         this._bottleService.getBottlesByName(bottleName).then(function (response) {
-            console.log("New bottle added: " + bottleName + " with ID: " + response.rows[0]['id']);
             var bottleID = response.rows[0]['id'];
-            var bottle = new __WEBPACK_IMPORTED_MODULE_5__app_samplebottle_samplebottle__["a" /* SampleBottle */](_this.sample_ID, bottleID, null, null, null, null, null, null, null, bottleName, bottleID);
+            var bottle = new __WEBPACK_IMPORTED_MODULE_4__app_samplebottle_samplebottle__["a" /* SampleBottle */](_this.sample_ID, bottleID, null, null, null, null, null, null, null, bottleName, bottleID);
             _this.mySampleBottles.push(bottle);
             // include the PouchDB internal ID for quick retrieval
             bottle['_id'] = bottleID;
             _this._samplebottleService.update(bottle);
         });
     };
-    SampleDetailPage.prototype._getSites = function (projectName) {
-        var _this = this;
-        this._projectService.getProjectByName(projectName)
-            .then(function (response) {
-            var sites = response.rows[0].doc['sites'];
-            for (var i = 0; i < sites.length; i++) {
-                var sitedata = sites[i];
-                var newsite = new __WEBPACK_IMPORTED_MODULE_3__app_site_site__["a" /* Site */]("temp");
-                newsite['name'] = sitedata.name;
-                newsite['usgs_scode'] = sitedata.usgs_scode;
-                newsite['id'] = sitedata.id;
-                _this.mySites.push(newsite);
-            }
-        }, function (error) {
-            _this._errorMessage = error;
-        });
-    };
+    // private _getSites(projectName: any) {
+    //   this._projectService.getProjectByName(projectName)
+    //     .then(response =>
+    //     {
+    //       let sites = response.rows[0].doc['sites'];
+    //       for(let i =0; i < sites.length; i++) {
+    //         let sitedata = sites[i];
+    //         let newsite = new Site("temp");
+    //         newsite['name'] = sitedata.name;
+    //         newsite['usgs_scode'] = sitedata.usgs_scode;
+    //         newsite['id'] = sitedata.id;
+    //         this.mySites.push(newsite);
+    //       }
+    //     }, error => {
+    //       this._errorMessage = <any>error;
+    //     });
+    // }
     SampleDetailPage.prototype._getMediums = function () {
         var _this = this;
         this._mediumService.getAll()
@@ -1933,14 +1926,14 @@ var SampleDetailPage = (function () {
         var _this = this;
         this._acidService.findAcid(acidID)
             .then(function (response) {
-            console.log("get acid response: ");
-            console.log(response);
             //this.sampleAcid.setValue(response[0].code);
+            _this.sampleHeaderControls.controls['sampleAcid'].setValue(response[0].code);
         }, function (error) {
             _this._errorMessage = error;
         });
     };
     SampleDetailPage.prototype._timeToText = function (time) {
+        time = time.replace(':', '');
         return time;
     };
     SampleDetailPage.prototype._textToTime = function (text) {
@@ -1950,7 +1943,6 @@ var SampleDetailPage = (function () {
         if (text.length == 3 && !text.match(/:/g)) {
             text = text.substr(0, 1) + ":" + text.substr(1, 2);
         }
-        console.log(text);
         return text;
     };
     SampleDetailPage.prototype.openDateSelect = function () {
@@ -1959,7 +1951,7 @@ var SampleDetailPage = (function () {
     SampleDetailPage.prototype.openBottleSelect = function (rowIndex) {
         var _this = this;
         var opts = { showBackdrop: false, enableBackdropDismiss: false };
-        var modal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_12__bottle_select__["a" /* BottleSelectPage */], {}, opts);
+        var modal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_11__bottle_select__["a" /* BottleSelectPage */], {}, opts);
         modal.onDidDismiss(function (data) {
             if (data) {
                 _this.sampleBottleControls.controls[rowIndex].controls['bottle'].setValue(data);
@@ -1971,7 +1963,7 @@ var SampleDetailPage = (function () {
     SampleDetailPage.prototype.openAcidSelect = function () {
         var _this = this;
         var opts = { showBackdrop: false, enableBackdropDismiss: false };
-        var modal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_13__acid_select__["a" /* AcidSelectPage */], {}, opts);
+        var modal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_12__acid_select__["a" /* AcidSelectPage */], {}, opts);
         modal.onDidDismiss(function (acidName) {
             if (acidName) {
                 _this.acidNameChange(acidName);
@@ -1983,7 +1975,7 @@ var SampleDetailPage = (function () {
         var _this = this;
         this._acidService.getAcidsByName(acidName)
             .then(function (response) {
-            _this._selectedAcid = response.rows[0].doc.id;
+            _this.selectedAcid = response.rows[0].doc.id;
             _this.sampleHeaderControls.controls['sampleAcid'].setValue(acidName);
         })
             .catch(function (error) {
@@ -1993,18 +1985,28 @@ var SampleDetailPage = (function () {
     SampleDetailPage.prototype.openFilterSelect = function () {
         var _this = this;
         var opts = { showBackdrop: false, enableBackdropDismiss: false };
-        var modal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_17__filter_select__["a" /* FilterSelectPage */], {}, opts);
-        modal.onDidDismiss(function (acidName) {
-            if (acidName) {
-                _this.acidNameChange(acidName);
+        var modal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_16__filter_select__["a" /* FilterSelectPage */], {}, opts);
+        modal.onDidDismiss(function (filterName) {
+            if (filterName) {
+                _this.filterNameChange(filterName);
             }
         });
         modal.present();
     };
+    SampleDetailPage.prototype.filterNameChange = function (filterName) {
+        var _this = this;
+        this._filterService.getFiltersByName(filterName)
+            .then(function (response) {
+            _this.selectedFilter = response.rows[0].doc.id;
+            _this.sampleHeaderControls.controls['sampleFilter'].setValue(filterName);
+        })
+            .catch(function (error) {
+            _this.showAlert('Filter not found!', filterName, 'was not found in the database. Please enter a valid filter.');
+        });
+    };
     SampleDetailPage.prototype.editSampleBottle = function (rowIndex) {
         var _this = this;
         var sbName = this.sampleBottleControls.controls[rowIndex].controls['bottle'].value;
-        console.log("sample bottle name: " + sbName + " row index " + rowIndex);
         if (sbName == null) {
             alert("Please select a bottle first!");
         }
@@ -2015,12 +2017,11 @@ var SampleDetailPage = (function () {
         }
     };
     SampleDetailPage.prototype.openPage = function (sample_bottle_id) {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_14__sample_bottle__["a" /* SampleBottlePage */], {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_13__sample_bottle__["a" /* SampleBottlePage */], {
             samplebottle: sample_bottle_id
         });
     };
     SampleDetailPage.prototype.projectNameChange = function (projectName) {
-        console.log("project name select: " + projectName);
         if (projectName == null || projectName == "") {
             return;
         }
@@ -2029,8 +2030,6 @@ var SampleDetailPage = (function () {
             this.showAlert('Project not found!', projectName, 'was not found in the database. Please enter a valid project name.');
         }
         else {
-            console.log(projects[0]);
-            console.log("current project number: " + this.mySample['projectNumber'] + " updating to " + projects[0]['id']);
             this.projectNumber.setValue(projects[0]['id']);
             this.projectName.setValue(projects[0]['name']);
             this.mySample['projectName'] = projects[0]['name'];
@@ -2039,7 +2038,6 @@ var SampleDetailPage = (function () {
         }
     };
     SampleDetailPage.prototype.projectNumberChange = function (projectNumber) {
-        console.log("project # select: " + projectNumber);
         if (projectNumber == null || projectNumber == NaN) {
             return;
         }
@@ -2048,8 +2046,6 @@ var SampleDetailPage = (function () {
             this.showAlert('Project # not found!', projectNumber.toString(), 'was not found in the database. Please enter a valid project number.');
         }
         else {
-            console.log(projects[0]);
-            console.log("current project name: " + this.mySample['projectName'] + " updating to " + projects[0]['name']);
             this.projectName.setValue(projects[0]['name']);
             this.projectNumber.setValue(projects[0]['id']);
             this.mySample['projectName'] = projects[0]['name'];
@@ -2091,7 +2087,6 @@ var SampleDetailPage = (function () {
     };
     SampleDetailPage.prototype.addRow = function (samplebottle) {
         if (samplebottle) {
-            console.log("Non-null bottle");
             this.sampleBottleControls.push(new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["d" /* FormGroup */]({
                 bottle: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](samplebottle['_id'] ? samplebottle['_id'] : null),
                 medium: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](this.mySample['medium'] ? this.mySample['medium'] : null),
@@ -2100,7 +2095,8 @@ var SampleDetailPage = (function () {
                 filterVolume: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](samplebottle['volume_filtered'] ? samplebottle['volume_filtered'] : null),
                 preservationType: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](samplebottle['preservation_type'] ? samplebottle['preservation_type'] : null),
                 preservationAcid: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](samplebottle['preservation_acid'] ? samplebottle['preservation_acid'] : null),
-                preservationVolume: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](samplebottle['preservation_volume'] ? samplebottle['preservation_volume'] : null)
+                preservationVolume: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](samplebottle['preservation_volume'] ? samplebottle['preservation_volume'] : null),
+                preservationComment: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](samplebottle['preservation_comment'] ? samplebottle['preservation_comment'] : null)
             }));
             this._numRowsAdded++;
             if (this._numRowsAdded == this._numSampleBottles) {
@@ -2116,7 +2112,8 @@ var SampleDetailPage = (function () {
                 filterVolume: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](null),
                 preservationType: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](null),
                 preservationAcid: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](null),
-                preservationVolume: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](null)
+                preservationVolume: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](null),
+                preservationComment: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormControl */](null)
             }));
         }
     };
@@ -2126,7 +2123,6 @@ var SampleDetailPage = (function () {
         var _loop_1 = function (i, j) {
             if (sampleBottleControlRows[i] == sampleBottleControlsRow) {
                 var sampleBottleID = this_1.sampleBottleControls.controls[i].controls['bottle'].value;
-                console.log("remove sampleid: " + sampleBottleID);
                 if (sampleBottleID == null) {
                     sampleBottleControlRows.splice(i, 1);
                 }
@@ -2166,13 +2162,8 @@ var SampleDetailPage = (function () {
             _this.mySample['_rev'] = response['_rev'];
             _this._sampleService.update(_this.mySample).then(function (result) {
                 var _loop_2 = function (i, j) {
-                    console.log(_this.sampleBottleControls.controls[i]);
-                    console.log(_this.sampleBottleControls.controls[i].controls['bottle'].value);
                     if (_this.sampleBottleControls.controls[i].controls['bottle'].value !== null) {
-                        console.log("saving bottle to sample: " + _this.sampleBottleControls.controls[i].controls['bottle'].value);
                         _this._samplebottleService.getOne(_this.sampleBottleControls.controls[i].controls['bottle'].value).then(function (response) {
-                            console.log("Bottle response update:");
-                            console.log(response);
                             var pType = _this.sampleBottleControls.controls[i].controls['preservationType'].value;
                             return _this._samplebottleService.update({
                                 '_id': response['_id'],
@@ -2182,8 +2173,8 @@ var SampleDetailPage = (function () {
                                 'volume_filtered': parseInt(_this.sampleBottleControls.controls[i].controls['filterVolume'].value),
                                 'preservation_type': pType,
                                 'preservation_volume': parseInt(_this.sampleBottleControls.controls[i].controls['preservationVolume'].value),
-                                'preservation_comment': response['preservation_comment'],
-                                'preservation_acid': (pType == 8) ? self._selectedAcid : null
+                                'preservation_comment': _this.sampleBottleControls.controls[i].controls['preservationComment'].value,
+                                'preservation_acid': (pType == 8) ? self.selectedAcid : null
                             });
                         });
                     }
@@ -2195,7 +2186,7 @@ var SampleDetailPage = (function () {
                     _this.events.publish('custom-user-events');
                 });
             }, function (error) {
-                console.log(error);
+                _this._errorMessage = error;
             });
         });
     };
@@ -2233,7 +2224,6 @@ var SampleDetailPage = (function () {
                 {
                     text: 'No',
                     handler: function () {
-                        console.log('Disagree clicked');
                     }
                 },
                 {
@@ -2249,41 +2239,29 @@ var SampleDetailPage = (function () {
     return SampleDetailPage;
 }());
 SampleDetailPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\sample-detail.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button large menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Sample {{sample_ID}}</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div [hidden]="!notready" align="left" id="loading-spinner">\n\n    <ion-spinner></ion-spinner>\n\n  </div>\n\n  <div [hidden]="notready">\n\n    <form (keydown.enter)="$event.preventDefault()" [formGroup]="sampleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleForm.value)">\n\n      <ion-grid id="header" formGroupName="sampleHeaderControls">\n\n        <ion-row>\n\n          <ion-col col-12>\n\n            <ion-item>\n\n              <ion-label> Use data entry widgets</ion-label>\n\n              <ion-toggle (ionChange)="toggleUseWidgets()" [checked]=useWidgets></ion-toggle>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row class="sampleFormRow">\n\n          <ion-col col-6>\n\n            <ion-label>Project Name</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-select class="full-width-select" formControlName="projectName" (ionChange)="projectNameChange(pName.text)" #pName>\n\n                <ion-option *ngFor="let project of myProjects" [value]="project.name" [selected]="project.name == mySample.projectName">{{project.name}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" formControlName="projectName" [value]="mySample.projectName" (blur)="projectNameChange(pName.value)"\n\n                #pName></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-6>\n\n            <ion-label>Project Number</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-select  class="full-width-select" formControlName="projectNumber" (ionChange)="projectNumberChange(pNumber.text)" #pNumber>\n\n                <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="project.id == mySample.projectNumber">{{project.id}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" formControlName="projectNumber" [value]="mySample.projectNumber" (ionChange)="projectNumberChange(pNumber.value)"\n\n                #pNumber></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row class="sampleFormRow">\n\n          <ion-col col-6>\n\n            <ion-label>Site Name</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-select class="full-width-select" formControlName="siteName" (ionChange)="siteNameChange(sName.text)" #sName>\n\n                <ion-option *ngFor="let site of mySites" [value]="site.name" [selected]="site.id == mySample.siteNumber">{{site.name}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" formControlName="siteName" [value]="mySample.siteName" (ionChange)="siteNameChange(sName.value)" #sName></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-6>\n\n            <ion-label>Site Number</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-select class="full-width-select" formControlName="siteNumber" (ionChange)="siteNumberChange(sName.text)" #sNumber>\n\n                <ion-option *ngFor="let site of mySites" [value]="site.id" [selected]="site.id == mySample.siteNumber">{{site.id}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" formControlName="siteNumber" [value]="mySample.siteNumber" (ionChange)="siteNumberChange(sNumber.value)"\n\n                #sNumber></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row class="sampleFormRow">\n\n          <ion-col col-6>\n\n            <ion-label>Date</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-input type="string" formControlName="sampleDate" (click)="openDateSelect()"></ion-input>\n\n            </ion-item>\n\n            <!-- <ion-item *ngIf="useWidgets"><ion-input type="text" [value]="mySample.date | date:\'MM/dd/y\'" formControlName="sampleDate"></ion-input></ion-item> -->\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" [value]="mySample.date | date:\'MM/dd/y\'" formControlName="sampleDate"></ion-input>\n\n            </ion-item>\n\n            <!-- <ion-item *ngIf="!useWidgets"><ion-input type="text" pattern="^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d\d\d\d$" formControlName="sampleDate"></ion-input></ion-item> -->\n\n          </ion-col>\n\n          <ion-col col-6>\n\n            <ion-label>Time</ion-label>\n\n            <ion-item>\n\n              <ion-input type="text" pattern="^(00|0[0-9]|1[0-9]|2[0-3])([0-5][0-9])$" formControlName="sampleTime"></ion-input>\n\n            </ion-item>\n\n            <!--\n\n            <ion-label>Time</ion-label>\n\n            <ion-item>                \n\n                <ion-datetime type="text" displayFormat="hh:mm:ss" formControlName="sampleTime"></ion-datetime>\n\n            </ion-item>-->\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row class="sampleFormRow">\n\n          <ion-col col-6>\n\n            <ion-label>Depth</ion-label>\n\n            <ion-item>\n\n              <ion-input type="text" pattern="^[0-9]*\.?[0-9]+$" formControlName="sampleDepth"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-6>\n\n            <ion-label>Rep</ion-label>\n\n            <ion-item>\n\n              <ion-input type="text" pattern="^[0-9]*$" formControlName="sampleRep"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row class="sampleFormRow">\n\n          <ion-col col-4>\n\n            <ion-label>Medium</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-select class="full-width-select" formControlName="sampleMedium" (ionChange)="mediumChange(mName.text.split(\' - \')[0])" #mName>\n\n                <ion-option *ngFor="let medium of myMediums" [value]="medium.nwis_code" [selected]="medium.id == mySample.mediumNumber">{{medium.nwis_code}} - {{medium.description}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" formControlName="sampleMedium" [value]="mySample.mediumName" (ionChange)="mediumChange(mName.value)"\n\n                #mName></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-4>\n\n            <ion-label>Acid</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-input type="string" formControlName="sampleAcid" (click)="openAcidSelect()"></ion-input>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" formControlName="sampleAcid" (blur)="acidNameChange(aName.value)" #aName></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-4>\n\n              <ion-label>Filter</ion-label>\n\n              <ion-item *ngIf="useWidgets">                  \n\n                <ion-select formControlName="sampleFilter" class="full-width-select">\n\n                  <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="false">{{filter.filter}}</ion-option>\n\n                </ion-select>                    \n\n              </ion-item>\n\n              <ion-item *ngIf="!useWidgets">\n\n                <ion-input type="text" formControlName="sampleFilter" (blur)="filterNameChange(aName.value)" #aName></ion-input>\n\n              </ion-item>\n\n            </ion-col>\n\n        </ion-row>\n\n      </ion-grid>\n\n\n\n      <!-- start Bottles -->\n\n      <ion-grid id="body" formGroupName="sampleBottleControls">\n\n        <ion-row>\n\n          <ion-col col-8>\n\n            <h3>Containers</h3>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col col-7>\n\n            <ion-item class="option-box">\n\n              <ion-label>Lookup Container IDs</ion-label>\n\n              <ion-toggle (ionChange)="toggleLookupContainers()"></ion-toggle>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-5>\n\n            <button style="float:right;" ion-button medium type="button" (click)="addRow()">\n\n              <ion-icon name="add-circle"></ion-icon> &nbsp;Add Container</button>\n\n          </ion-col>\n\n        </ion-row>\n\n\n\n        <ion-row style="margin-top:10px;">\n\n          <ion-col col-2 class="text-center" text-center>Container</ion-col>          \n\n          <ion-col col-2 class="text-center" text-center>Analysis</ion-col>          \n\n          <ion-col col-2 class="text-center" text-center>Filter Volume</ion-col>\n\n          <ion-col col-3 class="text-center" text-center>Preservation</ion-col>          \n\n          <ion-col col-2 class="text-center" text-center>Acid Volume</ion-col>\n\n          <ion-col col-1></ion-col>          \n\n        </ion-row>\n\n        \n\n        <!--\n\n        <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow"\n\n          class="sampleFormRow">{{ndx + 1}}\n\n          <ion-col col-7>\n\n            <ion-item *ngIf="lookupContainers">\n\n              <ion-input type="string" formControlName="bottle" (click)="openBottleSelect(ndx)"></ion-input>\n\n            </ion-item>\n\n            <ion-item *ngIf="!lookupContainers">\n\n              <ion-input type="string" formControlName="bottle" [value]="sampleBottleControls.controls[ndx].controls[\'bottle\'].value"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-2>\n\n            <div style="float:right;">\n\n              <button ion-button large type="button" (click)="editSampleBottle(ndx)">\n\n                <ion-icon name="list"></ion-icon>\n\n              </button>\n\n              <button ion-button large type="button" (click)="removeRow(sampleBottleControlsRow)">\n\n                <ion-icon name="remove-circle"></ion-icon>\n\n              </button>\n\n            </div>\n\n          </ion-col>\n\n        </ion-row>-->\n\n\n\n        <!-- bottle integration {{ndx + 1}} -->\n\n        <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow">\n\n          \n\n          <ion-col col-2>\n\n            <ion-item *ngIf="lookupContainers">\n\n                <ion-input type="string" formControlName="bottle" (click)="openBottleSelect(ndx)" class="full-width-select"></ion-input>\n\n              </ion-item>\n\n              <ion-item *ngIf="!lookupContainers">\n\n                <ion-input type="string" (ionBlur)="addNewBottle($event);" formControlName="bottle" [value]="sampleBottleControls.controls[ndx].controls[\'bottle\'].value" class="full-width-select"></ion-input>\n\n              </ion-item>\n\n          </ion-col>          \n\n          <ion-col col-2>\n\n            <ion-item>\n\n              <ion-select formControlName="analysis" class="full-width-select">\n\n                <ion-option *ngFor="let analysis of myAnalyses" [value]="analysis.id" [selected]="false">{{analysis.analysis}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n          </ion-col>          \n\n          <ion-col col-2>\n\n            <ion-item>\n\n              <ion-input type="number" formControlName="filterVolume" class="full-width-select"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-3>\n\n            <ion-item>\n\n              <ion-select formControlName="preservationType" class="full-width-select">\n\n                <ion-option *ngFor="let preservation of myPreservations" [value]="preservation.id" [selected]="false">{{preservation.preservation}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n          </ion-col>          \n\n          <ion-col col-2>\n\n            <ion-item>\n\n              <ion-input type="number" formControlName="preservationVolume" class="full-width-select"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-1>\n\n              <button ion-button color="danger" small type="button" (click)="removeRow(sampleBottleControlsRow)" style="float:right">\n\n                <ion-icon name="remove-circle"></ion-icon>\n\n              </button>\n\n          </ion-col>          \n\n        </ion-row>\n\n      </ion-grid>\n\n      <!-- end Bottles -->\n\n\n\n      <ion-grid id="comments" formGroupName="sampleCommentControls">\n\n        <ion-row>\n\n          <ion-col>\n\n            <ion-label>Comments</ion-label>\n\n            <ion-item>\n\n              <ion-input type="text" formControlName="sampleComment"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n      </ion-grid>\n\n      <div>\n\n        <!-- <p>Form value: {{ sampleForm.value | json }}</p> -->\n\n        <!-- <p>Form status: {{ sampleForm.status | json }}</p> -->\n\n        <button ion-button block large color="secondary" type="submit">Save</button>\n\n        <!--<button ion-button large type="submit" [disabled]="!sampleForm.valid">Save</button>-->\n\n        <!--<button ion-button large type="button" (click)="showConfirm(\'deleteSampleRow\')">Delete</button> just do this from the sample list -->\n\n      </div>\n\n    </form>\n\n  </div>\n\n</ion-content>'/*ion-inline-end:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\sample-detail.html"*/,
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"D:\projects\mercurymobile\src\pages\samples\sample-detail.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button large menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Sample {{sample_ID}}</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div [hidden]="!notready" align="left" id="loading-spinner">\n\n    <ion-spinner></ion-spinner>\n\n  </div>\n\n  <div [hidden]="notready">\n\n    <form (keydown.enter)="$event.preventDefault()" [formGroup]="sampleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleForm.value)">\n\n      <ion-grid id="header" formGroupName="sampleHeaderControls">\n\n        <ion-row>\n\n          <ion-col col-12>\n\n            <ion-item>\n\n              <ion-label> Use data entry widgets</ion-label>\n\n              <ion-toggle (ionChange)="toggleUseWidgets()" [checked]=useWidgets></ion-toggle>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row class="sampleFormRow">\n\n          <ion-col col-6>\n\n            <ion-label>Project Name</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-select class="full-width-select" formControlName="projectName" (ionChange)="projectNameChange(pName.text)" #pName>\n\n                <ion-option *ngFor="let project of myProjects" [value]="project.name" [selected]="project.name == mySample.projectName">{{project.name}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" formControlName="projectName" [value]="mySample.projectName" (blur)="projectNameChange(pName.value)" #pName></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-6>\n\n            <ion-label>Project Number</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-select  class="full-width-select" formControlName="projectNumber" (ionChange)="projectNumberChange(pNumber.text)" #pNumber>\n\n                <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="project.id == mySample.projectNumber">{{project.id}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" formControlName="projectNumber" [value]="mySample.projectNumber" (ionChange)="projectNumberChange(pNumber.value)" #pNumber></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row class="sampleFormRow">\n\n          <ion-col col-6>\n\n            <ion-label>Site Name</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-select class="full-width-select" formControlName="siteName" (ionChange)="siteNameChange(sName.text)" #sName>\n\n                <ion-option *ngFor="let site of mySites" [value]="site.name" [selected]="site.id == mySample.siteNumber">{{site.name}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" formControlName="siteName" [value]="mySample.siteName" (ionChange)="siteNameChange(sName.value)" #sName></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-6>\n\n            <ion-label>Site Number</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-select class="full-width-select" formControlName="siteNumber" (ionChange)="siteNumberChange(sName.text)" #sNumber>\n\n                <ion-option *ngFor="let site of mySites" [value]="site.id" [selected]="site.id == mySample.siteNumber">{{site.id}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" formControlName="siteNumber" [value]="mySample.siteNumber" (ionChange)="siteNumberChange(sNumber.value)" #sNumber></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row class="sampleFormRow">\n\n          <ion-col col-6>\n\n            <ion-label>Date</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-input type="string" formControlName="sampleDate" (click)="openDateSelect()"></ion-input>\n\n            </ion-item>\n\n            <!-- <ion-item *ngIf="useWidgets"><ion-input type="text" [value]="mySample.date | date:\'MM/dd/y\'" formControlName="sampleDate"></ion-input></ion-item> -->\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" [value]="mySample.date | date:\'MM/dd/y\'" formControlName="sampleDate"></ion-input>\n\n            </ion-item>\n\n            <!-- <ion-item *ngIf="!useWidgets"><ion-input type="text" pattern="^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d\d\d\d$" formControlName="sampleDate"></ion-input></ion-item> -->\n\n          </ion-col>\n\n          <ion-col col-6>\n\n            <ion-label>Time</ion-label>\n\n            <ion-item>\n\n              <ion-input type="text" pattern="^(00|0[0-9]|1[0-9]|2[0-3])([0-5][0-9])$" formControlName="sampleTime"></ion-input>\n\n            </ion-item>\n\n            <!--\n\n            <ion-label>Time</ion-label>\n\n            <ion-item>                \n\n                <ion-datetime type="text" displayFormat="hh:mm:ss" formControlName="sampleTime"></ion-datetime>\n\n            </ion-item>-->\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row class="sampleFormRow">\n\n          <ion-col col-6>\n\n            <ion-label>Depth</ion-label>\n\n            <ion-item>\n\n              <ion-input type="text" pattern="^[0-9]*\.?[0-9]+$" formControlName="sampleDepth"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-6>\n\n            <ion-label>Rep</ion-label>\n\n            <ion-item>\n\n              <ion-input type="text" pattern="^[0-9]*$" formControlName="sampleRep"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row class="sampleFormRow">\n\n          <ion-col col-4>\n\n            <ion-label>Medium</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-select class="full-width-select" formControlName="sampleMedium" (ionChange)="mediumChange(mName.text.split(\' - \')[0])" #mName>\n\n                <ion-option *ngFor="let medium of myMediums" [value]="medium.nwis_code" [selected]="medium.id == mySample.mediumNumber">{{medium.nwis_code}} - {{medium.description}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" formControlName="sampleMedium" [value]="mySample.mediumName" (ionChange)="mediumChange(mName.value)" #mName></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-4>\n\n            <ion-label>Acid</ion-label>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-input type="string" formControlName="sampleAcid" (click)="openAcidSelect()"></ion-input>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="text" formControlName="sampleAcid" (blur)="acidNameChange(aName.value)" #aName></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-4>\n\n              <ion-label>Filter</ion-label>\n\n              <ion-item *ngIf="useWidgets">                  \n\n                <ion-select formControlName="sampleFilter" class="full-width-select">\n\n                  <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="filter.id == selectedFilter">{{filter.filter}}</ion-option>\n\n                </ion-select>                    \n\n              </ion-item>\n\n              <ion-item *ngIf="!useWidgets">\n\n                <ion-input type="text" formControlName="sampleFilter" (blur)="filterNameChange(fName.value)" #fName></ion-input>\n\n              </ion-item>\n\n            </ion-col>\n\n        </ion-row>\n\n      </ion-grid>\n\n\n\n      <!-- start Bottles -->\n\n      <ion-grid id="body" formGroupName="sampleBottleControls">\n\n        <ion-row>\n\n          <ion-col col-8>\n\n            <h3>Containers</h3>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col col-7>\n\n            <ion-item class="option-box">\n\n              <ion-label>Lookup Container IDs</ion-label>\n\n              <ion-toggle (ionChange)="toggleLookupContainers()"></ion-toggle>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-5>\n\n            <button style="float:right;" ion-button medium type="button" (click)="addRow()">\n\n              <ion-icon name="add-circle"></ion-icon> &nbsp;Add Container</button>\n\n          </ion-col>\n\n        </ion-row>\n\n\n\n        <ion-row style="margin-top:10px;">\n\n          <ion-col col-2 class="text-center" text-center>Container</ion-col>          \n\n          <ion-col col-2 class="text-center" text-center>Analysis</ion-col>          \n\n          <ion-col col-1 class="text-center" text-center>Filter Volume</ion-col>\n\n          <ion-col col-3 class="text-center" text-center>Preservation</ion-col>\n\n          <ion-col col-1 class="text-center" text-center>Acid Volume</ion-col>\n\n          <ion-col col-2 class="text-center" text-center>Preservation Comment</ion-col>   \n\n          <ion-col col-1></ion-col>          \n\n        </ion-row>\n\n        \n\n        <!--\n\n        <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow"\n\n          class="sampleFormRow">{{ndx + 1}}\n\n          <ion-col col-7>\n\n            <ion-item *ngIf="lookupContainers">\n\n              <ion-input type="string" formControlName="bottle" (click)="openBottleSelect(ndx)"></ion-input>\n\n            </ion-item>\n\n            <ion-item *ngIf="!lookupContainers">\n\n              <ion-input type="string" formControlName="bottle" [value]="sampleBottleControls.controls[ndx].controls[\'bottle\'].value"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-2>\n\n            <div style="float:right;">\n\n              <button ion-button large type="button" (click)="editSampleBottle(ndx)">\n\n                <ion-icon name="list"></ion-icon>\n\n              </button>\n\n              <button ion-button large type="button" (click)="removeRow(sampleBottleControlsRow)">\n\n                <ion-icon name="remove-circle"></ion-icon>\n\n              </button>\n\n            </div>\n\n          </ion-col>\n\n        </ion-row>-->\n\n\n\n        <!-- bottle integration {{ndx + 1}} -->\n\n        <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow">\n\n          \n\n          <ion-col col-2>\n\n            <ion-item *ngIf="lookupContainers">\n\n                <ion-input type="string" formControlName="bottle" (click)="openBottleSelect(ndx)" class="full-width-select"></ion-input>\n\n              </ion-item>\n\n              <ion-item *ngIf="!lookupContainers">\n\n                <ion-input type="string" (ionBlur)="addNewBottle($event, ndx);" formControlName="bottle" [value]="sampleBottleControls.controls[ndx].controls[\'bottle\'].value" class="full-width-select"></ion-input>\n\n              </ion-item>\n\n          </ion-col>          \n\n          <ion-col col-2>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-select formControlName="analysis" class="full-width-select">\n\n                <ion-option *ngFor="let analysis of myAnalyses" [value]="analysis.id" >{{analysis.analysis}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="string" formControlName="analysis" class="full-width-select"></ion-input>\n\n            </ion-item>\n\n          </ion-col>          \n\n          <ion-col col-1>\n\n            <ion-item>\n\n              <ion-input type="number" formControlName="filterVolume" class="full-width-select"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-3>\n\n            <ion-item *ngIf="useWidgets">\n\n              <ion-select formControlName="preservationType" class="full-width-select">\n\n                <ion-option *ngFor="let preservation of myPreservations" [value]="preservation.id" >{{preservation.preservation}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n            <ion-item *ngIf="!useWidgets">\n\n              <ion-input type="string" formControlName="preservationType" class="full-width-select"></ion-input>\n\n            </ion-item>\n\n          </ion-col>          \n\n          <ion-col col-1>\n\n            <ion-item>\n\n              <ion-input type="number" formControlName="preservationVolume" class="full-width-select"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-2>\n\n            <ion-item>\n\n              <ion-input type="string" formControlName="preservationComment" class="full-width-select"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-1>\n\n              <button ion-button color="danger" small type="button" (click)="removeRow(sampleBottleControlsRow)" style="float:right">\n\n                <ion-icon name="remove-circle"></ion-icon>\n\n              </button>\n\n          </ion-col>          \n\n        </ion-row>\n\n      </ion-grid>\n\n      <!-- end Bottles -->\n\n\n\n      <ion-grid id="comments" formGroupName="sampleCommentControls">\n\n        <ion-row>\n\n          <ion-col>\n\n            <ion-label>Comments</ion-label>\n\n            <ion-item>\n\n              <ion-input type="text" formControlName="sampleComment"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n      </ion-grid>\n\n      <div>\n\n        <!-- <p>Form value: {{ sampleForm.value | json }}</p> -->\n\n        <!-- <p>Form status: {{ sampleForm.status | json }}</p> -->\n\n        <!-- <button ion-button block large color="secondary" type="submit">Save</button> -->\n\n        <button ion-button block large type="submit" [disabled]="!sampleForm.valid">Save</button>\n\n        <!--<button ion-button large type="button" (click)="showConfirm(\'deleteSampleRow\')">Delete</button> just do this from the sample list -->\n\n      </div>\n\n    </form>\n\n  </div>\n\n</ion-content>'/*ion-inline-end:"D:\projects\mercurymobile\src\pages\samples\sample-detail.html"*/,
         styles: ['.select-wide {max-width: 100%;}'],
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["NavController"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["NavController"]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["NavParams"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["NavParams"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["AlertController"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["AlertController"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["ModalController"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["ModalController"]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["ViewController"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["ViewController"]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormBuilder */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_8__app_sample_sample_service__["a" /* SampleService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__app_sample_sample_service__["a" /* SampleService */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_9__app_samplebottle_samplebottle_service__["a" /* SampleBottleService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__app_samplebottle_samplebottle_service__["a" /* SampleBottleService */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_6__app_project_project_service__["a" /* ProjectService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__app_project_project_service__["a" /* ProjectService */]) === "function" && _j || Object, typeof (_k = typeof __WEBPACK_IMPORTED_MODULE_7__app_medium_medium_service__["a" /* MediumService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__app_medium_medium_service__["a" /* MediumService */]) === "function" && _k || Object, typeof (_l = typeof __WEBPACK_IMPORTED_MODULE_10__app_acid_acid_service__["a" /* AcidService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_10__app_acid_acid_service__["a" /* AcidService */]) === "function" && _l || Object, typeof (_m = typeof __WEBPACK_IMPORTED_MODULE_11__app_bottle_bottle_service__["a" /* BottleService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_11__app_bottle_bottle_service__["a" /* BottleService */]) === "function" && _m || Object, typeof (_o = typeof __WEBPACK_IMPORTED_MODULE_16_ionic2_date_picker__["DatePickerProvider"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_16_ionic2_date_picker__["DatePickerProvider"]) === "function" && _o || Object, typeof (_p = typeof __WEBPACK_IMPORTED_MODULE_18__app_analysis_analysis_service__["a" /* AnalysisService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_18__app_analysis_analysis_service__["a" /* AnalysisService */]) === "function" && _p || Object, typeof (_q = typeof __WEBPACK_IMPORTED_MODULE_19__app_filter_filter_service__["a" /* FilterService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_19__app_filter_filter_service__["a" /* FilterService */]) === "function" && _q || Object, typeof (_r = typeof __WEBPACK_IMPORTED_MODULE_20__app_preservation_preservation_service__["a" /* PreservationService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_20__app_preservation_preservation_service__["a" /* PreservationService */]) === "function" && _r || Object, typeof (_s = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["Events"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["Events"]) === "function" && _s || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["NavController"],
+        __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["NavParams"],
+        __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["AlertController"],
+        __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["ModalController"],
+        __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["ViewController"],
+        __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormBuilder */],
+        __WEBPACK_IMPORTED_MODULE_7__app_sample_sample_service__["a" /* SampleService */],
+        __WEBPACK_IMPORTED_MODULE_8__app_samplebottle_samplebottle_service__["a" /* SampleBottleService */],
+        __WEBPACK_IMPORTED_MODULE_5__app_project_project_service__["a" /* ProjectService */],
+        __WEBPACK_IMPORTED_MODULE_6__app_medium_medium_service__["a" /* MediumService */],
+        __WEBPACK_IMPORTED_MODULE_9__app_acid_acid_service__["a" /* AcidService */],
+        __WEBPACK_IMPORTED_MODULE_10__app_bottle_bottle_service__["a" /* BottleService */],
+        __WEBPACK_IMPORTED_MODULE_15_ionic2_date_picker__["DatePickerProvider"],
+        __WEBPACK_IMPORTED_MODULE_17__app_analysis_analysis_service__["a" /* AnalysisService */],
+        __WEBPACK_IMPORTED_MODULE_18__app_filter_filter_service__["a" /* FilterService */],
+        __WEBPACK_IMPORTED_MODULE_19__app_preservation_preservation_service__["a" /* PreservationService */],
+        __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["Events"]])
 ], SampleDetailPage);
 
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
 //# sourceMappingURL=sample-detail.js.map
-
-/***/ }),
-
-/***/ 286:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Site; });
-var Site = (function () {
-    function Site(name, usgs_sid, usgs_scode, description, latitude, longitude, datum, method, site_status, nwis_customer_code, projects, id) {
-        this.name = name;
-        this.usgs_sid = usgs_sid;
-        this.usgs_scode = usgs_scode;
-        this.description = description;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.datum = datum;
-        this.method = method;
-        this.site_status = site_status;
-        this.nwis_customer_code = nwis_customer_code;
-        this.projects = projects;
-        this.id = id;
-    }
-    return Site;
-}());
-
-//# sourceMappingURL=site.js.map
 
 /***/ }),
 
@@ -2443,13 +2421,13 @@ APP_UTILITIES = __decorate([
 
 /***/ }),
 
-/***/ 314:
+/***/ 313:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BottleSelectPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_bottle_bottle_service__ = __webpack_require__(109);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2523,7 +2501,7 @@ var BottleSelectPage = (function () {
     return BottleSelectPage;
 }());
 BottleSelectPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\bottle-select.html"*/'<ion-header>\n\n  <ion-toolbar>\n\n    <ion-title>\n\n      Select Bottle\n\n    </ion-title>\n\n    <ion-buttons start>\n\n      <button ion-button large (click)="dismiss()">\n\n        <ion-icon name="md-close"></ion-icon>\n\n      </button>\n\n    </ion-buttons>\n\n  </ion-toolbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div [hidden]="!notready" align="center" id="loading-spinner"><ion-spinner></ion-spinner></div>\n\n  <div [hidden]="notready">\n\n    <ion-searchbar (input)="filterBottles($event, searchbar)" placeholder="Filter by text" #searchbar></ion-searchbar>\n\n    <ion-list>\n\n      <ion-item *ngFor="let bottle of bottles">\n\n        <ion-label>{{bottle}}</ion-label>\n\n        <ion-radio [checked]="bottle === selectedBottle" (click)="selectBottle(bottle)"></ion-radio>\n\n      </ion-item>\n\n    </ion-list>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\bottle-select.html"*/,
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"D:\projects\mercurymobile\src\pages\samples\bottle-select.html"*/'<ion-header>\n\n  <ion-toolbar>\n\n    <ion-title>\n\n      Select Bottle\n\n    </ion-title>\n\n    <ion-buttons start>\n\n      <button ion-button large (click)="dismiss()">\n\n        <ion-icon name="md-close"></ion-icon>\n\n      </button>\n\n    </ion-buttons>\n\n  </ion-toolbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div [hidden]="!notready" align="center" id="loading-spinner"><ion-spinner></ion-spinner></div>\n\n  <div [hidden]="notready">\n\n    <ion-searchbar (input)="filterBottles($event, searchbar)" placeholder="Filter by text" #searchbar></ion-searchbar>\n\n    <ion-list>\n\n      <ion-item *ngFor="let bottle of bottles">\n\n        <ion-label>{{bottle}}</ion-label>\n\n        <ion-radio [checked]="bottle === selectedBottle" (click)="selectBottle(bottle)"></ion-radio>\n\n      </ion-item>\n\n    </ion-list>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"D:\projects\mercurymobile\src\pages\samples\bottle-select.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Platform"],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"],
@@ -2535,13 +2513,13 @@ BottleSelectPage = __decorate([
 
 /***/ }),
 
-/***/ 315:
+/***/ 314:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AcidSelectPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_acid_acid_service__ = __webpack_require__(78);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2615,7 +2593,7 @@ var AcidSelectPage = (function () {
     return AcidSelectPage;
 }());
 AcidSelectPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\acid-select.html"*/'<ion-header>\n\n  <ion-toolbar>\n\n    <ion-title>\n\n      Select Acid\n\n    </ion-title>\n\n    <ion-buttons start>\n\n      <button ion-button large (click)="dismiss()">\n\n        <ion-icon name="md-close"></ion-icon>\n\n      </button>\n\n    </ion-buttons>\n\n  </ion-toolbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div [hidden]="!notready" align="center" id="loading-spinner"><ion-spinner></ion-spinner></div>\n\n  <div [hidden]="notready">\n\n    <ion-searchbar (input)="filterAcids($event, searchbar)" placeholder="Filter by text" #searchbar></ion-searchbar>\n\n    <ion-list>\n\n      <ion-item *ngFor="let acid of acids">\n\n        <ion-label>{{acid}}</ion-label>\n\n        <ion-radio [checked]="acid === selectedAcid" (click)="selectAcid(acid)"></ion-radio>\n\n      </ion-item>\n\n    </ion-list>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\acid-select.html"*/,
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"D:\projects\mercurymobile\src\pages\samples\acid-select.html"*/'<ion-header>\n\n  <ion-toolbar>\n\n    <ion-title>\n\n      Select Acid\n\n    </ion-title>\n\n    <ion-buttons start>\n\n      <button ion-button large (click)="dismiss()">\n\n        <ion-icon name="md-close"></ion-icon>\n\n      </button>\n\n    </ion-buttons>\n\n  </ion-toolbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div [hidden]="!notready" align="center" id="loading-spinner"><ion-spinner></ion-spinner></div>\n\n  <div [hidden]="notready">\n\n    <ion-searchbar (input)="filterAcids($event, searchbar)" placeholder="Filter by text" #searchbar></ion-searchbar>\n\n    <ion-list>\n\n      <ion-item *ngFor="let acid of acids">\n\n        <ion-label>{{acid}}</ion-label>\n\n        <ion-radio [checked]="acid === selectedAcid" (click)="selectAcid(acid)"></ion-radio>\n\n      </ion-item>\n\n    </ion-list>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"D:\projects\mercurymobile\src\pages\samples\acid-select.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Platform"],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"],
@@ -2627,14 +2605,14 @@ AcidSelectPage = __decorate([
 
 /***/ }),
 
-/***/ 316:
+/***/ 315:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SampleBottlePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_analysis_analysis_service__ = __webpack_require__(110);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_filter_filter_service__ = __webpack_require__(79);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_preservation_preservation_service__ = __webpack_require__(111);
@@ -2767,7 +2745,7 @@ var SampleBottlePage = (function () {
     return SampleBottlePage;
 }());
 SampleBottlePage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\sample-bottle.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button large menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Sample Bottle {{sample_bottle_name}}</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>\n\n  <div [hidden]="notready">\n\n    <form (keydown.enter)="$event.preventDefault()" [formGroup]="sampleBottleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleBottleForm.value)">\n\n      <ion-grid id="body" formGroupName="sampleBottleControls">\n\n        <ion-row>\n\n          <ion-col width-10>Analysis</ion-col>\n\n          <ion-col width-90>\n\n            <ion-item>\n\n              <ion-select class="select-wide" formControlName="analysis">\n\n                <ion-option *ngFor="let analysis of myAnalyses" [value]="analysis.id" [selected]="analysis.id == mySampleBottle.analysis_type">{{analysis.analysis}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col width-10>Filter</ion-col>\n\n          <ion-col width-90>\n\n            <ion-item>\n\n              <ion-select class="select-wide" formControlName="filterType">\n\n                <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="filter.id == mySampleBottle.filter_type">{{filter.filter}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col width-10>Filter Volume</ion-col>\n\n          <ion-col width-90>\n\n            <ion-item>\n\n              <ion-input type="number" formControlName="filterVolume"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col width-10>Preservation</ion-col>\n\n          <ion-col width-90>\n\n            <ion-item>\n\n              <ion-select class="select-wide" formControlName="preservationType">\n\n                <ion-option *ngFor="let preservation of myPreservations" [value]="preservation.id"  [selected]="preservation.id == mySampleBottle.preservation_type">{{preservation.preservation}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col width-10>Acid Volume</ion-col>\n\n          <ion-col width-90>\n\n            <ion-item>\n\n              <ion-input type="number" formControlName="preservationVolume"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col width-10>Preservation Comment</ion-col>\n\n          <ion-col width-90>\n\n            <ion-item>\n\n              <ion-input type="text" formControlName="preservationComment"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n      </ion-grid>\n\n      <div><button ion-button large type="submit">Save</button></div>\n\n    </form>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\sample-bottle.html"*/,
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"D:\projects\mercurymobile\src\pages\samples\sample-bottle.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button large menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Sample Bottle {{sample_bottle_name}}</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>\n\n  <div [hidden]="notready">\n\n    <form (keydown.enter)="$event.preventDefault()" [formGroup]="sampleBottleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleBottleForm.value)">\n\n      <ion-grid id="body" formGroupName="sampleBottleControls">\n\n        <ion-row>\n\n          <ion-col width-10>Analysis</ion-col>\n\n          <ion-col width-90>\n\n            <ion-item>\n\n              <ion-select class="select-wide" formControlName="analysis">\n\n                <ion-option *ngFor="let analysis of myAnalyses" [value]="analysis.id" [selected]="analysis.id == mySampleBottle.analysis_type">{{analysis.analysis}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col width-10>Filter</ion-col>\n\n          <ion-col width-90>\n\n            <ion-item>\n\n              <ion-select class="select-wide" formControlName="filterType">\n\n                <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="filter.id == mySampleBottle.filter_type">{{filter.filter}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col width-10>Filter Volume</ion-col>\n\n          <ion-col width-90>\n\n            <ion-item>\n\n              <ion-input type="number" formControlName="filterVolume"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col width-10>Preservation</ion-col>\n\n          <ion-col width-90>\n\n            <ion-item>\n\n              <ion-select class="select-wide" formControlName="preservationType">\n\n                <ion-option *ngFor="let preservation of myPreservations" [value]="preservation.id"  [selected]="preservation.id == mySampleBottle.preservation_type">{{preservation.preservation}}</ion-option>\n\n              </ion-select>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col width-10>Acid Volume</ion-col>\n\n          <ion-col width-90>\n\n            <ion-item>\n\n              <ion-input type="number" formControlName="preservationVolume"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col width-10>Preservation Comment</ion-col>\n\n          <ion-col width-90>\n\n            <ion-item>\n\n              <ion-input type="text" formControlName="preservationComment"></ion-input>\n\n            </ion-item>\n\n          </ion-col>\n\n        </ion-row>\n\n      </ion-grid>\n\n      <div><button ion-button large type="submit">Save</button></div>\n\n    </form>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"D:\projects\mercurymobile\src\pages\samples\sample-bottle.html"*/,
         styles: ['.select-wide {max-width: 100%;}']
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["NavController"],
@@ -2933,13 +2911,13 @@ var APP_SETTINGS_1;
 
 /***/ }),
 
-/***/ 439:
+/***/ 441:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FilterSelectPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_filter_filter_service__ = __webpack_require__(79);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2988,7 +2966,7 @@ var FilterSelectPage = (function () {
     return FilterSelectPage;
 }());
 FilterSelectPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\filter-select.html"*/'<ion-header>\n\n    <ion-toolbar>\n\n        <ion-title>\n\n            Select Filter\n\n        </ion-title>\n\n        <ion-buttons start>\n\n            <button ion-button large (click)="dismiss()">\n\n                <ion-icon name="md-close"></ion-icon>\n\n            </button>\n\n        </ion-buttons>\n\n    </ion-toolbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n    <div [hidden]="!notready" align="center" id="loading-spinner">\n\n        <ion-spinner></ion-spinner>\n\n    </div>\n\n    <div [hidden]="notready">\n\n        <ion-list>\n\n            <ion-item *ngFor="let filter of filteres">\n\n                <ion-label>{{filter}}</ion-label>\n\n                <ion-radio [checked]="filter === selectedFilter" (click)="selectFilter(acid)"></ion-radio>\n\n            </ion-item>\n\n        </ion-list>\n\n    </div>\n\n</ion-content>'/*ion-inline-end:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\filter-select.html"*/,
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"D:\projects\mercurymobile\src\pages\samples\filter-select.html"*/'<ion-header>\n\n    <ion-toolbar>\n\n        <ion-title>\n\n            Select Filter\n\n        </ion-title>\n\n        <ion-buttons start>\n\n            <button ion-button large (click)="dismiss()">\n\n                <ion-icon name="md-close"></ion-icon>\n\n            </button>\n\n        </ion-buttons>\n\n    </ion-toolbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n    <div [hidden]="!notready" align="center" id="loading-spinner">\n\n        <ion-spinner></ion-spinner>\n\n    </div>\n\n    <div [hidden]="notready">\n\n        <ion-list>\n\n            <ion-item *ngFor="let filter of filteres">\n\n                <ion-label>{{filter}}</ion-label>\n\n                <ion-radio [checked]="filter === selectedFilter" (click)="selectFilter(acid)"></ion-radio>\n\n            </ion-item>\n\n        </ion-list>\n\n    </div>\n\n</ion-content>'/*ion-inline-end:"D:\projects\mercurymobile\src\pages\samples\filter-select.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Platform"],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"],
@@ -3000,13 +2978,13 @@ FilterSelectPage = __decorate([
 
 /***/ }),
 
-/***/ 440:
+/***/ 442:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BulkAcidUpdatePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_acid_acid_service__ = __webpack_require__(78);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -3090,7 +3068,7 @@ var BulkAcidUpdatePage = (function () {
     return BulkAcidUpdatePage;
 }());
 BulkAcidUpdatePage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\acid-select.html"*/'<ion-header>\n\n  <ion-toolbar>\n\n    <ion-title>\n\n      Select Acid\n\n    </ion-title>\n\n    <ion-buttons start>\n\n      <button ion-button large (click)="dismiss()">\n\n        <ion-icon name="md-close"></ion-icon>\n\n      </button>\n\n    </ion-buttons>\n\n  </ion-toolbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div [hidden]="!notready" align="center" id="loading-spinner"><ion-spinner></ion-spinner></div>\n\n  <div [hidden]="notready">\n\n    <ion-searchbar (input)="filterAcids($event, searchbar)" placeholder="Filter by text" #searchbar></ion-searchbar>\n\n    <ion-list>\n\n      <ion-item *ngFor="let acid of acids">\n\n        <ion-label>{{acid}}</ion-label>\n\n        <ion-radio [checked]="acid === selectedAcid" (click)="selectAcid(acid)"></ion-radio>\n\n      </ion-item>\n\n    </ion-list>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\samples\acid-select.html"*/,
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"D:\projects\mercurymobile\src\pages\samples\acid-select.html"*/'<ion-header>\n\n  <ion-toolbar>\n\n    <ion-title>\n\n      Select Acid\n\n    </ion-title>\n\n    <ion-buttons start>\n\n      <button ion-button large (click)="dismiss()">\n\n        <ion-icon name="md-close"></ion-icon>\n\n      </button>\n\n    </ion-buttons>\n\n  </ion-toolbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div [hidden]="!notready" align="center" id="loading-spinner"><ion-spinner></ion-spinner></div>\n\n  <div [hidden]="notready">\n\n    <ion-searchbar (input)="filterAcids($event, searchbar)" placeholder="Filter by text" #searchbar></ion-searchbar>\n\n    <ion-list>\n\n      <ion-item *ngFor="let acid of acids">\n\n        <ion-label>{{acid}}</ion-label>\n\n        <ion-radio [checked]="acid === selectedAcid" (click)="selectAcid(acid)"></ion-radio>\n\n      </ion-item>\n\n    </ion-list>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"D:\projects\mercurymobile\src\pages\samples\acid-select.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["ViewController"],
@@ -3102,15 +3080,15 @@ BulkAcidUpdatePage = __decorate([
 
 /***/ }),
 
-/***/ 441:
+/***/ 443:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SiteDetailPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_site_site__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_site_site__ = __webpack_require__(807);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_site_site_service__ = __webpack_require__(112);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_project_project_service__ = __webpack_require__(103);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -3247,7 +3225,7 @@ var SiteDetailPage = (function () {
     return SiteDetailPage;
 }());
 SiteDetailPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\sites\site-detail.html"*/'<ion-header>\n\n  <ion-toolbar>\n\n    <ion-title *ngIf="site_name">\n\n      Edit Site {{site_name}}\n\n    </ion-title>\n\n    <ion-title *ngIf="!site_name">\n\n      Add Site\n\n    </ion-title>\n\n    <ion-buttons start>\n\n      <button ion-button large (click)="dismiss()">\n\n        <ion-icon name="md-close"></ion-icon>\n\n      </button>\n\n    </ion-buttons>\n\n  </ion-toolbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>\n\n  <div [hidden]="notready">\n\n    <form (keydown.enter)="$event.preventDefault()" [formGroup]="siteForm" *ngIf="active" (ngSubmit)="onSubmit(siteForm.value)">\n\n      <ion-grid id="sitegroup" formGroupName="sitegroup">\n\n        <ion-row>\n\n          <ion-input type="number" [hidden]="true" formControlName="id"></ion-input>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col col-4><ion-label>Site Name</ion-label></ion-col>\n\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="name"></ion-input></ion-item></ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col col-4><ion-label>USGS SID</ion-label></ion-col>\n\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="usgs_sid"></ion-input></ion-item></ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col col-4><ion-label>USGS SCode</ion-label></ion-col>\n\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="usgs_scode"></ion-input></ion-item></ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col col-4><ion-label>Description</ion-label></ion-col>\n\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="description"></ion-input></ion-item></ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col col-4><ion-label>Latitude</ion-label></ion-col>\n\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="latitude"></ion-input></ion-item></ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col col-4><ion-label>Longitude</ion-label></ion-col>\n\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="longitude"></ion-input></ion-item></ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col col-4><ion-label>Datum</ion-label></ion-col>\n\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="datum"></ion-input></ion-item></ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col col-4><ion-label>Method</ion-label></ion-col>\n\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="method"></ion-input></ion-item></ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col col-4><ion-label>Site Status</ion-label></ion-col>\n\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="site_status"></ion-input></ion-item></ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col col-4><ion-label>NWIS Customer Code</ion-label></ion-col>\n\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="nwis_customer_code"></ion-input></ion-item></ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n          <ion-col col-4><ion-label>Project(s)</ion-label></ion-col>\n\n          <ion-col col-8><ion-item><ion-select [multiple]="true" formControlName="projects">\n\n            <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="false">{{project.name}}</ion-option>\n\n          </ion-select></ion-item></ion-col>\n\n        </ion-row>\n\n      </ion-grid>\n\n      <div><button ion-button large type="submit">Save</button></div>\n\n    </form>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\sites\site-detail.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"D:\projects\mercurymobile\src\pages\sites\site-detail.html"*/'<ion-header>\n  <ion-toolbar>\n    <ion-title *ngIf="site_name">\n      Edit Site {{site_name}}\n    </ion-title>\n    <ion-title *ngIf="!site_name">\n      Add Site\n    </ion-title>\n    <ion-buttons start>\n      <button ion-button large (click)="dismiss()">\n        <ion-icon name="md-close"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>\n  <div [hidden]="notready">\n    <form (keydown.enter)="$event.preventDefault()" [formGroup]="siteForm" *ngIf="active" (ngSubmit)="onSubmit(siteForm.value)">\n      <ion-grid id="sitegroup" formGroupName="sitegroup">\n        <ion-row>\n          <ion-input type="number" [hidden]="true" formControlName="id"></ion-input>\n        </ion-row>\n        <ion-row>\n          <ion-col col-4><ion-label>Site Name</ion-label></ion-col>\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="name"></ion-input></ion-item></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-4><ion-label>USGS SID</ion-label></ion-col>\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="usgs_sid"></ion-input></ion-item></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-4><ion-label>USGS SCode</ion-label></ion-col>\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="usgs_scode"></ion-input></ion-item></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-4><ion-label>Description</ion-label></ion-col>\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="description"></ion-input></ion-item></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-4><ion-label>Latitude</ion-label></ion-col>\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="latitude"></ion-input></ion-item></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-4><ion-label>Longitude</ion-label></ion-col>\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="longitude"></ion-input></ion-item></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-4><ion-label>Datum</ion-label></ion-col>\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="datum"></ion-input></ion-item></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-4><ion-label>Method</ion-label></ion-col>\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="method"></ion-input></ion-item></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-4><ion-label>Site Status</ion-label></ion-col>\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="site_status"></ion-input></ion-item></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-4><ion-label>NWIS Customer Code</ion-label></ion-col>\n          <ion-col col-8><ion-item><ion-input type="text" formControlName="nwis_customer_code"></ion-input></ion-item></ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col col-4><ion-label>Project(s)</ion-label></ion-col>\n          <ion-col col-8><ion-item><ion-select [multiple]="true" formControlName="projects">\n            <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="false">{{project.name}}</ion-option>\n          </ion-select></ion-item></ion-col>\n        </ion-row>\n      </ion-grid>\n      <div><button ion-button large type="submit">Save</button></div>\n    </form>\n  </div>\n</ion-content>\n'/*ion-inline-end:"D:\projects\mercurymobile\src\pages\sites\site-detail.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormBuilder */],
         __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["Platform"],
@@ -3261,13 +3239,13 @@ SiteDetailPage = __decorate([
 
 /***/ }),
 
-/***/ 442:
+/***/ 444:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConfigPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_utilities__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_project_project_service__ = __webpack_require__(103);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_site_site_service__ = __webpack_require__(112);
@@ -3392,7 +3370,7 @@ var ConfigPage = (function () {
     return ConfigPage;
 }());
 ConfigPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\config\config.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button large menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Config</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding class="home">\n\n  <h2>Config</h2>\n\n  <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>\n\n  <div [hidden]="notready">\n\n  <ion-grid>\n\n    <ion-row>\n\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'acids\')">Export Acids</button></ion-col>\n\n      <ion-col col-4><label ion-button large for="fileSelectAcids">Import Acids</label><input id="fileSelectAcids" type="file" multiple (change)="loadFile(\'acids\', $event)" style="display: none;" /></ion-col>\n\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'acids\')">Empty Acids</button></ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'analyses\')">Export Analyses</button></ion-col>\n\n      <ion-col col-4><label ion-button large for="fileSelectAnalyses">Import Analyses</label><input id="fileSelectAnalyses" type="file" multiple (change)="loadFile(\'analyses\', $event)" style="display: none;" /></ion-col>\n\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'analyses\')">Empty Analyses</button></ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'bottles\')">Export Bottles</button></ion-col>\n\n      <ion-col col-4><label ion-button large for="fileSelectBottles">Import Bottles</label><input id="fileSelectBottles" type="file" multiple (change)="loadFile(\'bottles\', $event)" style="display: none;" /></ion-col>\n\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'bottles\')">Empty Bottles</button></ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'filters\')">Export Filters</button></ion-col>\n\n      <ion-col col-4><label ion-button large for="fileSelectFilters">Import Filters</label><input id="fileSelectFilters" type="file" multiple (change)="loadFile(\'filters\', $event)" style="display: none;" /></ion-col>\n\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'filters\')">Empty Filters</button></ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'mediums\')">Export Mediums</button></ion-col>\n\n      <ion-col col-4><label ion-button large for="fileSelectMediums">Import Mediums</label><input id="fileSelectMediums" type="file" multiple (change)="loadFile(\'mediums\', $event)" style="display: none;" /></ion-col>\n\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'mediums\')">Empty Mediums</button></ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'preservations\')">Export Preservations</button></ion-col>\n\n      <ion-col col-4><label ion-button large for="fileSelectPreservations">Import Preservations</label><input id="fileSelectPreservations" type="file" multiple (change)="loadFile(\'preservations\', $event)" style="display: none;" /></ion-col>\n\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'preservations\')">Empty Preservations</button></ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'projects\')">Export Projects</button></ion-col>\n\n      <ion-col col-4><label ion-button large for="fileSelectProjects">Import Projects</label><input id="fileSelectProjects" type="file" multiple (change)="loadFile(\'projects\', $event)" style="display: none;" /></ion-col>\n\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'projects\')">Empty Projects</button></ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'samples\')">Export Samples</button></ion-col>\n\n      <ion-col col-4><label ion-button large for="fileSelectSamples">Import Samples</label><input id="fileSelectSamples" type="file" multiple (change)="loadFile(\'samples\', $event)" style="display: none;" /></ion-col>\n\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'samples\')">Empty Samples</button></ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'samplebottles\')">Export SampleBottles</button></ion-col>\n\n      <ion-col col-4><label ion-button large for="fileSelectSampleBottles">Import SampleBottles</label><input id="fileSelectSampleBottles" type="file" multiple (change)="loadFile(\'samplebottles\', $event)" style="display: none;" /></ion-col>\n\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'samplebottles\')">Empty SampleBottles</button></ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'sites\')">Export Sites</button></ion-col>\n\n      <ion-col col-4><label ion-button large for="fileSelectSites">Import Sites</label><input id="fileSelectSites" type="file" multiple (change)="loadFile(\'sites\', $event)" style="display: none;" /></ion-col>\n\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'sites\')">Empty Sites</button></ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col col-4><button ion-button large color="secondary" type="button" (click)="dumpFile(\'all\')"><strong>Export ALL</strong></button></ion-col>\n\n      <ion-col col-4><!--<label ion-button large for="fileSelectAll"><strong>Import ALL</strong></label><input id="fileSelectAll" type="file" multiple (change)="loadFile(\'all\', $event)" style="display: none;" />--></ion-col>\n\n      <ion-col col-4><button ion-button large color="secondary" type="button" (click)="destroyDB(\'all\')"><strong>Empty ALL</strong></button></ion-col>\n\n    </ion-row>\n\n  </ion-grid>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\ehaberman\Desktop\mercurymobile\src\pages\config\config.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"D:\projects\mercurymobile\src\pages\config\config.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button large menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Config</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="home">\n  <h2>Config</h2>\n  <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>\n  <div [hidden]="notready">\n  <ion-grid>\n    <ion-row>\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'acids\')">Export Acids</button></ion-col>\n      <ion-col col-4><label ion-button large for="fileSelectAcids">Import Acids</label><input id="fileSelectAcids" type="file" multiple (change)="loadFile(\'acids\', $event)" style="display: none;" /></ion-col>\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'acids\')">Empty Acids</button></ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'analyses\')">Export Analyses</button></ion-col>\n      <ion-col col-4><label ion-button large for="fileSelectAnalyses">Import Analyses</label><input id="fileSelectAnalyses" type="file" multiple (change)="loadFile(\'analyses\', $event)" style="display: none;" /></ion-col>\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'analyses\')">Empty Analyses</button></ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'bottles\')">Export Bottles</button></ion-col>\n      <ion-col col-4><label ion-button large for="fileSelectBottles">Import Bottles</label><input id="fileSelectBottles" type="file" multiple (change)="loadFile(\'bottles\', $event)" style="display: none;" /></ion-col>\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'bottles\')">Empty Bottles</button></ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'filters\')">Export Filters</button></ion-col>\n      <ion-col col-4><label ion-button large for="fileSelectFilters">Import Filters</label><input id="fileSelectFilters" type="file" multiple (change)="loadFile(\'filters\', $event)" style="display: none;" /></ion-col>\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'filters\')">Empty Filters</button></ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'mediums\')">Export Mediums</button></ion-col>\n      <ion-col col-4><label ion-button large for="fileSelectMediums">Import Mediums</label><input id="fileSelectMediums" type="file" multiple (change)="loadFile(\'mediums\', $event)" style="display: none;" /></ion-col>\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'mediums\')">Empty Mediums</button></ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'preservations\')">Export Preservations</button></ion-col>\n      <ion-col col-4><label ion-button large for="fileSelectPreservations">Import Preservations</label><input id="fileSelectPreservations" type="file" multiple (change)="loadFile(\'preservations\', $event)" style="display: none;" /></ion-col>\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'preservations\')">Empty Preservations</button></ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'projects\')">Export Projects</button></ion-col>\n      <ion-col col-4><label ion-button large for="fileSelectProjects">Import Projects</label><input id="fileSelectProjects" type="file" multiple (change)="loadFile(\'projects\', $event)" style="display: none;" /></ion-col>\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'projects\')">Empty Projects</button></ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'samples\')">Export Samples</button></ion-col>\n      <ion-col col-4><label ion-button large for="fileSelectSamples">Import Samples</label><input id="fileSelectSamples" type="file" multiple (change)="loadFile(\'samples\', $event)" style="display: none;" /></ion-col>\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'samples\')">Empty Samples</button></ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'samplebottles\')">Export SampleBottles</button></ion-col>\n      <ion-col col-4><label ion-button large for="fileSelectSampleBottles">Import SampleBottles</label><input id="fileSelectSampleBottles" type="file" multiple (change)="loadFile(\'samplebottles\', $event)" style="display: none;" /></ion-col>\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'samplebottles\')">Empty SampleBottles</button></ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col col-4><button ion-button large type="button" (click)="dumpFile(\'sites\')">Export Sites</button></ion-col>\n      <ion-col col-4><label ion-button large for="fileSelectSites">Import Sites</label><input id="fileSelectSites" type="file" multiple (change)="loadFile(\'sites\', $event)" style="display: none;" /></ion-col>\n      <ion-col col-4><button ion-button large type="button" (click)="destroyDB(\'sites\')">Empty Sites</button></ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col col-4><button ion-button large color="secondary" type="button" (click)="dumpFile(\'all\')"><strong>Export ALL</strong></button></ion-col>\n      <ion-col col-4><!--<label ion-button large for="fileSelectAll"><strong>Import ALL</strong></label><input id="fileSelectAll" type="file" multiple (change)="loadFile(\'all\', $event)" style="display: none;" />--></ion-col>\n      <ion-col col-4><button ion-button large color="secondary" type="button" (click)="destroyDB(\'all\')"><strong>Empty ALL</strong></button></ion-col>\n    </ion-row>\n  </ion-grid>\n  </div>\n</ion-content>\n'/*ion-inline-end:"D:\projects\mercurymobile\src\pages\config\config.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"],
         __WEBPACK_IMPORTED_MODULE_6__app_sample_sample_service__["a" /* SampleService */],
@@ -3411,13 +3389,13 @@ ConfigPage = __decorate([
 
 /***/ }),
 
-/***/ 443:
+/***/ 445:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(444);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(448);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(446);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(450);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -3425,21 +3403,21 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 448:
+/***/ 450:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__ = __webpack_require__(57);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(269);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(492);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(494);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__acid_acid_service__ = __webpack_require__(78);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__analysis_analysis_service__ = __webpack_require__(110);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__authentication_authentication_service__ = __webpack_require__(806);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__authentication_authentication_service__ = __webpack_require__(808);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__bottle_bottle_service__ = __webpack_require__(109);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__filter_filter_service__ = __webpack_require__(79);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__medium_medium_service__ = __webpack_require__(173);
@@ -3448,20 +3426,20 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__sample_sample_service__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__samplebottle_samplebottle_service__ = __webpack_require__(73);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__site_site_service__ = __webpack_require__(112);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__users_user_service__ = __webpack_require__(807);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__users_user_service__ = __webpack_require__(809);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pages_home_home__ = __webpack_require__(273);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pages_samples_sample_list__ = __webpack_require__(159);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pages_samples_sample_detail__ = __webpack_require__(285);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pages_samples_sample_bottle__ = __webpack_require__(316);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pages_samples_acid_select__ = __webpack_require__(315);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pages_samples_bottle_select__ = __webpack_require__(314);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pages_samples_sample_bottle__ = __webpack_require__(315);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pages_samples_acid_select__ = __webpack_require__(314);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pages_samples_bottle_select__ = __webpack_require__(313);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__pages_sites_site_list__ = __webpack_require__(175);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__pages_sites_site_detail__ = __webpack_require__(441);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__pages_config_config__ = __webpack_require__(442);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_ionic2_date_picker__ = __webpack_require__(317);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__pages_sites_site_detail__ = __webpack_require__(443);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__pages_config_config__ = __webpack_require__(444);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_ionic2_date_picker__ = __webpack_require__(316);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_ionic2_date_picker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_28_ionic2_date_picker__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pages_samples_bulk_acid_update__ = __webpack_require__(440);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pages_samples_filter_select__ = __webpack_require__(439);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pages_samples_bulk_acid_update__ = __webpack_require__(442);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pages_samples_filter_select__ = __webpack_require__(441);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3534,18 +3512,18 @@ AppModule = __decorate([
 
 /***/ }),
 
-/***/ 492:
+/***/ 494:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(269);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_home_home__ = __webpack_require__(273);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_samples_sample_list__ = __webpack_require__(159);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_sites_site_list__ = __webpack_require__(175);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_config_config__ = __webpack_require__(442);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_config_config__ = __webpack_require__(444);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3601,7 +3579,7 @@ __decorate([
     __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Nav"])
 ], AppComponent.prototype, "nav", void 0);
 AppComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"C:\Users\ehaberman\Desktop\mercurymobile\src\app\app.html"*/'<ion-menu [content]="content">\n\n\n\n  <ion-header>\n\n    <ion-toolbar>\n\n      <ion-title>Pages</ion-title>\n\n    </ion-toolbar>\n\n  </ion-header>\n\n\n\n  <ion-content>\n\n    <ion-list>\n\n      <button ion-item *ngFor="let p of pages" (click)="openPage(p)">\n\n        {{p.title}}\n\n      </button>\n\n      <!-- <button ion-item type="button" (click)="exitApp()"><ion-icon name="exit"></ion-icon>    Exit</button> -->\n\n    </ion-list>\n\n  </ion-content>\n\n\n\n</ion-menu>\n\n\n\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n'/*ion-inline-end:"C:\Users\ehaberman\Desktop\mercurymobile\src\app\app.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"D:\projects\mercurymobile\src\app\app.html"*/'<ion-menu [content]="content">\n\n\n\n  <ion-header>\n\n    <ion-toolbar>\n\n      <ion-title>Pages</ion-title>\n\n    </ion-toolbar>\n\n  </ion-header>\n\n\n\n  <ion-content>\n\n    <ion-list>\n\n      <button ion-item *ngFor="let p of pages" (click)="openPage(p)">\n\n        {{p.title}}\n\n      </button>\n\n      <!-- <button ion-item type="button" (click)="exitApp()"><ion-icon name="exit"></ion-icon>    Exit</button> -->\n\n    </ion-list>\n\n  </ion-content>\n\n\n\n</ion-menu>\n\n\n\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n\n'/*ion-inline-end:"D:\projects\mercurymobile\src\app\app.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Platform"],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["MenuController"],
@@ -3612,7 +3590,7 @@ AppComponent = __decorate([
 
 /***/ }),
 
-/***/ 494:
+/***/ 496:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3649,7 +3627,7 @@ var SAMPLES = [
 
 /***/ }),
 
-/***/ 525:
+/***/ 526:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3715,7 +3693,7 @@ var SAMPLEBOTTLES = [
 
 /***/ }),
 
-/***/ 526:
+/***/ 527:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3730,7 +3708,7 @@ var Sample = (function () {
 
 /***/ }),
 
-/***/ 527:
+/***/ 528:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3756,7 +3734,7 @@ var SampleBottle = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_utilities__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mock_samplebottles__ = __webpack_require__(525);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mock_samplebottles__ = __webpack_require__(526);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_pouchdb__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_pouchdb___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_pouchdb__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_pouchdb_load__ = __webpack_require__(37);
@@ -3857,7 +3835,7 @@ var SampleBottleService = (function () {
     SampleBottleService.prototype.findSampleBottle = function (val) {
         this._db.find({
             selector: { name: val },
-            fields: ['id', 'name']
+            fields: ['id', 'name', 'bottle_string']
         }).then(function (result) {
             if (!result) {
                 return false;
@@ -4067,7 +4045,7 @@ AcidService = __decorate([
 
 /***/ }),
 
-/***/ 788:
+/***/ 789:
 /***/ (function(module, exports) {
 
 /* (ignored) */
@@ -4199,6 +4177,9 @@ var FilterService = (function () {
             console.log('filter find error');
         });
     };
+    FilterService.prototype.getFiltersByName = function (val) {
+        return this._db.allDocs({ startkey: val, endkey: val + '\uffff', include_docs: true, limit: 100 });
+    };
     FilterService.prototype.getAll = function (opts) {
         if (this._db) {
             if (!opts) {
@@ -4240,77 +4221,79 @@ FilterService = __decorate([
 
 /***/ }),
 
-/***/ 794:
+/***/ 795:
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
 
-/***/ 802:
+/***/ 803:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./af": 320,
-	"./af.js": 320,
-	"./ar": 321,
-	"./ar-dz": 322,
-	"./ar-dz.js": 322,
-	"./ar-kw": 323,
-	"./ar-kw.js": 323,
-	"./ar-ly": 324,
-	"./ar-ly.js": 324,
-	"./ar-ma": 325,
-	"./ar-ma.js": 325,
-	"./ar-sa": 326,
-	"./ar-sa.js": 326,
-	"./ar-tn": 327,
-	"./ar-tn.js": 327,
-	"./ar.js": 321,
-	"./az": 328,
-	"./az.js": 328,
-	"./be": 329,
-	"./be.js": 329,
-	"./bg": 330,
-	"./bg.js": 330,
-	"./bm": 331,
-	"./bm.js": 331,
-	"./bn": 332,
-	"./bn.js": 332,
-	"./bo": 333,
-	"./bo.js": 333,
-	"./br": 334,
-	"./br.js": 334,
-	"./bs": 335,
-	"./bs.js": 335,
-	"./ca": 336,
-	"./ca.js": 336,
-	"./cs": 337,
-	"./cs.js": 337,
-	"./cv": 338,
-	"./cv.js": 338,
-	"./cy": 339,
-	"./cy.js": 339,
-	"./da": 340,
-	"./da.js": 340,
-	"./de": 341,
-	"./de-at": 342,
-	"./de-at.js": 342,
-	"./de-ch": 343,
-	"./de-ch.js": 343,
-	"./de.js": 341,
-	"./dv": 344,
-	"./dv.js": 344,
-	"./el": 345,
-	"./el.js": 345,
-	"./en-au": 346,
-	"./en-au.js": 346,
-	"./en-ca": 347,
-	"./en-ca.js": 347,
-	"./en-gb": 348,
-	"./en-gb.js": 348,
-	"./en-ie": 349,
-	"./en-ie.js": 349,
+	"./af": 319,
+	"./af.js": 319,
+	"./ar": 320,
+	"./ar-dz": 321,
+	"./ar-dz.js": 321,
+	"./ar-kw": 322,
+	"./ar-kw.js": 322,
+	"./ar-ly": 323,
+	"./ar-ly.js": 323,
+	"./ar-ma": 324,
+	"./ar-ma.js": 324,
+	"./ar-sa": 325,
+	"./ar-sa.js": 325,
+	"./ar-tn": 326,
+	"./ar-tn.js": 326,
+	"./ar.js": 320,
+	"./az": 327,
+	"./az.js": 327,
+	"./be": 328,
+	"./be.js": 328,
+	"./bg": 329,
+	"./bg.js": 329,
+	"./bm": 330,
+	"./bm.js": 330,
+	"./bn": 331,
+	"./bn.js": 331,
+	"./bo": 332,
+	"./bo.js": 332,
+	"./br": 333,
+	"./br.js": 333,
+	"./bs": 334,
+	"./bs.js": 334,
+	"./ca": 335,
+	"./ca.js": 335,
+	"./cs": 336,
+	"./cs.js": 336,
+	"./cv": 337,
+	"./cv.js": 337,
+	"./cy": 338,
+	"./cy.js": 338,
+	"./da": 339,
+	"./da.js": 339,
+	"./de": 340,
+	"./de-at": 341,
+	"./de-at.js": 341,
+	"./de-ch": 342,
+	"./de-ch.js": 342,
+	"./de.js": 340,
+	"./dv": 343,
+	"./dv.js": 343,
+	"./el": 344,
+	"./el.js": 344,
+	"./en-au": 345,
+	"./en-au.js": 345,
+	"./en-ca": 346,
+	"./en-ca.js": 346,
+	"./en-gb": 347,
+	"./en-gb.js": 347,
+	"./en-ie": 348,
+	"./en-ie.js": 348,
+	"./en-il": 349,
+	"./en-il.js": 349,
 	"./en-nz": 350,
 	"./en-nz.js": 350,
 	"./eo": 351,
@@ -4455,40 +4438,44 @@ var map = {
 	"./te.js": 420,
 	"./tet": 421,
 	"./tet.js": 421,
-	"./th": 422,
-	"./th.js": 422,
-	"./tl-ph": 423,
-	"./tl-ph.js": 423,
-	"./tlh": 424,
-	"./tlh.js": 424,
-	"./tr": 425,
-	"./tr.js": 425,
-	"./tzl": 426,
-	"./tzl.js": 426,
-	"./tzm": 427,
-	"./tzm-latn": 428,
-	"./tzm-latn.js": 428,
-	"./tzm.js": 427,
-	"./uk": 429,
-	"./uk.js": 429,
-	"./ur": 430,
-	"./ur.js": 430,
-	"./uz": 431,
-	"./uz-latn": 432,
-	"./uz-latn.js": 432,
-	"./uz.js": 431,
-	"./vi": 433,
-	"./vi.js": 433,
-	"./x-pseudo": 434,
-	"./x-pseudo.js": 434,
-	"./yo": 435,
-	"./yo.js": 435,
-	"./zh-cn": 436,
-	"./zh-cn.js": 436,
-	"./zh-hk": 437,
-	"./zh-hk.js": 437,
-	"./zh-tw": 438,
-	"./zh-tw.js": 438
+	"./tg": 422,
+	"./tg.js": 422,
+	"./th": 423,
+	"./th.js": 423,
+	"./tl-ph": 424,
+	"./tl-ph.js": 424,
+	"./tlh": 425,
+	"./tlh.js": 425,
+	"./tr": 426,
+	"./tr.js": 426,
+	"./tzl": 427,
+	"./tzl.js": 427,
+	"./tzm": 428,
+	"./tzm-latn": 429,
+	"./tzm-latn.js": 429,
+	"./tzm.js": 428,
+	"./ug-cn": 430,
+	"./ug-cn.js": 430,
+	"./uk": 431,
+	"./uk.js": 431,
+	"./ur": 432,
+	"./ur.js": 432,
+	"./uz": 433,
+	"./uz-latn": 434,
+	"./uz-latn.js": 434,
+	"./uz.js": 433,
+	"./vi": 435,
+	"./vi.js": 435,
+	"./x-pseudo": 436,
+	"./x-pseudo.js": 436,
+	"./yo": 437,
+	"./yo.js": 437,
+	"./zh-cn": 438,
+	"./zh-cn.js": 438,
+	"./zh-hk": 439,
+	"./zh-hk.js": 439,
+	"./zh-tw": 440,
+	"./zh-tw.js": 440
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -4504,11 +4491,38 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 802;
+webpackContext.id = 803;
 
 /***/ }),
 
-/***/ 806:
+/***/ 807:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Site; });
+var Site = (function () {
+    function Site(name, usgs_sid, usgs_scode, description, latitude, longitude, datum, method, site_status, nwis_customer_code, projects, id) {
+        this.name = name;
+        this.usgs_sid = usgs_sid;
+        this.usgs_scode = usgs_scode;
+        this.description = description;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.datum = datum;
+        this.method = method;
+        this.site_status = site_status;
+        this.nwis_customer_code = nwis_customer_code;
+        this.projects = projects;
+        this.id = id;
+    }
+    return Site;
+}());
+
+//# sourceMappingURL=site.js.map
+
+/***/ }),
+
+/***/ 808:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4518,7 +4532,7 @@ webpackContext.id = 802;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_observable_of__ = __webpack_require__(290);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_observable_of__ = __webpack_require__(289);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_observable_of__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_settings__ = __webpack_require__(42);
@@ -4583,7 +4597,7 @@ AuthenticationService = __decorate([
 
 /***/ }),
 
-/***/ 807:
+/***/ 809:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4657,7 +4671,7 @@ UserService = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_catch__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_app_utilities__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mock_samples__ = __webpack_require__(494);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mock_samples__ = __webpack_require__(496);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_pouchdb__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_pouchdb___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_pouchdb__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_pouchdb_load__ = __webpack_require__(37);
@@ -4783,5 +4797,5 @@ SampleService = __decorate([
 
 /***/ })
 
-},[443]);
+},[445]);
 //# sourceMappingURL=main.js.map

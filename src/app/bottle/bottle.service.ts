@@ -32,7 +32,7 @@ export class BottleService {
           //console.log(result.total_rows);
           if(result.total_rows === 0) {
             console.log("start put bottles");
-            let count = 0;
+            //let count = 0;
             /*for (let bottle of BOTTLES) {
               this._db.put({
                 _id: bottle['name'],

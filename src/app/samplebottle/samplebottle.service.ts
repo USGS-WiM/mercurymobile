@@ -96,7 +96,7 @@ export class SampleBottleService {
   findSampleBottle(val: string) {
       this._db.find({
           selector: {name: val},
-          fields: ['id', 'name']
+          fields: ['id', 'name', 'bottle_string']
       }).then(function (result) {
           if (!result) {
             return false;

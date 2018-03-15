@@ -44,8 +44,8 @@ export class SampleDetailPage {
   private _defaultRowCount: number = 8;
   private _numRowsAdded: number = 0;
   private _numSampleBottles: number = 0;
-  private _selectedAcid: number;
-  private _selectedFilter: string;
+  selectedAcid: number;
+  selectedFilter: number;
   
 
   mySample: Sample = new Sample(null, null, null, null, null, null, null, null, null, null, null, null, null);
@@ -163,8 +163,7 @@ export class SampleDetailPage {
       this.datePicker.showCalendar(this.modalCtrl);
 
     dateSelected.subscribe(date => {   
-      var theFormattedDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-      console.log(theFormattedDate);
+      const theFormattedDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
       
       this.sampleDate.setValue(theFormattedDate);
       (<FormGroup>this.sampleHeaderControls).controls['sampleDate'].setValue(theFormattedDate);
@@ -218,16 +217,14 @@ export class SampleDetailPage {
             this.sample_ID = id;
 
             // save this new cloned sample, and add empty sample bottle slots
-            this._sampleService.update(this.mySample).then(response => {console.log('Clone success'); console.log(response);}, error => console.log(error));
+            this._sampleService.update(this.mySample).then(response => {}, error => {});
           } else {
-            console.log(sample);
-
             this.mySample = sample;
           }
 
           if (this.mySample['projectName']) {
             this._getProjects(this.mySample['projectName']);
-            this._getSites(this.mySample['projectName']);
+            // this._getSites(this.mySample['projectName']);
           } else {
             this._getProjects();
           }
@@ -248,14 +245,13 @@ export class SampleDetailPage {
           } else {
               this.mySample['sample_bottles'] = [];
               for (let i = 0, j = this._defaultRowCount; i < j; i++){
-                console.log("empty bottles, adding rows");
                 this.addRow();
               }
               this.notready = false;
           }
         },
         error => this._errorMessage = <any>error)
-        .catch(err => console.log(err));
+        .catch(err => this._errorMessage = err);
   }
 
   private _getProjects(projectName?: any) {
@@ -268,7 +264,7 @@ export class SampleDetailPage {
         // if there is only one project, automatically select it and filter the sites
         if (this.myProjects.length == 1) {
           let proj = this.myProjects[0];
-          this.projectName.setValue(proj['id']);
+          this.projectName.setValue(proj['name']);
           this.projectNumber.setValue(proj['id']);
           this.mySample['projectName'] = proj['name'];
           this.mySample['projectNumber'] = proj['id'];
@@ -279,13 +275,11 @@ export class SampleDetailPage {
       });
   }
 
-  private _getSampleBottles(sampBottles: any){    
+  private _getSampleBottles(sampBottles: any){
     
     for (let i = 0, j = sampBottles.length; i < j; i++) {
-      console.log("Retrieving sample bottle ID: " + sampBottles[i]['_id']);
         this._samplebottleService.getOne(sampBottles[i]['_id']).then(response => {
             let samplebottle = response;
-            console.log(samplebottle);          
 
             // if this sample is not a clone, populate the sample bottle list
             if (!this.clone) {
@@ -295,9 +289,15 @@ export class SampleDetailPage {
 
             // populate the sample's acid field if any of the sample bottles have used an acid
             let acid = samplebottle['preservation_acid'];
-            if (acid && !this._selectedAcid) {
-              this._selectedAcid = acid;
-              this._getAcidName(this._selectedAcid);
+            if (acid && (typeof this.selectedAcid === 'undefined' || !this.selectedAcid)) {
+              this.selectedAcid = acid;
+              this._getAcidName(this.selectedAcid);
+            }
+
+            // populate the sample's filter field if any of the sample bottles have used an filter
+            let filter = samplebottle['filter_type'];
+            if (filter && (typeof this.selectedFilter === 'undefined' || !this.selectedFilter)) {
+              this.selectedFilter = filter;
             }
         });
     }
@@ -341,42 +341,38 @@ export class SampleDetailPage {
       });
   }
 
-  private addNewBottle(ev: any) {
-    console.log(ev);
-
-    var result = this._samplebottleService.findSampleBottle(ev.value);
-    console.log(result);
-    if (!result) {
-      let confirm = this.alertCtrl.create({
-        title: 'Add New Container',
-        message: ev.value + ' was not found in the database, add a new Container with this value?',
-        buttons: [
-          {
-            text: 'Cancel',
-            handler: () => {
-              console.log('Disagree clicked');
+  addNewBottle(ev: any, ndx: number) {
+    const newBottleName = ev.value;
+    this._bottleService.getBottlesByName(newBottleName).then(response => {
+      let exists = response.rows.length > 0 ? true : false;
+      if (!exists) {
+        let confirm = this.alertCtrl.create({
+          title: 'Add New Container',
+          message: newBottleName + ' was not found in the database, add a new Container with this value?',
+          buttons: [
+            {
+              text: 'Cancel',
+              handler: () => {
+                (<FormGroup>this.sampleBottleControls.controls[ndx]).controls['bottle'].setValue(null);
+              }
+            },
+            {
+              text: 'Add New Container',
+              handler: () => {
+                this._bottleService.add(newBottleName);
+                this._addSampleBottle(newBottleName);
+              }
             }
-          },
-          {
-            text: 'Add New Container',
-            handler: () => {
-              console.log('Agree clicked, adding new bottle: ' + ev.value + " for sample ID: " + this.sample_ID);
-              this._samplebottleService.add({'_id': ev.value, 'name': ev.value, 'id': ev.value});
-              this._bottleService.add(ev.value);
-              //let bottle = new SampleBottle(this.sample_ID, ev.value, null, null, null, null, null, null, null, ev.value, ev.value);
-              //this.mySampleBottles.push(bottle);
-              this._addSampleBottle(ev.value);
-            }
-          }
-        ]
-      });
-      confirm.present();
-    }               
+          ]
+        });
+        confirm.present();
+      }
+    });
+    
   }
 
   private _addSampleBottle(bottleName: string) {
     this._bottleService.getBottlesByName(bottleName).then(response => {
-        console.log("New bottle added: " + bottleName + " with ID: " + response.rows[0]['id']);        
 
         let bottleID = response.rows[0]['id'];
         let bottle = new SampleBottle(this.sample_ID, bottleID, null, null, null, null, null, null, null, bottleName, bottleID);
@@ -388,23 +384,23 @@ export class SampleDetailPage {
     });
   }
 
-  private _getSites(projectName: any) {
-    this._projectService.getProjectByName(projectName)
-      .then(response =>
-      {
-        let sites = response.rows[0].doc['sites'];
-        for(let i =0; i < sites.length; i++) {
-          let sitedata = sites[i];
-          let newsite = new Site("temp");
-          newsite['name'] = sitedata.name;
-          newsite['usgs_scode'] = sitedata.usgs_scode;
-          newsite['id'] = sitedata.id;
-          this.mySites.push(newsite);
-        }
-      }, error => {
-        this._errorMessage = <any>error;
-      });
-  }
+  // private _getSites(projectName: any) {
+  //   this._projectService.getProjectByName(projectName)
+  //     .then(response =>
+  //     {
+  //       let sites = response.rows[0].doc['sites'];
+  //       for(let i =0; i < sites.length; i++) {
+  //         let sitedata = sites[i];
+  //         let newsite = new Site("temp");
+  //         newsite['name'] = sitedata.name;
+  //         newsite['usgs_scode'] = sitedata.usgs_scode;
+  //         newsite['id'] = sitedata.id;
+  //         this.mySites.push(newsite);
+  //       }
+  //     }, error => {
+  //       this._errorMessage = <any>error;
+  //     });
+  // }
 
   private _getMediums() {
     this._mediumService.getAll()
@@ -421,16 +417,16 @@ export class SampleDetailPage {
   private _getAcidName(acidID: number) {
     this._acidService.findAcid(acidID)
       .then(
-        response => {
-          console.log("get acid response: ");
-          console.log(response);          
+        response => {       
           //this.sampleAcid.setValue(response[0].code);
+          (<FormGroup>this.sampleHeaderControls).controls['sampleAcid'].setValue(response[0].code);
         }, error => {
         this._errorMessage = <any>error;
       });
   }
 
   private _timeToText(time: string) {
+    time = time.replace(':', '');
     return time;
   }
 
@@ -444,7 +440,6 @@ export class SampleDetailPage {
       text = text.substr(0,1) + ":" + text.substr(1,2);
     }
 
-    console.log(text);
     return text;
   }
 
@@ -478,7 +473,7 @@ export class SampleDetailPage {
   acidNameChange(acidName: string) {
     this._acidService.getAcidsByName(acidName)
     .then(response => {
-      this._selectedAcid = response.rows[0].doc.id;
+      this.selectedAcid = response.rows[0].doc.id;
       (<FormGroup>this.sampleHeaderControls).controls['sampleAcid'].setValue(acidName);
     })
     .catch(error => {
@@ -489,17 +484,27 @@ export class SampleDetailPage {
   openFilterSelect() {
     let opts = {showBackdrop: false, enableBackdropDismiss: false};
     let modal = this.modalCtrl.create(FilterSelectPage, {}, opts);
-    modal.onDidDismiss(acidName => {
-      if (acidName) {
-        this.acidNameChange(acidName);
+    modal.onDidDismiss(filterName => {
+      if (filterName) {
+        this.filterNameChange(filterName);
       }
     });
     modal.present();
   }
 
+  filterNameChange(filterName: string) {
+    this._filterService.getFiltersByName(filterName)
+    .then(response => {
+      this.selectedFilter = response.rows[0].doc.id;
+      (<FormGroup>this.sampleHeaderControls).controls['sampleFilter'].setValue(filterName);
+    })
+    .catch(error => {
+      this.showAlert('Filter not found!', filterName, 'was not found in the database. Please enter a valid filter.');
+    });
+  }
+
   editSampleBottle(rowIndex: number){
     let sbName = (<FormGroup>this.sampleBottleControls.controls[rowIndex]).controls['bottle'].value;
-    console.log("sample bottle name: " + sbName + " row index " + rowIndex);
     if (sbName == null) {alert("Please select a bottle first!")}
     else {
         this._bottleService.getBottlesByName(sbName).then(response => {
@@ -515,7 +520,6 @@ export class SampleDetailPage {
   }
 
   projectNameChange(projectName: string) {
-    console.log("project name select: " + projectName); 
     
     if (projectName == null || projectName == "") {
       return;
@@ -525,8 +529,6 @@ export class SampleDetailPage {
     if (projects.length < 1) {
       this.showAlert('Project not found!', projectName, 'was not found in the database. Please enter a valid project name.');
     } else {
-      console.log(projects[0]);
-      console.log("current project number: " + this.mySample['projectNumber'] + " updating to " + projects[0]['id']);
       this.projectNumber.setValue(projects[0]['id']);
       this.projectName.setValue(projects[0]['name']);
       this.mySample['projectName'] = projects[0]['name'];
@@ -536,7 +538,6 @@ export class SampleDetailPage {
   }
 
   projectNumberChange(projectNumber: number) {
-    console.log("project # select: " + projectNumber); 
 
     if (projectNumber == null || projectNumber == NaN) {
       return;
@@ -546,8 +547,6 @@ export class SampleDetailPage {
     if (projects.length < 1) {
       this.showAlert('Project # not found!', projectNumber.toString(), 'was not found in the database. Please enter a valid project number.');
     } else {
-      console.log(projects[0]);
-      console.log("current project name: " + this.mySample['projectName'] + " updating to " + projects[0]['name']);
       this.projectName.setValue(projects[0]['name']);
       this.projectNumber.setValue(projects[0]['id']);
       this.mySample['projectName'] = projects[0]['name'];
@@ -591,7 +590,6 @@ export class SampleDetailPage {
   addRow(samplebottle?: SampleBottle){
     
     if(samplebottle) {
-      console.log("Non-null bottle");
 
       this.sampleBottleControls.push(
         new FormGroup({
@@ -602,7 +600,8 @@ export class SampleDetailPage {
           filterVolume: new FormControl(samplebottle['volume_filtered'] ? samplebottle['volume_filtered'] : null),
           preservationType: new FormControl(samplebottle['preservation_type'] ? samplebottle['preservation_type'] : null),
           preservationAcid: new FormControl(samplebottle['preservation_acid'] ? samplebottle['preservation_acid'] : null),
-          preservationVolume: new FormControl(samplebottle['preservation_volume'] ? samplebottle['preservation_volume'] : null)
+          preservationVolume: new FormControl(samplebottle['preservation_volume'] ? samplebottle['preservation_volume'] : null),
+          preservationComment: new FormControl(samplebottle['preservation_comment'] ? samplebottle['preservation_comment'] : null)
         })
       );
       
@@ -620,7 +619,8 @@ export class SampleDetailPage {
           filterVolume: new FormControl(null),
           preservationType: new FormControl(null),
           preservationAcid: new FormControl(null),
-          preservationVolume: new FormControl(null)
+          preservationVolume: new FormControl(null),
+          preservationComment: new FormControl(null)
         })
       );      
     }
@@ -634,7 +634,6 @@ export class SampleDetailPage {
       
       if (sampleBottleControlRows[i] == sampleBottleControlsRow) {
         let sampleBottleID = (<FormGroup>this.sampleBottleControls.controls[i]).controls['bottle'].value;
-        console.log("remove sampleid: " + sampleBottleID);
         if (sampleBottleID == null) {
           sampleBottleControlRows.splice(i, 1);
         } else {
@@ -673,14 +672,9 @@ export class SampleDetailPage {
       this._sampleService.update(this.mySample).then(result => {
 
         for (let i = 0, j = this.sampleBottleControls.length; i < j; i++) {
-            console.log(this.sampleBottleControls.controls[i]);
-            console.log((<FormGroup>this.sampleBottleControls.controls[i]).controls['bottle'].value);
             if ((<FormGroup>this.sampleBottleControls.controls[i]).controls['bottle'].value !== null) {
-              console.log("saving bottle to sample: " + (<FormGroup>this.sampleBottleControls.controls[i]).controls['bottle'].value);
               this._samplebottleService.getOne((<FormGroup>this.sampleBottleControls.controls[i]).controls['bottle'].value).then(response => {
-                console.log("Bottle response update:");
-                console.log(response);
-                var pType = (<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationType'].value;
+                const pType = (<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationType'].value;
                 return this._samplebottleService.update({
                   '_id': response['_id'],
                   '_rev': response['_rev'],
@@ -689,8 +683,8 @@ export class SampleDetailPage {
                   'volume_filtered': parseInt((<FormGroup>this.sampleBottleControls.controls[i]).controls['filterVolume'].value),
                   'preservation_type': pType,
                   'preservation_volume': parseInt((<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationVolume'].value),
-                  'preservation_comment': response['preservation_comment'],
-                  'preservation_acid': (pType == 8) ? self._selectedAcid : null
+                  'preservation_comment': (<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationComment'].value,
+                  'preservation_acid': (pType == 8) ? self.selectedAcid : null
                 });
               });
             }
@@ -701,7 +695,7 @@ export class SampleDetailPage {
         });        
         
       }, error => {
-        console.log(error);})
+        this._errorMessage = error})
     })    
   }
 
@@ -738,7 +732,6 @@ export class SampleDetailPage {
         {
           text: 'No',
           handler: () => {
-            console.log('Disagree clicked');
           }
         },
         {

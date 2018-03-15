@@ -31,8 +31,7 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="projectName" [value]="mySample.projectName" (blur)="projectNameChange(pName.value)"
-                #pName></ion-input>
+              <ion-input type="text" formControlName="projectName" [value]="mySample.projectName" (blur)="projectNameChange(pName.value)" #pName></ion-input>
             </ion-item>
           </ion-col>
           <ion-col col-6>
@@ -43,8 +42,7 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="projectNumber" [value]="mySample.projectNumber" (ionChange)="projectNumberChange(pNumber.value)"
-                #pNumber></ion-input>
+              <ion-input type="text" formControlName="projectNumber" [value]="mySample.projectNumber" (ionChange)="projectNumberChange(pNumber.value)" #pNumber></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -68,8 +66,7 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="siteNumber" [value]="mySample.siteNumber" (ionChange)="siteNumberChange(sNumber.value)"
-                #sNumber></ion-input>
+              <ion-input type="text" formControlName="siteNumber" [value]="mySample.siteNumber" (ionChange)="siteNumberChange(sNumber.value)" #sNumber></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -120,8 +117,7 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="sampleMedium" [value]="mySample.mediumName" (ionChange)="mediumChange(mName.value)"
-                #mName></ion-input>
+              <ion-input type="text" formControlName="sampleMedium" [value]="mySample.mediumName" (ionChange)="mediumChange(mName.value)" #mName></ion-input>
             </ion-item>
           </ion-col>
           <ion-col col-4>
@@ -137,11 +133,11 @@
               <ion-label>Filter</ion-label>
               <ion-item *ngIf="useWidgets">                  
                 <ion-select formControlName="sampleFilter" class="full-width-select">
-                  <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="false">{{filter.filter}}</ion-option>
+                  <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="filter.id == selectedFilter">{{filter.filter}}</ion-option>
                 </ion-select>                    
               </ion-item>
               <ion-item *ngIf="!useWidgets">
-                <ion-input type="text" formControlName="sampleFilter" (blur)="filterNameChange(aName.value)" #aName></ion-input>
+                <ion-input type="text" formControlName="sampleFilter" (blur)="filterNameChange(fName.value)" #fName></ion-input>
               </ion-item>
             </ion-col>
         </ion-row>
@@ -170,9 +166,10 @@
         <ion-row style="margin-top:10px;">
           <ion-col col-2 class="text-center" text-center>Container</ion-col>          
           <ion-col col-2 class="text-center" text-center>Analysis</ion-col>          
-          <ion-col col-2 class="text-center" text-center>Filter Volume</ion-col>
-          <ion-col col-3 class="text-center" text-center>Preservation</ion-col>          
-          <ion-col col-2 class="text-center" text-center>Acid Volume</ion-col>
+          <ion-col col-1 class="text-center" text-center>Filter Volume</ion-col>
+          <ion-col col-3 class="text-center" text-center>Preservation</ion-col>
+          <ion-col col-1 class="text-center" text-center>Acid Volume</ion-col>
+          <ion-col col-2 class="text-center" text-center>Preservation Comment</ion-col>   
           <ion-col col-1></ion-col>          
         </ion-row>
         
@@ -207,31 +204,42 @@
                 <ion-input type="string" formControlName="bottle" (click)="openBottleSelect(ndx)" class="full-width-select"></ion-input>
               </ion-item>
               <ion-item *ngIf="!lookupContainers">
-                <ion-input type="string" (ionBlur)="addNewBottle($event);" formControlName="bottle" [value]="sampleBottleControls.controls[ndx].controls['bottle'].value" class="full-width-select"></ion-input>
+                <ion-input type="string" (ionBlur)="addNewBottle($event, ndx);" formControlName="bottle" [value]="sampleBottleControls.controls[ndx].controls['bottle'].value" class="full-width-select"></ion-input>
               </ion-item>
           </ion-col>          
           <ion-col col-2>
-            <ion-item>
+            <ion-item *ngIf="useWidgets">
               <ion-select formControlName="analysis" class="full-width-select">
-                <ion-option *ngFor="let analysis of myAnalyses" [value]="analysis.id" [selected]="false">{{analysis.analysis}}</ion-option>
+                <ion-option *ngFor="let analysis of myAnalyses" [value]="analysis.id" >{{analysis.analysis}}</ion-option>
               </ion-select>
             </ion-item>
+            <ion-item *ngIf="!useWidgets">
+              <ion-input type="string" formControlName="analysis" class="full-width-select"></ion-input>
+            </ion-item>
           </ion-col>          
-          <ion-col col-2>
+          <ion-col col-1>
             <ion-item>
               <ion-input type="number" formControlName="filterVolume" class="full-width-select"></ion-input>
             </ion-item>
           </ion-col>
           <ion-col col-3>
-            <ion-item>
+            <ion-item *ngIf="useWidgets">
               <ion-select formControlName="preservationType" class="full-width-select">
-                <ion-option *ngFor="let preservation of myPreservations" [value]="preservation.id" [selected]="false">{{preservation.preservation}}</ion-option>
+                <ion-option *ngFor="let preservation of myPreservations" [value]="preservation.id" >{{preservation.preservation}}</ion-option>
               </ion-select>
             </ion-item>
+            <ion-item *ngIf="!useWidgets">
+              <ion-input type="string" formControlName="preservationType" class="full-width-select"></ion-input>
+            </ion-item>
           </ion-col>          
-          <ion-col col-2>
+          <ion-col col-1>
             <ion-item>
               <ion-input type="number" formControlName="preservationVolume" class="full-width-select"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-2>
+            <ion-item>
+              <ion-input type="string" formControlName="preservationComment" class="full-width-select"></ion-input>
             </ion-item>
           </ion-col>
           <ion-col col-1>
@@ -256,8 +264,8 @@
       <div>
         <!-- <p>Form value: {{ sampleForm.value | json }}</p> -->
         <!-- <p>Form status: {{ sampleForm.status | json }}</p> -->
-        <button ion-button block large color="secondary" type="submit">Save</button>
-        <!--<button ion-button large type="submit" [disabled]="!sampleForm.valid">Save</button>-->
+        <!-- <button ion-button block large color="secondary" type="submit">Save</button> -->
+        <button ion-button block large type="submit" [disabled]="!sampleForm.valid">Save</button>
         <!--<button ion-button large type="button" (click)="showConfirm('deleteSampleRow')">Delete</button> just do this from the sample list -->
       </div>
     </form>

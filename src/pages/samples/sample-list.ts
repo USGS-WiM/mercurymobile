@@ -130,7 +130,7 @@ export class SampleListPage implements OnInit {
   }
 
   updateBulkSamples(sample_id, checked) {    
-    var index = this._bulkSamples.indexOf(sample_id);
+    const index = this._bulkSamples.indexOf(sample_id);
     if (index > -1) {
       this._bulkSamples.splice(index, 1);
     } else {
@@ -198,8 +198,7 @@ export class SampleListPage implements OnInit {
 
   openPage(sample_id, clone?) {
     
-    this.events.subscribe('custom-user-events', () => {  
-      console.log("refresh");    
+    this.events.subscribe('custom-user-events', () => {
       this._getSamples();
       this.events.unsubscribe('custom-user-events');
     });
