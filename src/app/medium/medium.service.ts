@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
 import {APP_UTILITIES}   from '../../app/app.utilities';
-import {MEDIUMS} from './mediums';
+//import {MEDIUMS} from './mediums';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
 import load from 'pouchdb-load';
@@ -31,7 +31,7 @@ export class MediumService {
         .then(result => {
           if(result.total_rows === 0) {
             //this._db.bulkDocs(MEDIUMS);
-            for (let medium of MEDIUMS) {
+            /*for (let medium of MEDIUMS) {
               //this._db.post(medium);
               this._db.put({
                 _id: medium['nwis_code'],
@@ -40,7 +40,7 @@ export class MediumService {
                 medium: medium['medium'],
                 description: medium['description']
               });
-            }
+            }*/
           }
         })
         .catch( error => {

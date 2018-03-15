@@ -2,10 +2,10 @@ import {Component} from '@angular/core';
 import {NavParams, ViewController, Platform} from 'ionic-angular';
 import {BottleService} from '../../app/bottle/bottle.service';
 
-
 @Component({
   templateUrl: 'bottle-select.html',
 })
+
 export class BottleSelectPage {
   active: Boolean = true;
   isReadOnly: Boolean = true;

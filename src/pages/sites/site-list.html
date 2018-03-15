@@ -8,10 +8,15 @@
 </ion-header>
 
 <ion-content>
-  <button ion-button large type="button" (click)="addSite()"><ion-icon name="add-circle"></ion-icon></button>
-  <p>Site Count: {{siteCount}}</p>
-  <p>Page {{currentPage}} of {{resultPages}}</p>
-  <div *ngIf="showPageButtons"><button ion-button large type="button" (click)="prevPage()">Prev Page</button><button ion-button large type="button" (click)="nextPage()">Next Page</button></div>
+  <button style="float:right;margin-top:10px;margin-right:10px;" ion-button medium type="button" (click)="addSite()"><ion-icon name="add-circle"></ion-icon> &nbsp;Add Site</button>
+  <h3 style="margin-left:10px;">{{siteCount}} Sites</h3>
+
+  <div *ngIf="showPageButtons" style="padding:8px;width:100%;margin-top:30px;text-align:center;">
+      <a (click)="prevPage()" class="sites-nav sites-nav-left">Prev Page</a>
+      {{currentPage}} / {{resultPages}}
+      <a (click)="nextPage()" class="sites-nav sites-nav-right">Next Page</a>      
+  </div>
+
   <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>
   <div [hidden]="notready">
     <ion-list>
@@ -27,5 +32,11 @@
       You navigated here from <b>{{selectedSite.name}}</b>
     </div>
   </div>
-  <div *ngIf="showPageButtons"><button ion-button large type="button" (click)="prevPage()">Prev Page</button><button ion-button large type="button" (click)="nextPage()">Next Page</button></div>
+
+  <div *ngIf="showPageButtons" style="padding:8px; width:100%;margin-top:30px;text-align:center;">
+      <a (click)="prevPage()" class="sites-nav sites-nav-left">Prev Page</a>
+      {{currentPage}} / {{resultPages}}
+      <a (click)="nextPage()" class="sites-nav sites-nav-right">Next Page</a>      
+  </div>
+
 </ion-content>

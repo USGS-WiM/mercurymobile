@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
 import {APP_UTILITIES}   from '../app.utilities';
-import {BOTTLES} from './bottles';
+//import {BOTTLES} from './bottles';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
 import load from 'pouchdb-load';
@@ -33,7 +33,7 @@ export class BottleService {
           if(result.total_rows === 0) {
             console.log("start put bottles");
             let count = 0;
-            for (let bottle of BOTTLES) {
+            /*for (let bottle of BOTTLES) {
               this._db.put({
                 _id: bottle['name'],
                 id: bottle['id'],
@@ -43,7 +43,7 @@ export class BottleService {
               if (count % 1000 == 0) {
                 console.log(count);
               }
-            }
+            }*/
             console.log("end put bottles");
           }
         })
@@ -94,6 +94,14 @@ export class BottleService {
         }).catch(function(err) {
           console.log('dumpDB ERROR! ', err);
           return false;
+      });
+    }
+
+    add(name: string) {
+      this._db.put({
+        _id: name,
+        id: name,
+        name: name
       });
     }
 

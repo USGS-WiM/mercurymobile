@@ -9,9 +9,11 @@ export class Sample {
     depth: number,
     replicate: number,
     medium: number,
+    filter: string,
+    acid: string,
     sample_bottles?: number[],
     comment?: string,
     length?: number,
-    id?: number
+    id?: number,    
   ) {}
 }
