@@ -16,7 +16,7 @@
       <ion-grid id="header" formGroupName="sampleHeaderControls">
         <ion-row>
           <ion-col col-12>
-            <ion-item>
+            <ion-item style="float:right;">
               <ion-label> Use data entry widgets</ion-label>
               <ion-toggle (ionChange)="toggleUseWidgets()" [checked]=useWidgets></ion-toggle>
             </ion-item>
@@ -151,13 +151,13 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col col-7>
-            <ion-item class="option-box">
+          <ion-col col-8>
+            <ion-item style="float:right;">
               <ion-label>Lookup Container IDs</ion-label>
               <ion-toggle (ionChange)="toggleLookupContainers()"></ion-toggle>
             </ion-item>
           </ion-col>
-          <ion-col col-5>
+          <ion-col col-4>
             <button style="float:right;" ion-button medium type="button" (click)="addRow()">
               <ion-icon name="add-circle"></ion-icon> &nbsp;Add Container</button>
           </ion-col>

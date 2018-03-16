@@ -64,7 +64,7 @@
         </ion-row>
         <ion-row>
           <ion-col col-4><ion-label>Project(s)</ion-label></ion-col>
-          <ion-col col-8><ion-item><ion-select [multiple]="true" formControlName="projects">
+          <ion-col col-8><ion-item><ion-select  class="full-width-select" [multiple]="true" formControlName="projects">
             <ion-option *ngFor="let project of myProjects" [value]="project.id" [selected]="false">{{project.name}}</ion-option>
           </ion-select></ion-item></ion-col>
         </ion-row>
