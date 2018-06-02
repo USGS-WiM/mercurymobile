@@ -45,7 +45,8 @@ export class SampleDetailPage {
   private _numRowsAdded: number = 0;
   private _numSampleBottles: number = 0;
   selectedAcid: number;
-  selectedFilter: number;
+  selectedFilterID: number;
+  selectedFilterName: string;
   
 
   mySample: Sample = new Sample(null, null, null, null, null, null, null, null, null, null, null, null, null);
@@ -258,17 +259,27 @@ export class SampleDetailPage {
     this._projectService.getAll()
       .then(response =>
       {
-        for(let i =0; i < response.rows.length; i++) {
+        for(let i = 0; i < response.rows.length; i++) {
           this.myProjects.push(response.rows[i].doc);
         }
         // if there is only one project, automatically select it and filter the sites
         if (this.myProjects.length == 1) {
-          let proj = this.myProjects[0];
-          this.projectName.setValue(proj['name']);
-          this.projectNumber.setValue(proj['id']);
-          this.mySample['projectName'] = proj['name'];
-          this.mySample['projectNumber'] = proj['id'];
-          this.mySites = proj['sites'];
+          const project = this.myProjects[0];
+          this.projectName.setValue(project['name']);
+          this.projectNumber.setValue(project['id']);
+          this.mySample['projectName'] = project['name'];
+          this.mySample['projectNumber'] = project['id'];
+          this.mySites = project['sites'];
+        }
+        // if there is already a project for this sample, automatically select it and filter the sites
+        else if (projectName) {
+          let projects = this.myProjects.filter(function (project) { return project['name'] == projectName });
+          const project = projects[0];
+          this.projectName.setValue(project['name']);
+          this.projectNumber.setValue(project['id']);
+          this.mySample['projectName'] = project['name'];
+          this.mySample['projectNumber'] = project['id'];
+          this.mySites = project['sites'];
         }
       }, error => {
         this._errorMessage = <any>error;
@@ -296,14 +307,23 @@ export class SampleDetailPage {
 
             // populate the sample's filter field if any of the sample bottles have used an filter
             let filter = samplebottle['filter_type'];
-            if (filter && (typeof this.selectedFilter === 'undefined' || !this.selectedFilter)) {
-              this.selectedFilter = filter;
+            console.log(filter);
+            if (filter && (typeof this.selectedFilterID === 'undefined' || !this.selectedFilterID)) {
+              this.selectedFilterID = filter;
+              const myFilter = this.myFilters.filter(function (myFilter) { return myFilter['id'] == filter });
+              const filterName = myFilter[0]['filter'];
+              console.log(filterName);
+              this.selectedFilterName = filterName;
+              (<FormGroup>this.sampleHeaderControls).controls['sampleFilter'].setValue(filterName);
             }
         });
     }
     this.notready = false;
   }
 
+  onClick() {
+    console.log("click");
+  }
 
   private _getAnalyses() {
     this._analysisService.getAll()
@@ -343,31 +363,33 @@ export class SampleDetailPage {
 
   addNewBottle(ev: any, ndx: number) {
     const newBottleName = ev.value;
-    this._bottleService.getBottlesByName(newBottleName).then(response => {
-      let exists = response.rows.length > 0 ? true : false;
-      if (!exists) {
-        let confirm = this.alertCtrl.create({
-          title: 'Add New Container',
-          message: newBottleName + ' was not found in the database, add a new Container with this value?',
-          buttons: [
-            {
-              text: 'Cancel',
-              handler: () => {
-                (<FormGroup>this.sampleBottleControls.controls[ndx]).controls['bottle'].setValue(null);
+    if (newBottleName != null && newBottleName != '') {
+      this._bottleService.getBottlesByName(newBottleName).then(response => {
+        let exists = response.rows.length > 0 ? true : false;
+        if (!exists) {
+          let confirm = this.alertCtrl.create({
+            title: 'Add New Container',
+            message: newBottleName + ' was not found in the database, add a new Container with this value?',
+            buttons: [
+              {
+                text: 'Cancel',
+                handler: () => {
+                  (<FormGroup>this.sampleBottleControls.controls[ndx]).controls['bottle'].setValue(null);
+                }
+              },
+              {
+                text: 'Add New Container',
+                handler: () => {
+                  this._bottleService.add(newBottleName);
+                }
               }
-            },
-            {
-              text: 'Add New Container',
-              handler: () => {
-                this._bottleService.add(newBottleName);
-                this._addSampleBottle(newBottleName);
-              }
-            }
-          ]
-        });
-        confirm.present();
-      }
-    });
+            ]
+          });
+          confirm.present();
+        }
+        this._addSampleBottle(newBottleName);
+      });
+    }
     
   }
 
@@ -495,7 +517,8 @@ export class SampleDetailPage {
   filterNameChange(filterName: string) {
     this._filterService.getFiltersByName(filterName)
     .then(response => {
-      this.selectedFilter = response.rows[0].doc.id;
+      this.selectedFilterID = response.rows[0].doc.id;
+      this.selectedFilterName = response.rows[0].doc.filter;
       (<FormGroup>this.sampleHeaderControls).controls['sampleFilter'].setValue(filterName);
     })
     .catch(error => {
@@ -514,13 +537,12 @@ export class SampleDetailPage {
   }
 
   openPage(sample_bottle_id) {
-      this.navCtrl.push(SampleBottlePage, {
-          samplebottle: sample_bottle_id
-      });
+    this.navCtrl.push(SampleBottlePage, {
+        samplebottle: sample_bottle_id
+    });
   }
 
   projectNameChange(projectName: string) {
-    
     if (projectName == null || projectName == "") {
       return;
     }
@@ -538,7 +560,6 @@ export class SampleDetailPage {
   }
 
   projectNumberChange(projectNumber: number) {
-
     if (projectNumber == null || projectNumber == NaN) {
       return;
     }
@@ -588,7 +609,7 @@ export class SampleDetailPage {
   }
 
   addRow(samplebottle?: SampleBottle){
-    
+
     if(samplebottle) {
 
       this.sampleBottleControls.push(
@@ -675,12 +696,13 @@ export class SampleDetailPage {
             if ((<FormGroup>this.sampleBottleControls.controls[i]).controls['bottle'].value !== null) {
               this._samplebottleService.getOne((<FormGroup>this.sampleBottleControls.controls[i]).controls['bottle'].value).then(response => {
                 const pType = (<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationType'].value;
+                const filterVolume = parseInt((<FormGroup>this.sampleBottleControls.controls[i]).controls['filterVolume'].value);
                 return this._samplebottleService.update({
                   '_id': response['_id'],
                   '_rev': response['_rev'],
                   'analysis_type': (<FormGroup>this.sampleBottleControls.controls[i]).controls['analysis'].value,
-                  'filter_type': formValue.sampleHeaderControls.sampleFilter,
-                  'volume_filtered': parseInt((<FormGroup>this.sampleBottleControls.controls[i]).controls['filterVolume'].value),
+                  'filter_type': (filterVolume != null) ? formValue.sampleHeaderControls.sampleFilter : null, // formValue.sampleHeaderControls.sampleFilter,
+                  'volume_filtered': filterVolume,
                   'preservation_type': pType,
                   'preservation_volume': parseInt((<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationVolume'].value),
                   'preservation_comment': (<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationComment'].value,

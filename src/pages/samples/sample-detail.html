@@ -15,11 +15,14 @@
     <form (keydown.enter)="$event.preventDefault()" [formGroup]="sampleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleForm.value)">
       <ion-grid id="header" formGroupName="sampleHeaderControls">
         <ion-row>
-          <ion-col col-12>
+          <ion-col col-10>
             <ion-item style="float:right;">
               <ion-label> Use data entry widgets</ion-label>
               <ion-toggle (ionChange)="toggleUseWidgets()" [checked]=useWidgets></ion-toggle>
             </ion-item>
+          </ion-col>
+          <ion-col col-2>
+            <button ion-button block large type="button" (click)="onClick()">Pause</button>
           </ion-col>
         </ion-row>
         <ion-row class="sampleFormRow">
@@ -133,13 +136,18 @@
               <ion-label>Filter</ion-label>
               <ion-item *ngIf="useWidgets">                  
                 <ion-select formControlName="sampleFilter" class="full-width-select">
-                  <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="filter.id == selectedFilter">{{filter.filter}}</ion-option>
+                  <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="filter.id == selectedFilterID">{{filter.filter}}</ion-option>
                 </ion-select>                    
               </ion-item>
               <ion-item *ngIf="!useWidgets">
-                <ion-input type="text" formControlName="sampleFilter" (blur)="filterNameChange(fName.value)" #fName></ion-input>
+                <ion-input type="text" formControlName="sampleFilter" [value]="selectedFilterName" (blur)="filterNameChange(fName.value)" #fName></ion-input>
               </ion-item>
             </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-12>
+            {{mySample | json}}
+          </ion-col>
         </ion-row>
       </ion-grid>
 

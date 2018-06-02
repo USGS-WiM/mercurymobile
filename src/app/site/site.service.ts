@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
 import {APP_UTILITIES}   from '../../app/app.utilities';
-//import {SITES} from './sites';
+import {SITES} from './sites';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
 import load from 'pouchdb-load';
@@ -30,11 +30,11 @@ export class SiteService {
       console.log("start init sites");
       this._db.allDocs()
         .then(result => {
-          //console.log(result.total_rows);
+          console.log(result.total_rows);
           if(result.total_rows === 0) {
             console.log("start put sites");
-            // let count = 0;
-            /*for (let site of SITES) {
+            //let count = 0;
+            for (let site of SITES) {
                 // let projects = site['projects'];
                 // let siteID;
                 // for (let project in projects) {
@@ -58,7 +58,7 @@ export class SiteService {
                 // if (count % 1000 == 0) {
                 //   console.log(count);
                 // }
-              }*/
+              }
             }
             console.log("end put sites");
         })

@@ -42,10 +42,10 @@ export class ConfigPage {
         this.myServices["samplebottles"] = this._samplebottleService;
         this.myServices["sites"] = this._siteService;
 
-        // this._acidService.initDB();
-        // this._bottleService.initDB();
-        // this._projectService.initDB();
-        // this._siteService.initDB();
+        //this._acidService.initDB();
+        //this._bottleService.initDB();
+        //this._projectService.initDB();
+        //this._siteService.initDB();
     }
 
     fileDragHover(fileInput) {

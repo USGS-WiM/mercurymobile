@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {APP_SETTINGS}   from '../app.settings';
 import {APP_UTILITIES}   from '../../app/app.utilities';
-//import {PROJECTS} from './projects';
+import {PROJECTS} from './projects';
 import PouchDB from 'pouchdb';
 import find from 'pouchdb-find';
 import load from 'pouchdb-load';
@@ -31,7 +31,7 @@ export class ProjectService {
         .then(result => {
           if(result.total_rows === 0) {
             //this._db.bulkDocs(PROJECTS);
-            /*for (let project of PROJECTS) {
+            for (let project of PROJECTS) {
               //this._db.post(analysis);
               this._db.put({
                 _id: project['name'],
@@ -39,7 +39,7 @@ export class ProjectService {
                 name: project['name'],
                 sites: project['sites']
               });
-            }*/
+            }
           }
         })
         .catch( error => {
