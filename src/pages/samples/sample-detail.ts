@@ -49,7 +49,7 @@ export class SampleDetailPage {
   selectedFilterName: string;
   
 
-  mySample: Sample = new Sample(null, null, null, null, null, null, null, null, null, null, null, null, null);
+  mySample: Sample = new Sample(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
   mySampleBottles: SampleBottle[] = [];
   myProjects: Project[] = [];
   mySites: Site[] = [];
@@ -126,6 +126,10 @@ export class SampleDetailPage {
     this.sample_ID = this.navParams.get('sample');
     this.clone = this.navParams.get('clone');
 
+    this._getFilters();
+    this._getPreservations();
+    this._getAnalyses();
+
     // if the sample exists retrieve its data, otherwise set up a new empty sample
     if (this.sample_ID) {
       this._getSample(this.sample_ID, this.clone);
@@ -153,10 +157,6 @@ export class SampleDetailPage {
             this.notready = false;
         });
     }
-
-    this._getPreservations();
-    this._getAnalyses();
-    this._getFilters();
   }
 
   showCalendar() {
@@ -206,10 +206,11 @@ export class SampleDetailPage {
             this.mySample['siteName'] = sample['siteName'];
             this.mySample['siteNumber'] = sample['siteNumber'];
             this.mySample['date'] = sample['date'];
+            this.mySample['medium'] = sample['medium']; 
             this.mySample['mediumName'] = sample['mediumName'];
             this.mySample['mediumNumber'] = sample['mediumNumber'];  
-            this.mySample['filter'] = sample['filter'];
-            this.mySample['acid'] = sample['acid'];
+            // this.mySample['filter'] = sample['filter'];
+            // this.mySample['acid'] = sample['acid'];
 
             // set new sample id to some random unique number
             let id = Date.now() % 10000000000;
@@ -230,6 +231,10 @@ export class SampleDetailPage {
             this._getProjects();
           }
 
+          console.log(this.mySample);
+          console.log(this.mySample['medium'])
+          console.log(this.mySample['mediumNumber'])
+          console.log(this.mySample['mediumName'])
           this.sampleDate.setValue(this.mySample['date']);
           this.sampleMedium.setValue(this.mySample['medium']);
           this.sampleComment.setValue(this.mySample['comment']);
@@ -287,36 +292,30 @@ export class SampleDetailPage {
   }
 
   private _getSampleBottles(sampBottles: any){
-    
     for (let i = 0, j = sampBottles.length; i < j; i++) {
-        this._samplebottleService.getOne(sampBottles[i]['_id']).then(response => {
-            let samplebottle = response;
+      this._samplebottleService.getOne(sampBottles[i]['_id']).then(response => {
+          let samplebottle = response;
 
-            // if this sample is not a clone, populate the sample bottle list
-            if (!this.clone) {
-              this.mySampleBottles.push(samplebottle);
-              this.addRow(samplebottle);              
-            }
+          // if this sample is not a clone, populate the sample bottle list
+          if (!this.clone) {
+            this.mySampleBottles.push(samplebottle);
+            this.addRow(samplebottle);              
+          }
 
-            // populate the sample's acid field if any of the sample bottles have used an acid
-            let acid = samplebottle['preservation_acid'];
-            if (acid && (typeof this.selectedAcid === 'undefined' || !this.selectedAcid)) {
-              this.selectedAcid = acid;
-              this._getAcidName(this.selectedAcid);
-            }
+          // populate the sample's acid field if any of the sample bottles have used an acid
+          let acid = samplebottle['preservation_acid'];
+          if (acid && (typeof this.selectedAcid === 'undefined' || !this.selectedAcid)) {
+            this.selectedAcid = acid;
+            this._getAcidName(this.selectedAcid);
+          }
 
-            // populate the sample's filter field if any of the sample bottles have used an filter
-            let filter = samplebottle['filter_type'];
-            console.log(filter);
-            if (filter && (typeof this.selectedFilterID === 'undefined' || !this.selectedFilterID)) {
-              this.selectedFilterID = filter;
-              const myFilter = this.myFilters.filter(function (myFilter) { return myFilter['id'] == filter });
-              const filterName = myFilter[0]['filter'];
-              console.log(filterName);
-              this.selectedFilterName = filterName;
-              (<FormGroup>this.sampleHeaderControls).controls['sampleFilter'].setValue(filterName);
-            }
-        });
+          // populate the sample's filter field if any of the sample bottles have used an filter
+          let filter = samplebottle['filter_type'];
+          if (filter && (typeof this.selectedFilterID === 'undefined' || !this.selectedFilterID)) {
+            this.selectedFilterID = filter;
+            this._setFilterName(filter);
+          }
+      });
     }
     this.notready = false;
   }
@@ -337,6 +336,10 @@ export class SampleDetailPage {
       });
   }
 
+  private _debugTime() {
+    return new Date().toISOString().substr(14, 22);
+  }
+
   private _getFilters() {
     this._filterService.getAll()
       .then(response =>
@@ -344,9 +347,22 @@ export class SampleDetailPage {
         for(let i =0; i < response.rows.length; i++) {
           this.myFilters.push(response.rows[i].doc);
         }
+        // update filter name just in case _getSampleBottles finished before this function (_getFilters) finished
+        if (this.selectedFilterID) {
+          this._setFilterName(this.selectedFilterID);
+        }
       }, error => {
         this._errorMessage = <any>error;
       });
+  }
+
+  private _setFilterName(filterID: number) {
+    const myFilter = this.myFilters.filter(function (myFilter) { return myFilter['id'] == filterID });
+    if (myFilter.length > 0) {
+      const filterName = myFilter[0]['filter'];
+      this.selectedFilterName = filterName;
+      (<FormGroup>this.sampleHeaderControls).controls['sampleFilter'].setValue(filterName);
+    }
   }
 
   private _getPreservations() {
@@ -397,7 +413,7 @@ export class SampleDetailPage {
     this._bottleService.getBottlesByName(bottleName).then(response => {
 
         let bottleID = response.rows[0]['id'];
-        let bottle = new SampleBottle(this.sample_ID, bottleID, null, null, null, null, null, null, null, bottleName, bottleID);
+        let bottle = new SampleBottle(this.sample_ID, bottleID, null, null, null, null, null, null, null, null, null, bottleName, bottleID);
         this.mySampleBottles.push(bottle);
 
         // include the PouchDB internal ID for quick retrieval
@@ -603,8 +619,41 @@ export class SampleDetailPage {
     if (mediums.length < 1) {
       this.showAlert('Medium not found!', mName.toString(), 'was not found in the database. Please enter a valid medium.');
     } else {
+      this.mySample['medium'] = mediums[0]['id'];
       this.mySample['mediumNumber'] = mediums[0]['id'];
       this.mySample['mediumName'] = mediums[0]['nwis_code'];
+    }
+  }
+
+  analysisChange(ev: any, ndx: number) {
+    console.log("analysisChange");
+    const aName = ev.value;
+    console.log(aName);
+    if (aName != null && aName != '') {
+      let analyses = this.myAnalyses.filter(function(analysis: Analysis) {return analysis['analysis'] == aName});
+      if (analyses.length < 1) {
+        this.showAlert('Analysis not found!', aName.toString(), 'was not found in the database. Please enter a valid medium.');
+      } else {
+        console.log(analyses[0]['id']);
+        (<FormGroup>this.sampleBottleControls.controls[ndx]).controls['analysis'].setValue(analyses[0]['id']);
+        (<FormGroup>this.sampleBottleControls.controls[ndx]).controls['analysisName'].setValue(aName);
+      }
+    }
+  }
+
+  preservationChange(ev: any, ndx: number) {
+    console.log("preservationChange");
+    const pName = ev.value;
+    console.log(pName);
+    if (pName != null && pName != '') {
+      let preservations = this.myPreservations.filter(function(preservation: Preservation) {return preservation['preservation'] == pName});
+      if (preservations.length < 1) {
+        this.showAlert('Preservation not found!', pName.toString(), 'was not found in the database. Please enter a valid preservation.');
+      } else {
+        console.log(preservations[0]['id']);
+        (<FormGroup>this.sampleBottleControls.controls[ndx]).controls['preservationType'].setValue(preservations[0]['id']);
+        (<FormGroup>this.sampleBottleControls.controls[ndx]).controls['preservationTypeName'].setValue(pName);
+      }
     }
   }
 
@@ -615,11 +664,13 @@ export class SampleDetailPage {
       this.sampleBottleControls.push(
         new FormGroup({
           bottle: new FormControl(samplebottle['_id'] ? samplebottle['_id'] : null),
-          medium: new FormControl(this.mySample['medium'] ? this.mySample['medium'] : null),
+          // medium: new FormControl(this.mySample['medium'] ? this.mySample['medium'] : null),
           analysis: new FormControl(samplebottle['analysis_type'] ? samplebottle['analysis_type'] : null),
+          analysisName: new FormControl(samplebottle['analysis_type_name'] ? samplebottle['analysis_type_name'] : null),
           filterType: new FormControl(samplebottle['filter_type'] ? samplebottle['filter_type'] : null),
           filterVolume: new FormControl(samplebottle['volume_filtered'] ? samplebottle['volume_filtered'] : null),
           preservationType: new FormControl(samplebottle['preservation_type'] ? samplebottle['preservation_type'] : null),
+          preservationTypeName: new FormControl(samplebottle['preservation_type_name'] ? samplebottle['preservation_type_name'] : null),
           preservationAcid: new FormControl(samplebottle['preservation_acid'] ? samplebottle['preservation_acid'] : null),
           preservationVolume: new FormControl(samplebottle['preservation_volume'] ? samplebottle['preservation_volume'] : null),
           preservationComment: new FormControl(samplebottle['preservation_comment'] ? samplebottle['preservation_comment'] : null)
@@ -634,11 +685,13 @@ export class SampleDetailPage {
       this.sampleBottleControls.push(
         new FormGroup({
           bottle: new FormControl(null),
-          medium: new FormControl(null),
+          // medium: new FormControl(null),
           analysis: new FormControl(null),
+          analysisName: new FormControl(null),
           filterType: new FormControl(null),
           filterVolume: new FormControl(null),
           preservationType: new FormControl(null),
+          preservationTypeName: new FormControl(null),
           preservationAcid: new FormControl(null),
           preservationVolume: new FormControl(null),
           preservationComment: new FormControl(null)
@@ -684,8 +737,8 @@ export class SampleDetailPage {
     this.mySample['replicate'] = parseInt(formValue.sampleHeaderControls.sampleRep);
     this.mySample['sample_bottles'] = this.mySampleBottles;
     this.mySample['comment'] = formValue.sampleCommentControls.sampleComment;
-    //this.mySample['filter'] = formValue.sampleHeaderControls.sampleFilter;
-    //this.mySample['acid'] = formValue.sampleHeaderControls.sampleAcid;
+    // this.mySample['filter'] = formValue.sampleHeaderControls.sampleFilter;
+    // this.mySample['acid'] = formValue.sampleHeaderControls.sampleAcid;
 
     // update the sample
     this._sampleService.getOne(this.mySample['_id']).then(response => {
@@ -703,7 +756,9 @@ export class SampleDetailPage {
                   'analysis_type': (<FormGroup>this.sampleBottleControls.controls[i]).controls['analysis'].value,
                   'filter_type': (filterVolume != null) ? formValue.sampleHeaderControls.sampleFilter : null, // formValue.sampleHeaderControls.sampleFilter,
                   'volume_filtered': filterVolume,
+                  'analysis_type_name': (<FormGroup>this.sampleBottleControls.controls[i]).controls['analysisName'].value,
                   'preservation_type': pType,
+                  'preservation_type_name': (<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationTypeName'].value,
                   'preservation_volume': parseInt((<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationVolume'].value),
                   'preservation_comment': (<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationComment'].value,
                   'preservation_acid': (pType == 8) ? self.selectedAcid : null

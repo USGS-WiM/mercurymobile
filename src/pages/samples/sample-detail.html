@@ -116,7 +116,7 @@
             <ion-label>Medium</ion-label>
             <ion-item *ngIf="useWidgets">
               <ion-select class="full-width-select" formControlName="sampleMedium" (ionChange)="mediumChange(mName.text.split(' - ')[0])" #mName>
-                <ion-option *ngFor="let medium of myMediums" [value]="medium.nwis_code" [selected]="medium.id == mySample.mediumNumber">{{medium.nwis_code}} - {{medium.description}}</ion-option>
+                <ion-option *ngFor="let medium of myMediums" [value]="medium.id" [selected]="medium.id == mySample.medium">{{medium.nwis_code}} - {{medium.description}}</ion-option>
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
@@ -136,7 +136,7 @@
               <ion-label>Filter</ion-label>
               <ion-item *ngIf="useWidgets">                  
                 <ion-select formControlName="sampleFilter" class="full-width-select">
-                  <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="filter.id == selectedFilterID">{{filter.filter}}</ion-option>
+                  <ion-option *ngFor="let filter of myFilters" [value]="filter.filter" [selected]="filter.id == selectedFilterID">{{filter.filter}}</ion-option>
                 </ion-select>                    
               </ion-item>
               <ion-item *ngIf="!useWidgets">
@@ -222,7 +222,7 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="string" formControlName="analysis" class="full-width-select"></ion-input>
+              <ion-input type="string" formControlName="analysis" [value]="sampleBottleControls.controls[ndx].controls['analysisName'].value" class="full-width-select" (ionChange)="analysisChange(analysisName.value)" #analysisName></ion-input>
             </ion-item>
           </ion-col>          
           <ion-col col-1>
@@ -237,7 +237,7 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="string" formControlName="preservationType" class="full-width-select"></ion-input>
+              <ion-input type="string" formControlName="preservationType" [value]="sampleBottleControls.controls[ndx].controls['preservationTypeName'].value" class="full-width-select" (ionChange)="preservationChange(preservationTypeName.value)" #preservationTypeName></ion-input>
             </ion-item>
           </ion-col>          
           <ion-col col-1>
