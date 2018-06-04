@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormControl, FormGroup, FormArray, FormBuilder} from "@angular/forms";
+import {FormControl, FormGroup, FormArray, FormBuilder, Validators} from "@angular/forms";
 import {ViewController, ModalController, NavController, NavParams, AlertController, Events} from 'ionic-angular';
 import {Project} from '../../app/project/project';
 import {Site} from '../../app/site/site';
@@ -64,7 +64,7 @@ export class SampleDetailPage {
   siteName: FormControl = new FormControl(null);
   siteNumber: FormControl = new FormControl(null);
   sampleDate: FormControl = new FormControl(null);
-  sampleTime: FormControl = new FormControl(null);
+  sampleTime: FormControl = new FormControl({value: null, disabled: false}, Validators.required);
   sampleDepth: FormControl = new FormControl(null);
   sampleRep: FormControl = new FormControl(null);
   sampleMedium: FormControl = new FormControl(null);
@@ -139,8 +139,8 @@ export class SampleDetailPage {
         // this a new sample, so set all values to empty of equivalent
         this.mySample = new Sample('', 0, '', 0, null, null, 0, 0, 0, '', '', [], '');
         // force setting of date to today
-        this.sampleDate.setValue(APP_UTILITIES.TODAY);
-        this.mySample['sampleDate'] = APP_UTILITIES.TODAY;
+        this.sampleDate.setValue(this._convertDateISOtoUS(APP_UTILITIES.TODAY));
+        this.mySample['date'] = APP_UTILITIES.TODAY;
         // force setting of depth and rep input fields to zero
         this.sampleDepth.setValue('0');
         this.sampleRep.setValue('0');
@@ -164,20 +164,25 @@ export class SampleDetailPage {
       this.datePicker.showCalendar(this.modalCtrl);
 
     dateSelected.subscribe(date => {   
-      const theFormattedDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-      
-      this.sampleDate.setValue(theFormattedDate);
-      (<FormGroup>this.sampleHeaderControls).controls['sampleDate'].setValue(theFormattedDate);
-      this.mySample['sampleDate'] = theFormattedDate;            
+      const isoFormattedDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+      this.mySample['date'] = isoFormattedDate;
+      const usFormattedDate = this._convertDateISOtoUS(isoFormattedDate);
+      this.sampleDate.setValue(usFormattedDate);
     });
   }
 
   toggleUseWidgets() {
     this.useWidgets = !this.useWidgets;
-    let myDate = this.sampleDate.value;
-    if (myDate.includes('/')) {
-      this.mySample['date'] = myDate.slice(6,10) + '-' + myDate.slice(0,2) + '-' + myDate.slice(3,5);
-      this.sampleDate.setValue(this.mySample['date']);
+    // const myDate = this.sampleDate.value;
+    this.mediumChange(this.mySample['mediumName']);
+    if (this.selectedFilterID) {
+      this._setFilterName(this.selectedFilterID);
+    }
+    for (let i = 0; i < this._numSampleBottles; i++) {
+      const anName = (<FormGroup>this.sampleBottleControls.controls[i]).controls['analysisName'].value;
+      this.analysisChange(anName, i);
+      const prName = (<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationTypeName'].value;
+      this.preservationChange(prName, i);
     }
   }
 
@@ -208,7 +213,7 @@ export class SampleDetailPage {
             this.mySample['date'] = sample['date'];
             this.mySample['medium'] = sample['medium']; 
             this.mySample['mediumName'] = sample['mediumName'];
-            this.mySample['mediumNumber'] = sample['mediumNumber'];  
+            // this.mySample['mediumNumber'] = sample['mediumNumber'];
             // this.mySample['filter'] = sample['filter'];
             // this.mySample['acid'] = sample['acid'];
 
@@ -231,11 +236,7 @@ export class SampleDetailPage {
             this._getProjects();
           }
 
-          console.log(this.mySample);
-          console.log(this.mySample['medium'])
-          console.log(this.mySample['mediumNumber'])
-          console.log(this.mySample['mediumName'])
-          this.sampleDate.setValue(this.mySample['date']);
+          this.sampleDate.setValue(this._convertDateISOtoUS(this.mySample['date']));
           this.sampleMedium.setValue(this.mySample['medium']);
           this.sampleComment.setValue(this.mySample['comment']);
           this.sampleTime.setValue(this._timeToText(this.mySample['time']));
@@ -320,10 +321,6 @@ export class SampleDetailPage {
     this.notready = false;
   }
 
-  onClick() {
-    console.log("click");
-  }
-
   private _getAnalyses() {
     this._analysisService.getAll()
       .then(response =>
@@ -361,7 +358,7 @@ export class SampleDetailPage {
     if (myFilter.length > 0) {
       const filterName = myFilter[0]['filter'];
       this.selectedFilterName = filterName;
-      (<FormGroup>this.sampleHeaderControls).controls['sampleFilter'].setValue(filterName);
+      (<FormGroup>this.sampleHeaderControls).controls['sampleFilter'].setValue(filterID);
     }
   }
 
@@ -481,6 +478,17 @@ export class SampleDetailPage {
     return text;
   }
 
+  private _convertDateUStoISO(usFormattedDate: string) {
+    const usFormattedDateParts = usFormattedDate.split('/');
+    return usFormattedDateParts[2] + '-' + usFormattedDateParts[0] + '-' + usFormattedDateParts[1];
+  }
+
+  private _convertDateISOtoUS(isoFormattedDate: string) {
+    const isoFormattedDateParts = isoFormattedDate.split('-');
+    const year = isoFormattedDateParts[0]
+    return isoFormattedDateParts[1] + '/' + isoFormattedDateParts[2] + '/' + year;
+  }
+
   openDateSelect() {
     this.showCalendar();
   }
@@ -519,23 +527,12 @@ export class SampleDetailPage {
     });
   }
 
-  openFilterSelect() {
-    let opts = {showBackdrop: false, enableBackdropDismiss: false};
-    let modal = this.modalCtrl.create(FilterSelectPage, {}, opts);
-    modal.onDidDismiss(filterName => {
-      if (filterName) {
-        this.filterNameChange(filterName);
-      }
-    });
-    modal.present();
-  }
-
-  filterNameChange(filterName: string) {
+  filterNameChange(filterName: string, source: string) {
     this._filterService.getFiltersByName(filterName)
     .then(response => {
       this.selectedFilterID = response.rows[0].doc.id;
       this.selectedFilterName = response.rows[0].doc.filter;
-      (<FormGroup>this.sampleHeaderControls).controls['sampleFilter'].setValue(filterName);
+      //(<FormGroup>this.sampleHeaderControls).controls['sampleFilter'].setValue(filterName);
     })
     .catch(error => {
       this.showAlert('Filter not found!', filterName, 'was not found in the database. Please enter a valid filter.');
@@ -615,42 +612,37 @@ export class SampleDetailPage {
   }
 
   mediumChange(mName: string) {
-    let mediums = this.myMediums.filter(function(medium: Medium) {return medium['nwis_code'] == mName});
-    if (mediums.length < 1) {
-      this.showAlert('Medium not found!', mName.toString(), 'was not found in the database. Please enter a valid medium.');
-    } else {
-      this.mySample['medium'] = mediums[0]['id'];
-      this.mySample['mediumNumber'] = mediums[0]['id'];
-      this.mySample['mediumName'] = mediums[0]['nwis_code'];
+    if (mName && mName != null && mName != '' && mName != 'undefined') {
+      let mediums = this.myMediums.filter(function(medium: Medium) {return medium['nwis_code'] == mName});
+      if (mediums.length < 1) {
+        this.showAlert('Medium not found!', mName.toString(), 'was not found in the database. Please enter a valid medium.');
+      } else {
+        this.mySample['medium'] = mediums[0]['id'];
+        // this.mySample['mediumNumber'] = mediums[0]['id'];
+        this.mySample['mediumName'] = mediums[0]['nwis_code'];
+        (<FormGroup>this.sampleHeaderControls).controls['sampleMedium'].setValue(this.mySample['medium']);
+      }
     }
   }
 
-  analysisChange(ev: any, ndx: number) {
-    console.log("analysisChange");
-    const aName = ev.value;
-    console.log(aName);
+  analysisChange(aName: string, ndx: number) {
     if (aName != null && aName != '') {
       let analyses = this.myAnalyses.filter(function(analysis: Analysis) {return analysis['analysis'] == aName});
       if (analyses.length < 1) {
-        this.showAlert('Analysis not found!', aName.toString(), 'was not found in the database. Please enter a valid medium.');
+        this.showAlert('Analysis not found!', aName.toString(), 'was not found in the database. Please enter a valid analysis.');
       } else {
-        console.log(analyses[0]['id']);
         (<FormGroup>this.sampleBottleControls.controls[ndx]).controls['analysis'].setValue(analyses[0]['id']);
         (<FormGroup>this.sampleBottleControls.controls[ndx]).controls['analysisName'].setValue(aName);
       }
     }
   }
 
-  preservationChange(ev: any, ndx: number) {
-    console.log("preservationChange");
-    const pName = ev.value;
-    console.log(pName);
+  preservationChange(pName: string, ndx: number) {
     if (pName != null && pName != '') {
       let preservations = this.myPreservations.filter(function(preservation: Preservation) {return preservation['preservation'] == pName});
       if (preservations.length < 1) {
         this.showAlert('Preservation not found!', pName.toString(), 'was not found in the database. Please enter a valid preservation.');
       } else {
-        console.log(preservations[0]['id']);
         (<FormGroup>this.sampleBottleControls.controls[ndx]).controls['preservationType'].setValue(preservations[0]['id']);
         (<FormGroup>this.sampleBottleControls.controls[ndx]).controls['preservationTypeName'].setValue(pName);
       }
@@ -729,10 +721,18 @@ export class SampleDetailPage {
     let self = this;
 
     // TODO: build proper onSubmit function, including validations (especially assigning acid to samplebottles)
+    let myTime = formValue.sampleHeaderControls.sampleTime;
+    if (myTime == null || myTime == '') {
+      this.showAlert('Time is a required field! Please enter a valid acid.');
+      return false;
+    }
     let myDate = formValue.sampleHeaderControls.sampleDate;
+    if (myDate.includes('/')) {
+      myDate = this._convertDateUStoISO(myDate);
+    }
       
     this.mySample['date'] = myDate;
-    this.mySample['time'] = this._textToTime(formValue.sampleHeaderControls.sampleTime);
+    this.mySample['time'] = this._textToTime(myTime);
     this.mySample['depth'] = parseInt(formValue.sampleHeaderControls.sampleDepth);
     this.mySample['replicate'] = parseInt(formValue.sampleHeaderControls.sampleRep);
     this.mySample['sample_bottles'] = this.mySampleBottles;

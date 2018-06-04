@@ -15,14 +15,11 @@
     <form (keydown.enter)="$event.preventDefault()" [formGroup]="sampleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleForm.value)">
       <ion-grid id="header" formGroupName="sampleHeaderControls">
         <ion-row>
-          <ion-col col-10>
+          <ion-col col-12>
             <ion-item style="float:right;">
               <ion-label> Use data entry widgets</ion-label>
               <ion-toggle (ionChange)="toggleUseWidgets()" [checked]=useWidgets></ion-toggle>
             </ion-item>
-          </ion-col>
-          <ion-col col-2>
-            <button ion-button block large type="button" (click)="onClick()">Pause</button>
           </ion-col>
         </ion-row>
         <ion-row class="sampleFormRow">
@@ -34,7 +31,7 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="projectName" [value]="mySample.projectName" (blur)="projectNameChange(pName.value)" #pName></ion-input>
+              <ion-input type="text" formControlName="projectName" [value]="mySample.projectName" (ionBlur)="projectNameChange(pName.value)" #pName></ion-input>
             </ion-item>
           </ion-col>
           <ion-col col-6>
@@ -45,7 +42,7 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="projectNumber" [value]="mySample.projectNumber" (ionChange)="projectNumberChange(pNumber.value)" #pNumber></ion-input>
+              <ion-input type="text" formControlName="projectNumber" [value]="mySample.projectNumber" (ionBlur)="projectNumberChange(pNumber.value)" #pNumber></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -58,7 +55,7 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="siteName" [value]="mySample.siteName" (ionChange)="siteNameChange(sName.value)" #sName></ion-input>
+              <ion-input type="text" formControlName="siteName" [value]="mySample.siteName" (ionBlur)="siteNameChange(sName.value)" #sName></ion-input>
             </ion-item>
           </ion-col>
           <ion-col col-6>
@@ -69,7 +66,7 @@
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="siteNumber" [value]="mySample.siteNumber" (ionChange)="siteNumberChange(sNumber.value)" #sNumber></ion-input>
+              <ion-input type="text" formControlName="siteNumber" [value]="mySample.siteNumber" (ionBlur)="siteNumberChange(sNumber.value)" #sNumber></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -81,7 +78,7 @@
             </ion-item>
             <!-- <ion-item *ngIf="useWidgets"><ion-input type="text" [value]="mySample.date | date:'MM/dd/y'" formControlName="sampleDate"></ion-input></ion-item> -->
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" [value]="mySample.date | date:'MM/dd/y'" formControlName="sampleDate"></ion-input>
+              <ion-input type="text" formControlName="sampleDate"></ion-input>
             </ion-item>
             <!-- <ion-item *ngIf="!useWidgets"><ion-input type="text" pattern="^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d\d\d\d$" formControlName="sampleDate"></ion-input></ion-item> -->
           </ion-col>
@@ -116,11 +113,11 @@
             <ion-label>Medium</ion-label>
             <ion-item *ngIf="useWidgets">
               <ion-select class="full-width-select" formControlName="sampleMedium" (ionChange)="mediumChange(mName.text.split(' - ')[0])" #mName>
-                <ion-option *ngFor="let medium of myMediums" [value]="medium.id" [selected]="medium.id == mySample.medium">{{medium.nwis_code}} - {{medium.description}}</ion-option>
+                <ion-option *ngFor="let medium of myMediums" value="{{medium.id}}">{{medium.nwis_code}} - {{medium.description}}</ion-option>
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="sampleMedium" [value]="mySample.mediumName" (ionChange)="mediumChange(mName.value)" #mName></ion-input>
+              <ion-input type="text" formControlName="sampleMedium" [value]="mySample.mediumName" (ionBlur)="mediumChange(mName.value)" #mName></ion-input>
             </ion-item>
           </ion-col>
           <ion-col col-4>
@@ -129,25 +126,20 @@
               <ion-input type="string" formControlName="sampleAcid" (click)="openAcidSelect()"></ion-input>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="text" formControlName="sampleAcid" (blur)="acidNameChange(aName.value)" #aName></ion-input>
+              <ion-input type="text" formControlName="sampleAcid" (ionBlur)="acidNameChange(aName.value)" #aName></ion-input>
             </ion-item>
           </ion-col>
           <ion-col col-4>
               <ion-label>Filter</ion-label>
               <ion-item *ngIf="useWidgets">                  
-                <ion-select formControlName="sampleFilter" class="full-width-select">
-                  <ion-option *ngFor="let filter of myFilters" [value]="filter.filter" [selected]="filter.id == selectedFilterID">{{filter.filter}}</ion-option>
+                <ion-select formControlName="sampleFilter" class="full-width-select" (ionChange)="filterNameChange(fName.text, 'sampleFilter select widget')" #fName>
+                  <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="filter.id == selectedFilterID">{{filter.filter}}</ion-option>
                 </ion-select>                    
               </ion-item>
               <ion-item *ngIf="!useWidgets">
-                <ion-input type="text" formControlName="sampleFilter" [value]="selectedFilterName" (blur)="filterNameChange(fName.value)" #fName></ion-input>
+                <ion-input type="text" formControlName="sampleFilter" [value]="selectedFilterName" (ionBlur)="filterNameChange(fName.value, 'sampleFilter text')" #fName></ion-input>
               </ion-item>
             </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-12>
-            {{mySample | json}}
-          </ion-col>
         </ion-row>
       </ion-grid>
 
@@ -217,12 +209,12 @@
           </ion-col>          
           <ion-col col-2>
             <ion-item *ngIf="useWidgets">
-              <ion-select formControlName="analysis" class="full-width-select">
-                <ion-option *ngFor="let analysis of myAnalyses" [value]="analysis.id" >{{analysis.analysis}}</ion-option>
+              <ion-select formControlName="analysis" class="full-width-select"(ionChange)="analysisChange(anName.text, ndx)" #anName>
+                <ion-option *ngFor="let analysis of myAnalyses" [value]="analysis.id" [selected]="analysis.id == sampleBottleControls.controls[ndx].controls['analysis'].value">{{analysis.analysis}}</ion-option>
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="string" formControlName="analysis" [value]="sampleBottleControls.controls[ndx].controls['analysisName'].value" class="full-width-select" (ionChange)="analysisChange(analysisName.value)" #analysisName></ion-input>
+              <ion-input type="string" formControlName="analysis" [value]="sampleBottleControls.controls[ndx].controls['analysisName'].value" class="full-width-select" (ionBlur)="analysisChange(anName.value, ndx)" #anName></ion-input>
             </ion-item>
           </ion-col>          
           <ion-col col-1>
@@ -232,12 +224,12 @@
           </ion-col>
           <ion-col col-3>
             <ion-item *ngIf="useWidgets">
-              <ion-select formControlName="preservationType" class="full-width-select">
-                <ion-option *ngFor="let preservation of myPreservations" [value]="preservation.id" >{{preservation.preservation}}</ion-option>
+              <ion-select formControlName="preservationType" class="full-width-select" (ionChange)="preservationChange(prName.text, ndx)" #prName>
+                <ion-option *ngFor="let preservation of myPreservations" [value]="preservation.id"  [selected]="preservation.id == sampleBottleControls.controls[ndx].controls['preservationType'].value">{{preservation.preservation}}</ion-option>
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
-              <ion-input type="string" formControlName="preservationType" [value]="sampleBottleControls.controls[ndx].controls['preservationTypeName'].value" class="full-width-select" (ionChange)="preservationChange(preservationTypeName.value)" #preservationTypeName></ion-input>
+              <ion-input type="string" formControlName="preservationType" [value]="sampleBottleControls.controls[ndx].controls['preservationTypeName'].value" class="full-width-select" (ionBlur)="preservationChange(prName.value, ndx)" #prName></ion-input>
             </ion-item>
           </ion-col>          
           <ion-col col-1>
