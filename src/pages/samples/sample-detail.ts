@@ -182,7 +182,7 @@ export class SampleDetailPage {
     if (this.selectedFilterID) {
       this._setFilterName(this.selectedFilterID);
     }
-    for (let i = 0; i < this._numSampleBottles; i++) {
+    for (let i = 0, j = this.mySampleBottles.length; i < j; i++) {
       const anName = (<FormGroup>this.sampleBottleControls.controls[i]).controls['analysisName'].value;
       this.analysisChange(anName, i);
       const prName = (<FormGroup>this.sampleBottleControls.controls[i]).controls['preservationTypeName'].value;
