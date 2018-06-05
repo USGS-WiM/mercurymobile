@@ -48,9 +48,6 @@ export class AcidSelectPage {
           for(let i = 0; i < response.rows.length; i++) {
             this.acids.push(response.rows[i]['id']);
           }
-          setTimeout(() => {			
-              element.setFocus();
-          },50);
           this.notready = false;
         }, error => {
           this._errorMessage = <any>error;
