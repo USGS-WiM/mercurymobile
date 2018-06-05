@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <button ion-button large menuToggle>
-      <ion-icon name="menu"></ion-icon>
+      <ion-icon name="menu" large></ion-icon>
     </button>
     <ion-title>Config</ion-title>
   </ion-navbar>
@@ -11,6 +11,11 @@
   <h2>Config</h2>
   <div [hidden]="!notready" align="left" id="loading-spinner"><ion-spinner></ion-spinner></div>
   <div [hidden]="notready">
+  <!-- <div>
+    <label ion-button large for="fileSelectAl">Import All</label>
+    <input id="fileSelectAll" type="file" multiple (change)="loadAllFiles($event)" style="display: none;" />
+    <span>NOTE: The files must be simple ASCII text format and the names <strong>must</strong> match the service names (e.g., 'acids', 'bottles', 'sites')</span>
+  </div> -->
   <ion-grid>
     <ion-row>
       <ion-col col-4><button ion-button large type="button" (click)="dumpFile('acids')">Export Acids</button></ion-col>
@@ -64,7 +69,10 @@
     </ion-row>
     <ion-row>
       <ion-col col-4><button ion-button large color="secondary" type="button" (click)="dumpFile('all')"><strong>Export ALL</strong></button></ion-col>
-      <ion-col col-4><!--<label ion-button large for="fileSelectAll"><strong>Import ALL</strong></label><input id="fileSelectAll" type="file" multiple (change)="loadFile('all', $event)" style="display: none;" />--></ion-col>
+      <!-- <ion-col col-4><label ion-button large color="secondary" for="fileSelectAll">Import All</label><input id="fileSelectAll" type="file" multiple (change)="loadAllFiles('all', $event)" style="display: none;" /></ion-col> -->
+      <!-- <ion-col col-4><input id="fileSelectAll" type="file" multiple (change)="loadAllFiles('all', $event)"/></ion-col> -->
+      <!-- <ion-col col-4><label ion-button large color="secondary" for="fileSelectAll"><strong>Import ALL</strong></label><input id="fileSelectAll" type="file" multiple (change)="loadFile('all', $event)" style="display: none;" /></ion-col> -->
+      <ion-col col-4></ion-col>
       <ion-col col-4><button ion-button large color="secondary" type="button" (click)="destroyDB('all')"><strong>Empty ALL</strong></button></ion-col>
     </ion-row>
   </ion-grid>

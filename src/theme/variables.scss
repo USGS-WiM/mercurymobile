@@ -49,3 +49,15 @@ $colors: (
 
 $ionicons-font-path: "../assets/fonts";
 @import "ionicons";
+
+
+// Mercury Mobile custom settings
+// --------------------------------------------------
+
+$checkbox-md-icon-size: 32px;
+//$checkbox-md-item-end-margin-top: 18px;
+//$checkbox-md-item-end-margin-bottom: 1px;
+$toggle-md-track-width: 54px;
+$toggle-md-track-height: 21px;
+$toggle-md-handle-width: 30px;
+$toggle-md-handle-heigh: 30px;
