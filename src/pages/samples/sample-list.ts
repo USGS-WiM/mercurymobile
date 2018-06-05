@@ -3,6 +3,7 @@ import { NavController, NavParams, AlertController, ModalController, Events } fr
 import { Sample } from '../../app/sample/sample';
 import { SampleService } from '../../app/sample/sample.service';
 import { SampleBottleService } from '../../app/samplebottle/samplebottle.service';
+import { AcidService } from "../../app/acid/acid.service";
 import { SampleDetailPage } from './sample-detail';
 import { BulkAcidUpdatePage } from './bulk-acid-update'
 
@@ -28,6 +29,7 @@ export class SampleListPage implements OnInit {
     public alertCtrl: AlertController,
     private _sampleService: SampleService,
     private _samplebottleService: SampleBottleService,
+    private _acidService: AcidService,
     public modalCtrl: ModalController,
     private events: Events
   ) { }
@@ -53,76 +55,98 @@ export class SampleListPage implements OnInit {
 
   // update all selected samples with acid value for acidification bottles
   updateBulkSampleAcids() {
-    console.log(this._bulkSamples);
+    const numSamplesSelected = this._bulkSamples.length;
+    let numSamplesUpdated = 0;
 
-    if (!this._bulkSamples.length) {      
-      let alert = this.alertCtrl.create({
+    if (!numSamplesSelected) {
+      const alert = this.alertCtrl.create({
         title: 'Bulk Update',
-        subTitle: 'You need to select sites to update first!',
+        subTitle: 'You need to select samples to update first!',
         buttons: ['OK']
       });
-      alert.present();      
-      return;
+      alert.present();
+      return false;
     }
 
-    let opts = { showBackdrop: true, enableBackdropDismiss: true };
+    const opts = { showBackdrop: true, enableBackdropDismiss: true };
     let modal = this.modalCtrl.create(BulkAcidUpdatePage, this._bulkSamples, opts);
-    modal.onDidDismiss(data => {
-      if (data) {
-        console.log("Bulk update acid: " + data);
-        for (let i = 0, j = this._bulkSamples.length; i < j; i++) {
-          console.log(this._bulkSamples[i]);
-          // update the sample
-          this._sampleService.getOne(<string>this._bulkSamples[i].toString()).then(response => { 
-            response['acid'] = data;
-            this._sampleService.update(response);   
-                  
-            for (let i = 0, j = response['sample_bottles'].length; i < j; i++) {
-              
-              // update samplebottles with acid
-              this._samplebottleService.getOne(response['sample_bottles'][i]['_id'].toString()).then(savedBottle => {
-                console.log("Saved bottle: ");
-                console.log(savedBottle);      
-                
-                if (savedBottle['preservation_type'] == 8) {
-                  this._samplebottleService.update({
-                    '_id': savedBottle['_id'],
-                    '_rev': savedBottle['_rev'],
-                    'analysis_type': savedBottle['analysis_type'],
-                    'filter_type': savedBottle['filter_type'],
-                    'volume_filtered': savedBottle['volume_filtered'],
-                    'preservation_type': savedBottle['preservation_type'],
-                    'preservation_volume': savedBottle['preservation_volume'],
-                    'preservation_comment': savedBottle['preservation_comment'],
-                    'preservation_acid': data
-                  }).then(response => 
-                    {
-                      console.log('update success'); 
-                      console.log(response);
-                      this.selectedAll = false;
-                    },                     
-                    error => { 
-                      console.log(error)
-                      let alert = this.alertCtrl.create({
-                        title: 'Bulk Update Error',
-                        subTitle: 'Error updating ' + savedBottle['_id'] + ' with error message ' + error,
-                        buttons: ['OK']
-                      });
-                      alert.present();                                                
-                    });                                                  
-                }                  
-              });
-            }              
-          }); 
-        }
-                
-        let alert = this.alertCtrl.create({
-          title: 'Bulk Update',
-          subTitle: 'Update Success!',
-          buttons: ['OK']
-        });
-        alert.present();
-        
+    modal.onDidDismiss(newAcidName => {
+      if (newAcidName) {
+        this._acidService.getAcidsByName(newAcidName)
+          .then(response => {
+            const newAcidID = response.rows[0].doc.id;
+            for (let i = 0; i < numSamplesSelected; i++) {
+              const sampleName = this._bulkSamples[i].toString();
+              // update the sample
+              this._sampleService.getOne(sampleName)
+              .then(response => {
+                let sampleBottles = response['sample_bottles'];
+                const numSampleBottlesAttached = sampleBottles.length;
+                let numSampleBottlesRetrieved = 0;
+                for (let i = 0; i < numSampleBottlesAttached; i++) {
+                  const bottleName = sampleBottles[i]['_id'];
+                  // update samplebottles with acid
+                  this._samplebottleService.getOne(bottleName)
+                  .then(bottle => {
+                    numSampleBottlesRetrieved++;
+                    if (numSampleBottlesAttached == numSampleBottlesRetrieved) {
+                      numSamplesUpdated++;
+                      if (numSamplesSelected == numSamplesUpdated) {
+                        const alert = this.alertCtrl.create({
+                          title: 'Bulk Acid Update Success!',
+                          subTitle: '',
+                          buttons: ['OK']
+                        });
+                        alert.present();
+                      }
+                    }
+                    
+                    if (bottle['preservation_type'] == 8) {
+                      this._samplebottleService.update({
+                        '_id': bottle['_id'],
+                        '_rev': bottle['_rev'],
+                        'analysis_type': bottle['analysis_type'],
+                        'filter_type': bottle['filter_type'],
+                        'volume_filtered': bottle['volume_filtered'],
+                        'preservation_type': bottle['preservation_type'],
+                        'preservation_volume': bottle['preservation_volume'],
+                        'preservation_comment': bottle['preservation_comment'],
+                        'preservation_acid': newAcidID
+                      })
+                      .then(response => 
+                        {
+                          this.selectedAll = false;
+                        },
+                        error => {
+                          const alert = this.alertCtrl.create({
+                            title: 'Bulk Acid Update Error',
+                            subTitle: 'Error updating sample bottle ' + bottle['_id'] + ' with error message ' + error,
+                            buttons: ['OK']
+                          });
+                          alert.present();
+                        });                                                  
+                    }
+                  },
+                  error => {
+                    const alert = this.alertCtrl.create({
+                      title: 'Bulk Acid Update Error',
+                      subTitle: 'Error retrieving sample bottle ' + bottleName + ' with error message ' + error,
+                      buttons: ['OK']
+                    });
+                    alert.present();
+                  });
+                }
+              }); 
+            }
+          })
+          .catch(error => {
+            const alert = this.alertCtrl.create({
+              title: 'Bulk Acid Update Error',
+              subTitle: 'Error retrieving acid ' + newAcidName + ' with error message ' + error,
+              buttons: ['OK']
+            });
+            alert.present();
+          });
       }
     });
 
@@ -182,7 +206,7 @@ export class SampleListPage implements OnInit {
         {
           text: 'No',
           handler: () => {
-            console.log('Disagree clicked');
+            return false;
           }
         },
         {

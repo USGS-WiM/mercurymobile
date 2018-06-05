@@ -8,10 +8,10 @@
 </ion-header>
 
 <ion-content>
-  <div [hidden]="!notready" align="left" id="loading-spinner">
+  <div *ngIf="notready" align="left" id="loading-spinner">
     <ion-spinner></ion-spinner>
   </div>
-  <div [hidden]="notready">
+  <div *ngIf="!notready">
     <form (keydown.enter)="$event.preventDefault()" [formGroup]="sampleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleForm.value)">
       <ion-grid id="header" formGroupName="sampleHeaderControls">
         <ion-row>
@@ -113,7 +113,7 @@
             <ion-label>Medium</ion-label>
             <ion-item *ngIf="useWidgets">
               <ion-select class="full-width-select" formControlName="sampleMedium" (ionChange)="mediumChange(mName.text.split(' - ')[0])" #mName>
-                <ion-option *ngFor="let medium of myMediums" value="{{medium.id}}">{{medium.nwis_code}} - {{medium.description}}</ion-option>
+                <ion-option *ngFor="let medium of myMediums" [value]="medium.id">{{medium.nwis_code}} - {{medium.description}}</ion-option>
               </ion-select>
             </ion-item>
             <ion-item *ngIf="!useWidgets">
@@ -122,21 +122,27 @@
           </ion-col>
           <ion-col col-4>
             <ion-label>Acid</ion-label>
-            <ion-item *ngIf="useWidgets">
+            <ion-item *ngIf="!acidReady">
+              <ion-spinner></ion-spinner>
+            </ion-item>
+            <ion-item *ngIf="acidReady && useWidgets">
               <ion-input type="string" formControlName="sampleAcid" (click)="openAcidSelect()"></ion-input>
             </ion-item>
-            <ion-item *ngIf="!useWidgets">
+            <ion-item *ngIf="acidReady && !useWidgets">
               <ion-input type="text" formControlName="sampleAcid" (ionBlur)="acidNameChange(aName.value)" #aName></ion-input>
             </ion-item>
           </ion-col>
           <ion-col col-4>
               <ion-label>Filter</ion-label>
-              <ion-item *ngIf="useWidgets">                  
+              <ion-item *ngIf="!filterReady">
+                <ion-spinner></ion-spinner>
+              </ion-item>
+              <ion-item *ngIf="filterReady && useWidgets">                  
                 <ion-select formControlName="sampleFilter" class="full-width-select" (ionChange)="filterNameChange(fName.text, 'sampleFilter select widget')" #fName>
                   <ion-option *ngFor="let filter of myFilters" [value]="filter.id" [selected]="filter.id == selectedFilterID">{{filter.filter}}</ion-option>
                 </ion-select>                    
               </ion-item>
-              <ion-item *ngIf="!useWidgets">
+              <ion-item *ngIf="filterReady && !useWidgets">
                 <ion-input type="text" formControlName="sampleFilter" [value]="selectedFilterName" (ionBlur)="filterNameChange(fName.value, 'sampleFilter text')" #fName></ion-input>
               </ion-item>
             </ion-col>
@@ -172,31 +178,7 @@
           <ion-col col-2 class="text-center" text-center>Preservation Comment</ion-col>   
           <ion-col col-1></ion-col>          
         </ion-row>
-        
-        <!--
-        <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow"
-          class="sampleFormRow">{{ndx + 1}}
-          <ion-col col-7>
-            <ion-item *ngIf="lookupContainers">
-              <ion-input type="string" formControlName="bottle" (click)="openBottleSelect(ndx)"></ion-input>
-            </ion-item>
-            <ion-item *ngIf="!lookupContainers">
-              <ion-input type="string" formControlName="bottle" [value]="sampleBottleControls.controls[ndx].controls['bottle'].value"></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col col-2>
-            <div style="float:right;">
-              <button ion-button large type="button" (click)="editSampleBottle(ndx)">
-                <ion-icon name="list"></ion-icon>
-              </button>
-              <button ion-button large type="button" (click)="removeRow(sampleBottleControlsRow)">
-                <ion-icon name="remove-circle"></ion-icon>
-              </button>
-            </div>
-          </ion-col>
-        </ion-row>-->
 
-        <!-- bottle integration {{ndx + 1}} -->
         <ion-row *ngFor="let sampleBottleControlsRow of sampleBottleControls.controls; let ndx = index" [formGroup]="sampleBottleControlsRow">
           
           <ion-col col-2>
@@ -208,12 +190,15 @@
               </ion-item>
           </ion-col>          
           <ion-col col-2>
-            <ion-item *ngIf="useWidgets">
+              <ion-item *ngIf="!analysisReady">
+                  <ion-spinner></ion-spinner>
+                </ion-item>
+            <ion-item *ngIf="analysisReady && useWidgets">
               <ion-select formControlName="analysis" class="full-width-select"(ionChange)="analysisChange(anName.text, ndx)" #anName>
                 <ion-option *ngFor="let analysis of myAnalyses" [value]="analysis.id" [selected]="analysis.id == sampleBottleControls.controls[ndx].controls['analysis'].value">{{analysis.analysis}}</ion-option>
               </ion-select>
             </ion-item>
-            <ion-item *ngIf="!useWidgets">
+            <ion-item *ngIf="analysisReady && !useWidgets">
               <ion-input type="string" formControlName="analysis" [value]="sampleBottleControls.controls[ndx].controls['analysisName'].value" class="full-width-select" (ionBlur)="analysisChange(anName.value, ndx)" #anName></ion-input>
             </ion-item>
           </ion-col>          
@@ -223,12 +208,15 @@
             </ion-item>
           </ion-col>
           <ion-col col-3>
-            <ion-item *ngIf="useWidgets">
+              <ion-item *ngIf="!preservationReady">
+                  <ion-spinner></ion-spinner>
+                </ion-item>
+            <ion-item *ngIf="preservationReady && useWidgets">
               <ion-select formControlName="preservationType" class="full-width-select" (ionChange)="preservationChange(prName.text, ndx)" #prName>
                 <ion-option *ngFor="let preservation of myPreservations" [value]="preservation.id"  [selected]="preservation.id == sampleBottleControls.controls[ndx].controls['preservationType'].value">{{preservation.preservation}}</ion-option>
               </ion-select>
             </ion-item>
-            <ion-item *ngIf="!useWidgets">
+            <ion-item *ngIf="preservationReady && !useWidgets">
               <ion-input type="string" formControlName="preservationType" [value]="sampleBottleControls.controls[ndx].controls['preservationTypeName'].value" class="full-width-select" (ionBlur)="preservationChange(prName.value, ndx)" #prName></ion-input>
             </ion-item>
           </ion-col>          

@@ -16,8 +16,7 @@ import {BottleSelectPage} from './bottle-select';
 import {AcidSelectPage} from './acid-select';
 import {SampleBottlePage} from './sample-bottle';
 import {APP_UTILITIES}   from '../../app/app.utilities';
-import { DatePickerProvider } from 'ionic2-date-picker';
-import {FilterSelectPage} from './filter-select';
+import {DatePickerProvider} from 'ionic2-date-picker';
 
 // bottles
 import {Analysis} from "../../app/analysis/analysis";
@@ -47,6 +46,10 @@ export class SampleDetailPage {
   selectedAcid: number;
   selectedFilterID: number;
   selectedFilterName: string;
+  acidReady = false;
+  filterReady = false;
+  analysisReady = false;
+  preservationReady = false;
   
 
   mySample: Sample = new Sample(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
@@ -154,7 +157,6 @@ export class SampleDetailPage {
             for (let i = 0, j = this._defaultRowCount; i < j; i++){
                 this.addRow();
             }
-            this.notready = false;
         });
     }
   }
@@ -248,13 +250,11 @@ export class SampleDetailPage {
           if (this.mySample['sample_bottles'] && this.mySample['sample_bottles'].length > 0) {            
             this._numSampleBottles = this.mySample['sample_bottles'].length;
             this._getSampleBottles(this.mySample['sample_bottles']);
-            this.notready = false;
           } else {
               this.mySample['sample_bottles'] = [];
               for (let i = 0, j = this._defaultRowCount; i < j; i++){
                 this.addRow();
               }
-              this.notready = false;
           }
         },
         error => this._errorMessage = <any>error)
@@ -292,33 +292,33 @@ export class SampleDetailPage {
       });
   }
 
-  private _getSampleBottles(sampBottles: any){
+  private _getSampleBottles(sampBottles: any) {
     for (let i = 0, j = sampBottles.length; i < j; i++) {
-      this._samplebottleService.getOne(sampBottles[i]['_id']).then(response => {
-          let samplebottle = response;
+      this._samplebottleService.getOne(sampBottles[i]['_id'])
+      .then(response => {
+        let samplebottle = response;
 
-          // if this sample is not a clone, populate the sample bottle list
-          if (!this.clone) {
-            this.mySampleBottles.push(samplebottle);
-            this.addRow(samplebottle);              
-          }
+        // if this sample is not a clone, populate the sample bottle list
+        if (!this.clone) {
+          this.mySampleBottles.push(samplebottle);
+          this.addRow(samplebottle);              
+        }
 
-          // populate the sample's acid field if any of the sample bottles have used an acid
-          let acid = samplebottle['preservation_acid'];
-          if (acid && (typeof this.selectedAcid === 'undefined' || !this.selectedAcid)) {
-            this.selectedAcid = acid;
-            this._getAcidName(this.selectedAcid);
-          }
+        // populate the sample's acid field if any of the sample bottles have used an acid
+        let acid = samplebottle['preservation_acid'];
+        if (acid && (typeof this.selectedAcid === 'undefined' || !this.selectedAcid)) {
+          this.selectedAcid = acid;
+          this._getAcidName(this.selectedAcid);
+        }
 
-          // populate the sample's filter field if any of the sample bottles have used an filter
-          let filter = samplebottle['filter_type'];
-          if (filter && (typeof this.selectedFilterID === 'undefined' || !this.selectedFilterID)) {
-            this.selectedFilterID = filter;
-            this._setFilterName(filter);
-          }
+        // populate the sample's filter field if any of the sample bottles have used an filter
+        let filter = samplebottle['filter_type'];
+        if (filter && (typeof this.selectedFilterID === 'undefined' || !this.selectedFilterID)) {
+          this.selectedFilterID = filter;
+          this._setFilterName(filter);
+        }
       });
     }
-    this.notready = false;
   }
 
   private _getAnalyses() {
@@ -328,13 +328,10 @@ export class SampleDetailPage {
         for(let i =0; i < response.rows.length; i++) {
           this.myAnalyses.push(response.rows[i].doc);
         }
+        this.analysisReady = true;
       }, error => {
         this._errorMessage = <any>error;
       });
-  }
-
-  private _debugTime() {
-    return new Date().toISOString().substr(14, 22);
   }
 
   private _getFilters() {
@@ -359,6 +356,7 @@ export class SampleDetailPage {
       const filterName = myFilter[0]['filter'];
       this.selectedFilterName = filterName;
       (<FormGroup>this.sampleHeaderControls).controls['sampleFilter'].setValue(filterID);
+      this.filterReady = true;
     }
   }
 
@@ -369,6 +367,7 @@ export class SampleDetailPage {
         for(let i =0; i < response.rows.length; i++) {
           this.myPreservations.push(response.rows[i].doc);
         }
+        this.preservationReady = true;
       }, error => {
         this._errorMessage = <any>error;
       });
@@ -455,6 +454,7 @@ export class SampleDetailPage {
         response => {       
           //this.sampleAcid.setValue(response[0].code);
           (<FormGroup>this.sampleHeaderControls).controls['sampleAcid'].setValue(response[0].code);
+          this.acidReady = true;
         }, error => {
         this._errorMessage = <any>error;
       });
@@ -688,7 +688,12 @@ export class SampleDetailPage {
           preservationVolume: new FormControl(null),
           preservationComment: new FormControl(null)
         })
-      );      
+      );
+
+      this._numRowsAdded++;
+      if (this._numRowsAdded == this._defaultRowCount) {
+        this.notready = false;
+      }
     }
 
   }
