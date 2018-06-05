@@ -158,6 +158,8 @@ export class SampleDetailPage {
                 this.addRow();
             }
         });
+        this.acidReady = true;
+        this.filterReady = true;
     }
   }
 
@@ -255,6 +257,8 @@ export class SampleDetailPage {
               for (let i = 0, j = this._defaultRowCount; i < j; i++){
                 this.addRow();
               }
+              this.acidReady = true;
+              this.filterReady = true;
           }
         },
         error => this._errorMessage = <any>error)

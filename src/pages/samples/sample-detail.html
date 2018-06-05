@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <button ion-button large menuToggle>
-      <ion-icon name="menu"></ion-icon>
+      <ion-icon name="menu" large></ion-icon>
     </button>
     <ion-title>Sample {{sample_ID}}</ion-title>
   </ion-navbar>
@@ -15,10 +15,13 @@
     <form (keydown.enter)="$event.preventDefault()" [formGroup]="sampleForm" *ngIf="active" (ngSubmit)="onSubmit(sampleForm.value)">
       <ion-grid id="header" formGroupName="sampleHeaderControls">
         <ion-row>
-          <ion-col col-12>
-            <ion-item style="float:right;">
+          <ion-col col-3>
+            <ion-item *ngIf="!acidReady">
+              <ion-spinner></ion-spinner>
+            </ion-item>
+            <ion-item *ngIf="acidReady" style="float:left;">
               <ion-label> Use data entry widgets</ion-label>
-              <ion-toggle (ionChange)="toggleUseWidgets()" [checked]=useWidgets></ion-toggle>
+              <ion-toggle (ionChange)="toggleUseWidgets()" [checked]=useWidgets large></ion-toggle>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -157,15 +160,20 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col col-8>
-            <ion-item style="float:right;">
+          <ion-col col-3>
+            <ion-item *ngIf="!acidReady">
+              <ion-spinner></ion-spinner>
+            </ion-item>
+            <ion-item *ngIf="acidReady" style="float:left;">
               <ion-label>Lookup Container IDs</ion-label>
-              <ion-toggle (ionChange)="toggleLookupContainers()"></ion-toggle>
+              <ion-toggle (ionChange)="toggleLookupContainers()" large></ion-toggle>
             </ion-item>
           </ion-col>
-          <ion-col col-4>
-            <button style="float:right;" ion-button medium type="button" (click)="addRow()">
-              <ion-icon name="add-circle"></ion-icon> &nbsp;Add Container</button>
+        </ion-row>
+        <ion-row>
+          <ion-col col-12>
+            <button style="float:left;" ion-button large type="button" (click)="addRow()">
+              <ion-icon name="add-circle" large></ion-icon> &nbsp;Add Container</button>
           </ion-col>
         </ion-row>
 
@@ -231,8 +239,8 @@
             </ion-item>
           </ion-col>
           <ion-col col-1>
-              <button ion-button color="danger" small type="button" (click)="removeRow(sampleBottleControlsRow)" style="float:right">
-                <ion-icon name="remove-circle"></ion-icon>
+              <button ion-button color="danger" large type="button" (click)="removeRow(sampleBottleControlsRow)" style="float:right">
+                <ion-icon name="remove-circle" large></ion-icon>
               </button>
           </ion-col>          
         </ion-row>
@@ -250,11 +258,7 @@
         </ion-row>
       </ion-grid>
       <div>
-        <!-- <p>Form value: {{ sampleForm.value | json }}</p> -->
-        <!-- <p>Form status: {{ sampleForm.status | json }}</p> -->
-        <!-- <button ion-button block large color="secondary" type="submit">Save</button> -->
         <button ion-button block large type="submit" [disabled]="!sampleForm.valid">Save</button>
-        <!--<button ion-button large type="button" (click)="showConfirm('deleteSampleRow')">Delete</button> just do this from the sample list -->
       </div>
     </form>
   </div>

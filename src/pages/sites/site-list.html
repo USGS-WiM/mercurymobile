@@ -1,14 +1,14 @@
 <ion-header>
   <ion-navbar>
     <button ion-button large menuToggle>
-      <ion-icon name="menu"></ion-icon>
+      <ion-icon name="menu" large></ion-icon>
     </button>
     <ion-title>Site List</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <button style="float:right;margin-top:10px;margin-right:10px;" ion-button medium type="button" (click)="addSite()"><ion-icon name="add-circle"></ion-icon> &nbsp;Add Site</button>
+  <button style="float:right;margin-top:10px;margin-right:10px;" ion-button large type="button" (click)="addSite()"><ion-icon name="add-circle" large></ion-icon> &nbsp;Add Site</button>
   <h3 style="margin-left:10px;">{{siteCount}} Sites</h3>
 
   <div *ngIf="showPageButtons" style="padding:8px;width:100%;margin-top:30px;text-align:center;">
@@ -21,7 +21,7 @@
   <div [hidden]="notready">
     <ion-list>
       <button ion-item large *ngFor="let site of sites" (click)="editSite(site.name)">
-        <ion-icon name="pin" item-left></ion-icon>
+        <ion-icon name="pin" item-left large></ion-icon>
         {{site.name}} <span *ngIf="site.usgs_scode">{{site.usgs_scode}}</span>
         <div class="item-note" item-right>
           {{site.description}}

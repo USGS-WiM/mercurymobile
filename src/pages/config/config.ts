@@ -11,6 +11,7 @@ import {BottleService} from "../../app/bottle/bottle.service";
 import {AnalysisService} from "../../app/analysis/analysis.service";
 import {FilterService} from "../../app/filter/filter.service";
 import {PreservationService} from "../../app/preservation/preservation.service";
+import { ObjectUnsubscribedError } from 'rxjs';
 
 
 @Component({
@@ -19,6 +20,7 @@ import {PreservationService} from "../../app/preservation/preservation.service";
 export class ConfigPage {
     notready: Boolean = false;
     myServices = {};
+    myServicesKeys = [];
 
     constructor(public navCtrl: NavController,
                 private _sampleService: SampleService,
@@ -42,6 +44,8 @@ export class ConfigPage {
         this.myServices["samplebottles"] = this._samplebottleService;
         this.myServices["sites"] = this._siteService;
 
+        this.myServicesKeys = Object.keys(this.myServices);
+
         //this._acidService.initDB();
         //this._bottleService.initDB();
         //this._projectService.initDB();
@@ -53,7 +57,9 @@ export class ConfigPage {
         fileInput.preventDefault();
     }
 
-    loadFile(srv: string, fileInput: any) {
+    loadFile(mySrv: string, fileInput: any) {
+        console.log(mySrv);
+        let srv = '';
         let self = this;
         this.fileDragHover(fileInput);
         let selectedFiles = <Array<File>> fileInput.target.files || fileInput.dataTransfer.files;
@@ -65,8 +71,68 @@ export class ConfigPage {
             });
             
         };
-        reader.readAsBinaryString(selectedFiles[0]);
+        const numFilesSelected = selectedFiles.length;
+        let numFilesRead = 0;
+        function readFiles() {
+            if (numFilesSelected > numFilesRead) {
+                const file = selectedFiles[numFilesRead];
+                console.log(file);
+                const fileName = file.name;
+                console.log(fileName);
+                if (mySrv != '' && mySrv != null && mySrv != 'all') {
+                    srv = mySrv;
+                } else {
+                    srv = fileName.split('.')[0];
+                }
+                console.log(srv);
+                if (self.myServicesKeys.indexOf(srv) > -1) {
+                    console.log("Reading " + fileName + ".");
+                    reader.onloadend = function (loadEvent) {
+                        readFiles();
+                    }
+                    reader.readAsBinaryString(file);
+                } else {
+                    console.log("Skipping " + fileName + ", no matching database found.");
+                }
+                numFilesRead++;
+            }
+        }
+        readFiles();
     }
+
+    // loadAllFiles(srv: string, fileInput: any) {
+    //     let self = this;
+        
+    //     let selectedFiles = <Array<File>> fileInput.target.files || fileInput.dataTransfer.files;
+    //     let reader = new FileReader();
+    //     reader.onload = function (e) {
+    //         self.notready = true;
+    //         self.myServices[srv].destroyDB().then(response => {
+    //             self.myServices[srv].loadDB(reader.result).then(response => {self.notready = false;});
+    //         });
+    //     };
+    //     const numFilesSelected = selectedFiles.length;
+    //     let numFilesRead = 0;
+    //     function readFiles() {
+    //         if (numFilesSelected > numFilesRead) {
+    //             const file = selectedFiles[numFilesRead];
+    //             const fileName = file.name;
+    //             srv = fileName.split('.')[0];
+    //             if (self.myServicesKeys.indexOf(srv) > -1) {
+    //                 reader.onloadend = function (loadEvent) {
+    //                     readFiles();
+    //                 }
+    //                 reader.readAsBinaryString(file);
+    //             } else {
+    //                 console.log("Skipping " + fileName + ", no matching database found.");
+    //             }
+    //             numFilesRead++;
+    //         }
+    //     }
+    //     readFiles();
+    // }
+
+    
     
     dumpFile(service: string) {
         let self = this;
