@@ -378,8 +378,9 @@ export class SampleDetailPage {
   }
 
   addNewBottle(ev: any, ndx: number) {
-    const newBottleName = ev.value;
+    let newBottleName = ev.value;
     if (newBottleName != null && newBottleName != '') {
+      newBottleName.toUpperCase();
       this._bottleService.getBottlesByName(newBottleName).then(response => {
         let exists = response.rows.length > 0 ? true : false;
         if (!exists) {
@@ -465,8 +466,13 @@ export class SampleDetailPage {
   }
 
   private _timeToText(time: string) {
-    time = time.replace(':', '');
-    return time;
+    if (typeof time !== 'undefined') {
+      time = time.replace(':', '');
+      return time;
+    }
+    else {
+      return '';
+    }
   }
 
   private _textToTime(text: string) {    
@@ -521,6 +527,7 @@ export class SampleDetailPage {
   }
 
   acidNameChange(acidName: string) {
+    acidName.toUpperCase();
     this._acidService.getAcidsByName(acidName)
     .then(response => {
       this.selectedAcid = response.rows[0].doc.id;
@@ -532,6 +539,7 @@ export class SampleDetailPage {
   }
 
   filterNameChange(filterName: string, source: string) {
+    filterName.toUpperCase();
     this._filterService.getFiltersByName(filterName)
     .then(response => {
       this.selectedFilterID = response.rows[0].doc.id;
@@ -564,6 +572,7 @@ export class SampleDetailPage {
       return;
     }
 
+    projectName.toUpperCase();
     let projects = this.myProjects.filter(function(project: Project) {return project['name'] == projectName});
     if (projects.length < 1) {
       this.showAlert('Project not found!', projectName, 'was not found in the database. Please enter a valid project name.');
@@ -594,6 +603,7 @@ export class SampleDetailPage {
   }
 
   siteNameChange(siteName: string) {
+    siteName.toUpperCase();
     let sites = this.mySites.filter(function(site: Site) {return site['name'] == siteName});
     if (sites.length < 1) {
       this.showAlert('Site not found!', siteName, 'was not found in the database. Please enter a valid site name.');
@@ -617,6 +627,7 @@ export class SampleDetailPage {
 
   mediumChange(mName: string) {
     if (mName && mName != null && mName != '' && mName != 'undefined') {
+      mName.toUpperCase();
       let mediums = this.myMediums.filter(function(medium: Medium) {return medium['nwis_code'] == mName});
       if (mediums.length < 1) {
         this.showAlert('Medium not found!', mName.toString(), 'was not found in the database. Please enter a valid medium.');
@@ -631,6 +642,7 @@ export class SampleDetailPage {
 
   analysisChange(aName: string, ndx: number) {
     if (aName != null && aName != '') {
+      aName.toUpperCase();
       let analyses = this.myAnalyses.filter(function(analysis: Analysis) {return analysis['analysis'] == aName});
       if (analyses.length < 1) {
         this.showAlert('Analysis not found!', aName.toString(), 'was not found in the database. Please enter a valid analysis.');
@@ -643,6 +655,7 @@ export class SampleDetailPage {
 
   preservationChange(pName: string, ndx: number) {
     if (pName != null && pName != '') {
+      pName.toUpperCase();
       let preservations = this.myPreservations.filter(function(preservation: Preservation) {return preservation['preservation'] == pName});
       if (preservations.length < 1) {
         this.showAlert('Preservation not found!', pName.toString(), 'was not found in the database. Please enter a valid preservation.');
