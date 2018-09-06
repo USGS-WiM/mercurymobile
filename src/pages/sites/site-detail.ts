@@ -113,16 +113,16 @@ export class SiteDetailPage {
 
   onSubmit(formValue){
     // TODO: build proper onSubmit function, including validations
-    this.mySite['name'] = formValue.sitegroup.name;
-    this.mySite['usgs_sid'] = formValue.sitegroup.usgs_sid;
+    this.mySite['name'] = formValue.sitegroup.name.toUpperCase();
+    this.mySite['usgs_sid'] = formValue.sitegroup.usgs_sid.toUpperCase();
     this.mySite['usgs_scode'] = formValue.sitegroup.usgs_scode;
-    this.mySite['description'] = formValue.sitegroup.description;
+    this.mySite['description'] = formValue.sitegroup.description.toUpperCase();
     this.mySite['latitude'] = formValue.sitegroup.latitude;
     this.mySite['longitude'] = formValue.sitegroup.longitude;
-    this.mySite['datum'] = formValue.sitegroup.datum;
-    this.mySite['method'] = formValue.sitegroup.method;
-    this.mySite['site_status'] = formValue.sitegroup.site_status;
-    this.mySite['nwis_customer_code'] = formValue.sitegroup.nwis_customer_code;
+    this.mySite['datum'] = formValue.sitegroup.datum.toUpperCase();
+    this.mySite['method'] = formValue.sitegroup.method.toUpperCase();
+    this.mySite['site_status'] = formValue.sitegroup.site_status.toUpperCase();
+    this.mySite['nwis_customer_code'] = formValue.sitegroup.nwis_customer_code.toUpperCase();
     this.mySite['projects'] = formValue.sitegroup.projects;
     this.mySite['id'] = formValue.sitegroup.id;
     this.mySite['_id'] = formValue.sitegroup.name;

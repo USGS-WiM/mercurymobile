@@ -46,10 +46,10 @@ export class ConfigPage {
 
         this.myServicesKeys = Object.keys(this.myServices);
 
-        //this._acidService.initDB();
-        //this._bottleService.initDB();
-        //this._projectService.initDB();
-        //this._siteService.initDB();
+        // this._acidService.initDB();
+        // this._bottleService.initDB();
+        // this._projectService.initDB();
+        // this._siteService.initDB();
     }
 
     fileDragHover(fileInput) {
@@ -57,9 +57,7 @@ export class ConfigPage {
         fileInput.preventDefault();
     }
 
-    loadFile(mySrv: string, fileInput: any) {
-        console.log(mySrv);
-        let srv = '';
+    loadFile(srv: string, fileInput: any) {
         let self = this;
         this.fileDragHover(fileInput);
         let selectedFiles = <Array<File>> fileInput.target.files || fileInput.dataTransfer.files;
@@ -71,34 +69,51 @@ export class ConfigPage {
             });
             
         };
-        const numFilesSelected = selectedFiles.length;
-        let numFilesRead = 0;
-        function readFiles() {
-            if (numFilesSelected > numFilesRead) {
-                const file = selectedFiles[numFilesRead];
-                console.log(file);
-                const fileName = file.name;
-                console.log(fileName);
-                if (mySrv != '' && mySrv != null && mySrv != 'all') {
-                    srv = mySrv;
-                } else {
-                    srv = fileName.split('.')[0];
-                }
-                console.log(srv);
-                if (self.myServicesKeys.indexOf(srv) > -1) {
-                    console.log("Reading " + fileName + ".");
-                    reader.onloadend = function (loadEvent) {
-                        readFiles();
-                    }
-                    reader.readAsBinaryString(file);
-                } else {
-                    console.log("Skipping " + fileName + ", no matching database found.");
-                }
-                numFilesRead++;
-            }
-        }
-        readFiles();
+        reader.readAsBinaryString(selectedFiles[0]);
     }
+
+    // loadFile(mySrv: string, fileInput: any) {
+    //     console.log(mySrv);
+    //     let srv = '';
+    //     let self = this;
+    //     this.fileDragHover(fileInput);
+    //     let selectedFiles = <Array<File>> fileInput.target.files || fileInput.dataTransfer.files;
+    //     let reader = new FileReader();
+    //     reader.onload = function (e) {
+    //         self.notready = true;
+    //         self.myServices[srv].destroyDB().then(response => {
+    //             self.myServices[srv].loadDB(reader.result).then(response => {self.notready = false;});
+    //         });
+            
+    //     };
+    //     const numFilesSelected = selectedFiles.length;
+    //     let numFilesRead = 0;
+    //     function readFiles() {
+    //         if (numFilesSelected > numFilesRead) {
+    //             const file = selectedFiles[numFilesRead];
+    //             console.log(file);
+    //             const fileName = file.name;
+    //             console.log(fileName);
+    //             if (mySrv != '' && mySrv != null && mySrv != 'all') {
+    //                 srv = mySrv;
+    //             } else {
+    //                 srv = fileName.split('.')[0];
+    //             }
+    //             console.log(srv);
+    //             if (self.myServicesKeys.indexOf(srv) > -1) {
+    //                 console.log("Reading " + fileName + ".");
+    //                 reader.onloadend = function (loadEvent) {
+    //                     readFiles();
+    //                 }
+    //                 reader.readAsBinaryString(file);
+    //             } else {
+    //                 console.log("Skipping " + fileName + ", no matching database found.");
+    //             }
+    //             numFilesRead++;
+    //         }
+    //     }
+    //     readFiles();
+    // }
 
     // loadAllFiles(srv: string, fileInput: any) {
     //     let self = this;

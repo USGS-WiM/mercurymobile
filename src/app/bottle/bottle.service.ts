@@ -26,22 +26,54 @@ export class BottleService {
       this._createDB();
     }
 
+    testPut() {
+      console.log("start testPut bottles")
+      this._db.allDocs()
+        .then(result => {
+          console.log(result.total_rows);
+          if(result.total_rows === 0) {
+            this._db.put({
+              _id: 'testBottle',
+              id: 123,
+              name: 'testBottle'
+            })
+            .then(response => {
+              console.log(response);
+            });
+          }
+        })
+        .catch( error => {
+          console.log(error)
+        });
+      console.log("end testPut bottles");
+    }
+
+    testDelete() {
+      return this._db.remove('testBottle');
+  }
+
     initDB() {
+      console.log("start init bottles")
       this._db.allDocs()
         .then(result => {
           console.log(result.total_rows);
           if(result.total_rows === 0) {
             console.log("start put bottles");
-            let count = 0;
+            let bottleCount = 0;
+            let putBottles = []
             for (let bottle of BOTTLES) {
-              this._db.put({
-                _id: bottle['name'],
-                id: bottle['id'],
-                name: bottle['name']
-              });
-              count++;
-              if (count % 1000 == 0) {
-                console.log(count);
+              // this._db.put({
+              //   _id: bottle['name'],
+              //   id: bottle['id'],
+              //   name: bottle['name']
+              // });
+              let newBottle = {_id: bottle['name'], id: bottle['id'], name: bottle['name']}
+              putBottles.push(newBottle);
+              bottleCount++;
+              if (bottleCount % 1000 == 0 || bottle['id'] == 3378762) {
+                console.log(bottleCount);
+                this._db.bulkDocs(putBottles);
+                putBottles.length = 0;
               }
             }
             console.log("end put bottles");
